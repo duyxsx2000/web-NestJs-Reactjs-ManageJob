@@ -1,0 +1,122 @@
+.main{
+    padding-top: 20%px;
+    height: 100vh;
+    width: 100%;
+    background-size: cover; /* hoặc contain hoặc kích thước tùy chọn khác */
+    background-repeat: no-repeat;
+    background-image: url('https://feeldecor.com.vn/wp-content/uploads/2019/12/9-Xu-h%C6%B0%E1%BB%9Bng-n%E1%BB%99i-th%E1%BA%A5t-ph%C3%B2ng-l%C3%A0m-vi%E1%BB%87c-%C4%91%E1%BA%B9p-tr%C3%A0n-%C4%91%E1%BA%A7y-c%E1%BA%A3m-h%E1%BB%A9ng-53-1.jpg');
+}
+
+h1{
+    margin: 0px;
+    padding: 0;
+    color: aliceblue;
+    text-align: center;
+}
+
+h2{
+    color: aliceblue;
+    text-align: center;
+}
+
+.container{
+    display:flex;
+    margin-top: 20px;
+    
+    justify-content: center;
+    align-items: center;
+}
+
+.content{
+    width: 50%;
+    background:rgba(0, 0, 0, 0.8);
+    height: 500px;
+    /* transform: translateX(-50%); */
+}
+.container-input {
+    width: 70%;
+    height: 100%;
+    border: 1px solid rgb(64, 179, 18);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.unContainer-input {
+    width: 70%;
+    height: 100%;
+    border: 1px solid rgb(196, 16, 22);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.inputLogin{
+    outline: none;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    background: none;
+    color: white;
+    font-size: 20px;
+    width: 80%;
+    height: 100%;
+}
+
+.inputLogin::placeholder {
+    color: white; 
+}
+
+.option{
+    color: white;
+}
+input{
+    margin: 0px;
+    padding: 0px;
+    padding-block: 0px;
+    padding-inline: 0px;
+}
+
+.custom-checkbox {
+  
+    width: 20px;
+    height: 20px;
+    background: none;
+    margin-right: 10px;
+    border: 2px solid rgb(17, 189, 42);
+}
+  
+.custom-checkbox input{
+    outline: none;
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: none;
+    border-radius: none;
+    background-color: none;
+}
+.custom-checkbox input:checked{
+    background: none;
+}
+
+/* Trong CSS hoặc file style của bạn */
+.custom-checkbox input[type="checkbox"] {
+    font-family: 'Arial', sans-serif;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+
+    background-color: none;
+    border: none;
+
+    border-radius: 0;
+
+
+    &:checked {
+        background-color: rgb(17, 189, 42);
+    }
+}
