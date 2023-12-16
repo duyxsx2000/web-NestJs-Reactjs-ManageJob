@@ -21,13 +21,16 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('login')
     signIn(@Body(ValidationPipe) signInDto: SignInAuthDto) {
-
+   
       return this.authService.sign(signInDto)
     };
 
     @UseGuards(AuthGuard)
     @Get('profile')
-    getProfile() { 
-      return {name: 'duy', title: 'duy'};
+    getProfile(@Request() req) { 
+      console.log('123');
+      
+      const email = req.user.email
+      return this.authService.profile(email);
     }
 }

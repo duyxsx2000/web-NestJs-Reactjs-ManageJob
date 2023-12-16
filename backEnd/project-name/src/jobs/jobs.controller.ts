@@ -9,19 +9,6 @@ import { HttpMessage, HttpStatus } from 'src/global/globalEnum';
 export class JobsController {
     constructor(private readonly jobsService: JobsService) {}
 
-    @Get(':id')
-    async findOne(@Param('id', ParseIntPipe) id: number): Promise<ResponseData<{}>> {
-
-        try {
-            const job = await this.jobsService.findOne(id)
-            return new ResponseData<{}>(job, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
-        } catch (error) {
-            return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)
-        }
-
-        
-    };
-
     @Get()
     async findAll(): Promise<ResponseData<{}>> {
         try {
@@ -31,6 +18,29 @@ export class JobsController {
             return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)
         }
 
+    };
+
+    @Get(':id')
+    async findOne(@Param('id', ParseIntPipe) id: number): Promise<ResponseData<{}>> {
+
+        try {
+            const job = await this.jobsService.findOne(id)
+            return new ResponseData<{}>(job, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
+        } catch (error) {
+            return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)
+        }
+   
+    };
+
+    @Get('dashboard/:time')
+    async getStatistics(@Param('time') time: string): Promise<ResponseData<{}>> {
+        try {
+            const res = await this.jobsService.getStatistics('')
+            return new ResponseData<{}>(res, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
+        } catch (error) {
+            return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)
+            
+        }
     };
 
     @Post()

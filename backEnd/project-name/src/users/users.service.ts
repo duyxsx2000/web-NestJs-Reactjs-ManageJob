@@ -13,33 +13,6 @@ export class UsersService {
     
     constructor (@InjectModel(User.name) private userModel: Model<User>) {}
 
-    private users = [
-        {   
-            id: 1,
-            name:'Do Khuong Duy',
-            email: 'duy123@gmail.com',
-            password:'123qwe',
-            roles: Role.Admin
-           
-        },
-        {   
-            id: 2,
-            name:'Nguyen Hoang Nam',
-            email: 'nam123@gmail.com',
-            password:'123qwe',
-            roles: Role.Admin
-           
-        },
-        {
-            id: 3,
-            name:'Pham Quóc Thien',
-            email: 'thien@gmail.com',
-            password:'123qwe',
-            roles: Role.Admin
-          
-        }
-    ];
-
     async findAllUsers() {
         try {
             const users = await this.userModel.find();
@@ -83,8 +56,15 @@ export class UsersService {
             ]);
            
             const maxId = res[0].maxId;
-            const newUser = {...createUserDto, id: maxId + 1};
+            const newUser = {
+                ...createUserDto, 
+                id: maxId + 1,
+                idJobs:[0]
+            };
+
             await this.userModel.create(newUser);
+            console.log('create done' ,newUser);
+            
             return newUser
 
         } catch (error) {

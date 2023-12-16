@@ -1,31 +1,8 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
 }
 
 @keyframes App-logo-spin {
@@ -35,4 +12,48 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+
+
+
+
+
+.content>.bottom {
+  background: rgb(233, 227, 227);
+}
+
+
+
+.navConten{
+  display: flex;
+  border-radius: 5px;
+  
+  box-shadow: 0 0 0 1px rgb(195, 192, 192) ;
+
+  
+  background: white;
+}
+/* .navConten div{
+  width:25% ;
+  padding: 5px;
+  text-align: center; 
+  
+} */
+.navConten div>div {
+  width: 100%;
+  text-align: center;
+  font-weight: 700;
+}
+
+
+.scrollbar {
+  width: 12px; /* Độ rộng của thanh trượt */
+  height: 100%; /* Chiều cao của thanh trượt */
+  background-color: #888; /* Màu sắc của thanh trượt */
+  position: absolute; /* Đặt vị trí tuyệt đối để đặt thanh trượt theo vị trí xác định */
+  top: 0; /* Đặt vị trí thanh trượt ở trên cùng */
+  right: 0; /* Đặt vị trí thanh trượt ở bên phải */
+  overflow-y: scroll; /* Kích hoạt thanh trượt dọc */
 }

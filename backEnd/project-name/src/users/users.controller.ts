@@ -9,13 +9,13 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/auth/manageRoles/roles.guard';
 import { UpdateUserDto } from './dto/updtae-user.dto';
 
-
+@UseGuards(AuthGuard, RolesGuard)
 @Controller('users')
 
 export class UsersController {
     constructor (private readonly usersService: UsersService){}
     
-    @UseGuards(AuthGuard, RolesGuard)
+    
     @Get()
     @Roles(Role.Admin)
     findAll(): {} {
@@ -39,6 +39,8 @@ export class UsersController {
 
     @Post()
     async create(@Body(ValidationPipe) createUserDto: CreateUserDto ): Promise<ResponseData<{}>> {
+        console.log('1');
+        
         try {
            const newUser = await this.usersService.createUser(createUserDto) 
            console.log(newUser,'1');

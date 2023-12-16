@@ -2,13 +2,26 @@ import React, { useState } from 'react'
 import {GoogleOutlined, KeyOutlined} from '@ant-design/icons'
 import './login.css'
 import ButtonSample from '../component/buttonSample'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '../redux/store'
+import { fetchtokenByUser } from './authSlice';
+import { AsyncThunkAction} from '@reduxjs/toolkit'
+import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk'
+
+
 
 type TypeForm = {
     password: string,
     email: string
 }
+type ResToken = {
+    access_token: string,
+};
+
 
 export default function Login() {
+    const data12= useSelector((state: RootState) => state.auth.profile)
+    const dispatch = useDispatch()
 
     const [dataForm, setDataForm] = useState<TypeForm>({
         password:'',
@@ -16,13 +29,23 @@ export default function Login() {
     });
     const [status, setStatus] = useState<boolean>(true);
 
+    const postDataLogin = async () => {
+        try {
+            const action: AsyncThunkAction<ResToken, TypeForm, AsyncThunkConfig> | any = fetchtokenByUser(dataForm);
+            dispatch(action);
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    };
+   
+
     const handleClickButton =()=>{
 
         if(!dataForm || !dataForm.email || !dataForm.password) {
             setStatus(false);
             return
         }
-        console.log("fectdata");   
+        postDataLogin()     
     };
 
     const handleOnChange = (e: any) => {
@@ -31,12 +54,12 @@ export default function Login() {
             ...dataForm,
             [name]: value
         });
-        setStatus(true)
-
+        setStatus(true) ;
         
-    }
+    };
 
-  
+
+
     return (
         <div className='main'>
             <h1 >LOGIN FORM </h1>

@@ -18,9 +18,16 @@ export class User {
 
     @Prop()
     role: Role;
+    
+    @Prop()
+    wage: number;
 
     @Prop()
-    id: number
+    id: number;
+
+    @Prop([Number])
+    idJob: number[];
+
 };
 
 export const UserSchema = SchemaFactory.createForClass(User)

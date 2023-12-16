@@ -11,45 +11,6 @@ import { threadId } from 'worker_threads';
 export class JobsService {
     constructor(@InjectModel(Job.name) private jobModel: Model<Job>){}
     
-    private Jobs = [
-        {
-            id: 1,
-            idJob: 'job1',
-            name: 'create a component',
-            detail: 'update late',
-            date: {
-                post: '2023',
-                start: '2023',
-                expired: '2024',
-                done: '2024'
-            },    
-        },
-        {
-            id: 2,
-            idJob: 'job2',
-            name: 'create a component',
-            detail: 'update late',
-            date: {
-                post: '2023',
-                start: '2023',
-                expired: '2024',
-                done: '2024'
-            },    
-        },
-        {
-            id: 3,
-            idJob: 'job2',
-            name: 'create a component',
-            detail: 'update late',
-            date: {
-                post: '2023',
-                start: '2023',
-                expired: '2024',
-                done: '2024'
-            },    
-        }
-    ];
-
     async findOne(id: number) {
         try {
             const job = await this.jobModel.findOne({idJob: id})
@@ -68,6 +29,36 @@ export class JobsService {
         }
     };
 
+    async getStatistics(time: string) {
+
+        const countJob = async (status: string) => {
+            try {
+                const res = await this.jobModel.aggregate([
+                    {$match: {status: status}},
+                    {$count: 'count'}
+                ]);
+
+                return res[0].count
+            } catch (error) {                  
+                return 0
+            }
+        };
+
+        try {
+            const countJobs = await this.jobModel.countDocuments()
+            return {
+                countJobs: countJobs,
+                countDone: await countJob('done'),
+                countAwait: await countJob('await'),
+                countExpired: await countJob('await'),
+                countError: await countJob('error'),
+            }
+           
+        } catch (error) {
+            throw new NotFoundException('error')
+        }
+    }
+
     async create(createJobDto: CreateJobDto) {
         try {
             const idMax = await this.jobModel.aggregate([
@@ -76,7 +67,11 @@ export class JobsService {
                     maxId:{$max: '$idJob'}
                 }}
             ]);
-            const newJob = {...createJobDto, idJob: idMax[0].maxId};
+            const newJob = {
+                ...createJobDto, 
+                idJob: idMax[0].maxId + 1,
+ 
+            };
             await this.jobModel.create(newJob);
 
             return newJob

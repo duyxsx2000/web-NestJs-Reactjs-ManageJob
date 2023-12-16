@@ -1,13 +1,27 @@
-
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class CreateJobDto {
-    name: string;
-    detail: string;
-    date: {
-        post: string,
-        start: string,
-        done: string,
-        expired: string
-    }
+    @IsNotEmpty()
+    @IsString()
+    title: string;
+
+    @IsString()
+    status: string;
+
+    @IsString()
+    describe: string;
+
+    // date: {
+    //     post: Date,
+    //     start: Date,
+    //     expriced: Date
+    // }
+
+    @IsString()
+    request: string;
+
+    image: string | null;
+
+
 }
 
