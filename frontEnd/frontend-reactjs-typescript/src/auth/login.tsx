@@ -20,13 +20,15 @@ type ResToken = {
 
 
 export default function Login() {
+    
     const data12= useSelector((state: RootState) => state.auth.profile)
     const dispatch = useDispatch()
 
     const [dataForm, setDataForm] = useState<TypeForm>({
-        password:'',
-        email:''
+        password:'duy123',
+        email:'duy123@gmail.com'
     });
+
     const [status, setStatus] = useState<boolean>(true);
 
     const postDataLogin = async () => {
@@ -39,7 +41,7 @@ export default function Login() {
     };
    
 
-    const handleClickButton =()=>{
+    const handleClickButton = () =>{
 
         if(!dataForm || !dataForm.email || !dataForm.password) {
             setStatus(false);
@@ -57,8 +59,6 @@ export default function Login() {
         setStatus(true) ;
         
     };
-
-
 
     return (
         <div className='main'>

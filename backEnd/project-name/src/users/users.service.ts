@@ -13,9 +13,15 @@ export class UsersService {
     
     constructor (@InjectModel(User.name) private userModel: Model<User>) {}
 
-    async findAllUsers() {
+    async findAllUsers(email: string) {
         try {
-            const users = await this.userModel.find();
+            const users = await this.userModel.aggregate([
+                {
+                    $match: {
+                        email: { $ne: email }
+                    }
+                },
+            ])
             return users
         } catch (error) {
             throw new NotFoundException('error')
@@ -43,7 +49,6 @@ export class UsersService {
     }
 
     async createUser(createUserDto: CreateUserDto) {
-        const x= 123
         try {
 
             const res = await this.userModel.aggregate([
@@ -59,12 +64,11 @@ export class UsersService {
             const newUser = {
                 ...createUserDto, 
                 id: maxId + 1,
-                idJobs:[0]
+                idJobs:[0],
+                wage:0
             };
 
-            await this.userModel.create(newUser);
-            console.log('create done' ,newUser);
-            
+            await this.userModel.create(newUser);          
             return newUser
 
         } catch (error) {

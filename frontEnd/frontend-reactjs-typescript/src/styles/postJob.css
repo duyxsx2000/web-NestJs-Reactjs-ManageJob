@@ -1,0 +1,70 @@
+.ql-toolbar.ql-snow {
+    background: #9fd9e0;
+    
+   
+    /* position: fixed;
+    top: 100px; */
+}
+.ql-editor {
+font-size: 16px !important;
+
+}
+li {
+margin-left: 60px;
+padding: 0px;
+}
+.ql-editor ol li:not(.ql-direction-rtl), .ql-editor ul li:not(.ql-direction-rtl) {
+    padding-left: 0;
+}
+
+.ql-snow h1 {
+font-size: 2em !important;
+}
+
+.ql-snow h2 {
+font-size: 1.6em !important;
+}
+
+.ql-editor li.ql-indent-1:not(.ql-direction-rtl) {
+    padding-left: 0px;
+}
+.ql-snow h3 {
+font-size: 1.2em !important;
+}
+ul {
+    list-style-type: disc; /* Change to square or circle if desired */
+    margin-left: 0px;     /* Adjust the left margin */
+    
+}
+
+ol {
+    list-style-type: none;
+    margin-left: 40px;
+    counter-reset: my-counter; /* Khởi tạo đếm từ 0 */
+}
+.ql-editor ul {
+    padding-left: 0px;
+}
+.ql-indent-1 {
+    margin-left: 40px;
+}
+
+.ql-indent-2 {
+    margin-left: 80px;
+}
+
+
+h1 {
+font-size: 2em !important;
+}
+
+h2 {
+font-size: 1.6em !important;
+}
+
+h3 {
+font-size: 1.2em !important;
+}
+
+
+  

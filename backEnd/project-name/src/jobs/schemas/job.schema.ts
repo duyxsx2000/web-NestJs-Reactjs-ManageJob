@@ -5,33 +5,38 @@ export type Userdocument = HydratedDocument<Job>
 
 @Schema()
 export class Job {
-    @Prop()
-    idJob: number
+  @Prop()
+  idJob: number
 
-    @Prop({ type: { post: Date, start: Date, expired: Date } })
-    date: {
-        post: Date,
-        start: Date,
-        expriced: Date
-    }
-    
-    @Prop()
-    title: string
+  @Prop({ type: { post: Date, start: Date, expired: Date } })
+  date: {
+    post: Date,
+    start: Date,
+    expired: Date
+  }
+  
+  @Prop()
+  title: String
 
-    @Prop()
-    status: string
+  @Prop()
+  name: String
+  @Prop()
+  status: String
 
-    @Prop()
-    jobRecipient: string
+  @Prop()
+  priority:String
 
-    @Prop()
-    describe: string
+  @Prop()
+  deadline: String;
 
-    @Prop()
-    request: string
+  @Prop()
+  detail: String;
 
-    @Prop()
-    image: string
+  @Prop()
+  idLeader: Number;
+
+  @Prop({ type: [Number], default: [] })
+  recommend: Number[]; 
 }
 
 export const JobSchema = SchemaFactory.createForClass(Job)

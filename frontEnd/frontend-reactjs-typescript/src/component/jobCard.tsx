@@ -1,40 +1,47 @@
 import React,{memo} from 'react'
+import { JobType, User } from '../types';
 
 type Props = {
     status: string,
-    jobs: {} | string,
+    job: JobType,
     color: number,
-    onClick1?: () => void,
+    onClick1?: (() => void) | undefined,
     onClick2?: () => void,
 };
 
 
 
 const JobCard = ({
-    jobs,
+    job,
     color,
     onClick1,
     onClick2,
     status
 }: Props) => {
-
-   
-    
-
-    
+    const style = {
+        colorBg: {
+            green:'from-[rgba(42,193,97,0.5)]',
+            yellow:'from-[rgba(193,183,42,0.5)]',
+            red:'from-[rgba(193,45,42,0.5)]'
+        } 
+    }
     return (
-        <div className=' z-30 w-full h-full flex flex-col items-center container  '  >
-            <div className={`h-[90%] bg-white group border  w-[90%]  relative z-30 hover:shadow-xl`} >
-                <div className={`${color === 1 ? 'bg-pink-500' : color === 2 ? 'bg-green-500' :'bg-yellow-500'}   text-white font-medium text-center group-hover:font-bold group-hover:text-red-800 `}>Create page Login</div>
-                <div className='p-2'>Tạo 1 pageLogin với Reactjs/tailwincss</div>
-                <div className='p-2'>
+        <div className=' z-30 w-full h-full flex flex-col items-center container   '  >
+            <div className={`h-[90%] bg-white group  w-[90%] rounded-lg shadow-lg  relative z-30 hover:shadow-2xl `} >
+                <div className={`rounded-t-lg ${color === 3 ? 'bg-red-400' : color === 2 ? 'bg-yellow-400' :'bg-green-400'}   text-white font-medium text-center group-hover:font-bold  `}>
+                    {job.name}
+                </div>
+                <div className='p-2 text-center'>{job.title}</div>
+                <div className='p-2 text-center'>
                     <p>Đã đăng 13/3/2023</p>
-                    <p>Deadline 5 ngày</p>
+                    <p>Deadline {job.deadline}</p>
                 </div>
                 {status === 'home' ? (
-                        <div className='z-10 absolute -bottom-[50px] text-center x] transition-all h-[50px] bg-gradient-to-t from-[rgba(65,64,64,0.5)] to-transpar w-full text-blue-800 font-medium flex justify-between p-2 group-hover:bottom-0'>                    
-                            <div onClick={onClick1} className=' hover:text-white font-semibold cursor-pointer'>Chi tiết</div>
-                            <div onClick={onClick2} className=' hover:text-white font-semibold cursor-pointer'>Nhận Job</div>
+                        <div className={`z-10 absolute hidden h-[100px] text-center bottom-0 group-hover:flex items-end   duration-500 transition-all ease-in-out  rounded-b-lg bg-gradient-to-t ${color === 1 ? style.colorBg.red : color === 2 ? style.colorBg.yellow : style.colorBg.green} to-transpar w-full text-white font-medium `}>                    
+                            <div className='flex justify-around p-2 w-full mb-4'>
+                                <div onClick={onClick1} className='  hover:text-blue-800 font-semibold cursor-pointer'>Detail</div>
+                                <div onClick={onClick2} className='  hover:text-blue-800 font-semibold cursor-pointer'>Add</div>
+                            </div>
                         </div>
                     ) : (
                         <div className=' border-t border-gray-300 mt-3  px-4'>                    
@@ -44,7 +51,7 @@ const JobCard = ({
                     )
                 }
             </div>
-            {status === 'home' && <div className='cover  h-[10%] bg-white w-[100%] z-40 '></div>}
+ 
         </div>
     )
    

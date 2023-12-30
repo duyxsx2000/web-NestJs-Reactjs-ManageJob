@@ -16,7 +16,9 @@
 
 
 
-
+.App {
+  background:  #F8F8FF;
+}
 
 
 
@@ -24,29 +26,11 @@
   background: rgb(233, 227, 227);
 }
 
-
-
-.navConten{
-  display: flex;
-  border-radius: 5px;
-  
-  box-shadow: 0 0 0 1px rgb(195, 192, 192) ;
-
-  
-  background: white;
-}
-/* .navConten div{
-  width:25% ;
-  padding: 5px;
-  text-align: center; 
-  
-} */
 .navConten div>div {
   width: 100%;
   text-align: center;
   font-weight: 700;
 }
-
 
 .scrollbar {
   width: 12px; /* Độ rộng của thanh trượt */
@@ -56,4 +40,8 @@
   top: 0; /* Đặt vị trí thanh trượt ở trên cùng */
   right: 0; /* Đặt vị trí thanh trượt ở bên phải */
   overflow-y: scroll; /* Kích hoạt thanh trượt dọc */
+}
+
+input[type="file"] {
+  display: none;
 }

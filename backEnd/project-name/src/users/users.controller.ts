@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe, ValidationPipe, Query, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseIntPipe, ValidationPipe, Query, Delete, UseGuards, Request } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ResponseData } from 'src/global/globalClass';
@@ -15,11 +15,17 @@ import { UpdateUserDto } from './dto/updtae-user.dto';
 export class UsersController {
     constructor (private readonly usersService: UsersService){}
     
-    
     @Get()
     @Roles(Role.Admin)
-    findAll(): {} {
-        return this.usersService.findAllUsers()
+    async findAll(@Request() req): Promise<ResponseData<{}>> {
+        try {
+            const email = req.user.email;
+            const users = await this.usersService.findAllUsers(email)
+            return new ResponseData<{}>(users, HttpStatus.SUCCESS, HttpMessage.SUCCESS)   
+        } catch (error) {
+            return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)
+        }
+ 
     };
 
     @Get(':id')
@@ -39,8 +45,7 @@ export class UsersController {
 
     @Post()
     async create(@Body(ValidationPipe) createUserDto: CreateUserDto ): Promise<ResponseData<{}>> {
-        console.log('1');
-        
+       
         try {
            const newUser = await this.usersService.createUser(createUserDto) 
            console.log(newUser,'1');

@@ -1,23 +1,47 @@
-import React, { useRef, useState } from 'react';
+import React, {useState} from 'react';
+import {DndContext} from '@dnd-kit/core';
 
-export default function Testpage() {
-  const refdiv = useRef<null | HTMLParagraphElement>(null);
-  const [test, setTest] = useState<string | null>(null);
+import {Droppable} from './droppable';
+import {Draggable} from './draggable';
 
-  const applyList = (command: string) => {
-    if (refdiv.current) {
-      document.execCommand(command, false, undefined);
-      const html = refdiv.current.innerHTML;
-      setTest(html);
-    }
-  };
+function Testpage() {
+  const containers = ['A', 'B', 'C'];
+  const [parent, setParent] = useState(null);
+  const xxx = () => {
+    return(
+      <div>
+        hello ae
+      </div>
+    )
+  }  
+  const draggableMarkup = (
+    <Draggable id="draggable">{xxx()}</Draggable>
+  );
 
   return (
-    <>
-      {test && <div dangerouslySetInnerHTML={{ __html: test }} />}
-      <div ref={refdiv} className='container mt-8' contentEditable></div>
-      <button onClick={() => applyList('insertOrderedList')}>Danh sách số</button>
-      <button onClick={() => applyList('insertUnorderedList')}>Danh sách dấu đầu dòng</button>
-    </>
+    <div className='mt-[100px] '>
+      <DndContext onDragEnd={handleDragEnd} >
+        {parent === null ? draggableMarkup : null}
+        
+        {containers.map((id) => (
+          // We updated the Droppable component so it would accept an `id`
+          // prop and pass it to `useDroppable`
+          <Droppable key={id} id={id}>
+            {parent === id ? draggableMarkup : 'Drop here'}
+          </Droppable>
+        ))}
+      </DndContext>
+    </div>
+
   );
-}
+
+  function handleDragEnd(event: any) {
+    const {over} = event;
+
+    // If the item is dropped over a container, set it as the parent
+    // otherwise reset the parent to `null`
+    setParent(over ? over.id : null);
+  }
+};
+
+export default Testpage;

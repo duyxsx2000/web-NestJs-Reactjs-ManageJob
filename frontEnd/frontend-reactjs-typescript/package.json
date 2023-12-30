@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@dnd-kit/core": "^6.1.0-next-2023106221355",
+    "@dnd-kit/modifiers": "^7.0.0",
+    "@dnd-kit/sortable": "^8.0.0-next-2023106221355",
     "@reduxjs/toolkit": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -12,8 +15,12 @@
     "@types/react": "^18.2.42",
     "@types/react-dom": "^18.2.17",
     "antd": "^5.12.1",
+    "dompurify": "^3.0.6",
     "draft-js": "^0.11.7",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.15.0",
     "react-quill": "^2.0.0",
@@ -48,6 +55,9 @@
     ]
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.5",
+    "@types/react-beautiful-dnd": "^13.1.7",
+    "@types/react-draft-wysiwyg": "^1.13.7",
     "tailwindcss": "^3.3.6"
   }
 }

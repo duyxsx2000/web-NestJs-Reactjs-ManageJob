@@ -22,7 +22,9 @@ export class JobsService {
 
     async findAll() {      
         try {
-            const allJobs = await this.jobModel.find()
+            const allJobs = await this.jobModel.find({status:'none'})
+            console.log(allJobs);
+            
             return allJobs
         } catch (error) {
             throw new NotFoundException('error')   
@@ -60,6 +62,8 @@ export class JobsService {
     }
 
     async create(createJobDto: CreateJobDto) {
+        console.log(createJobDto,'create1');
+        
         try {
             const idMax = await this.jobModel.aggregate([
                 {$group: {
@@ -67,13 +71,21 @@ export class JobsService {
                     maxId:{$max: '$idJob'}
                 }}
             ]);
+            const jobAddDatePosst = {
+                ...createJobDto,
+                status:'none',
+                date: {
+                    ...createJobDto.date,
+                    post: new Date(Date.now())
+                }
+            }
             const newJob = {
-                ...createJobDto, 
+                ...jobAddDatePosst, 
                 idJob: idMax[0].maxId + 1,
  
             };
-            await this.jobModel.create(newJob);
 
+            const create = await this.jobModel.create(newJob);
             return newJob
         } catch (error) {
             throw new NotFoundException('error')

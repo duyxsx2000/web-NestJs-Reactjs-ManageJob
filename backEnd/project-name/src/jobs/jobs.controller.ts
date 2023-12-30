@@ -1,10 +1,15 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/create-Job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { ResponseData } from 'src/global/globalClass';
 import { HttpMessage, HttpStatus } from 'src/global/globalEnum';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/auth/manageRoles/roles.guard';
+import { Roles } from 'src/auth/manageRoles/roles.decorator';
+import { Role } from 'src/auth/manageRoles/role.enum';
 
+@UseGuards(AuthGuard, RolesGuard)
 @Controller('jobs')
 export class JobsController {
     constructor(private readonly jobsService: JobsService) {}
@@ -38,13 +43,15 @@ export class JobsController {
             const res = await this.jobsService.getStatistics('')
             return new ResponseData<{}>(res, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
         } catch (error) {
-            return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)
-            
+            return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)       
         }
     };
-
+    
+    @Roles(Role.Admin)
     @Post()
     async create(@Body(ValidationPipe) createJobDto: CreateJobDto): Promise<ResponseData<{}>> {
+        console.log(createJobDto,'create');
+        
         try {
             const res = await this.jobsService.create(createJobDto);
             return new ResponseData<{}>(res, HttpStatus.SUCCESS, HttpMessage.SUCCESS)

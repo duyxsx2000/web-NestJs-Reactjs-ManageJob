@@ -1,5 +1,5 @@
-import { IsString, IsNotEmpty, IsEmail, IsNumber } from "class-validator";
-
+import { IsString, IsNotEmpty, IsEmail, IsInt, Min, Max} from "class-validator";
+import { TransformFnParams } from 'class-transformer';
 export class CreateUserDto {
     @IsNotEmpty()
     @IsString()
@@ -11,9 +11,27 @@ export class CreateUserDto {
     @IsString()
     password: string;
 
-    @IsNumber()
-    wage: number;
+    @IsString()
+    position: string;
+
+    @IsNotEmpty()
+    phone: number;
+
+    @IsString()
+    level: string;
     
     @IsNotEmpty()
     role: string
+
+    @IsNotEmpty()
+    image: string
+}
+export type CreateUser = {
+    email: string,
+    name: string,
+    position: string,
+    role: string,
+    level: string,
+    phone: number,
+    [key: string]: string | number;
 }

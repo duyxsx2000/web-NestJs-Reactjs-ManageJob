@@ -18,15 +18,32 @@ export class User {
 
     @Prop()
     role: Role;
+
+    @Prop()
+    level: string;
+
+    @Prop()
+    position: string
     
     @Prop()
     wage: number;
 
     @Prop()
+    phone: number
+
+    @Prop()
     id: number;
+
+    @Prop()
+    image: string;
 
     @Prop([Number])
     idJob: number[];
+
+    @Prop({ type: Date, default: new Date(Date.now()) })
+    postDate: Date;
+
+
 
 };
 

@@ -13,7 +13,7 @@ const data: UserAuth = {
 const initialState: AuthState = {
     profile: data,
     test: '',
-    loading:'none',
+    loading:null,
     token:''
 };
 
@@ -28,7 +28,7 @@ type TypeForm = {
 interface AuthState {
     profile: UserAuth |  null,
     test: string,
-    loading: "done" | "none" | "loading",
+    loading: "done" | "none" | "loading" | null,
     token: string
 };
 
@@ -60,15 +60,12 @@ export const authSlice = createSlice({
             fetchProfileByToken.fulfilled, 
             (state, action) => {
                 if(!action.payload) {
-                    console.log('gg'); 
                     state.loading = "none"
                     return undefined
-                }
-                console.log(123);
-                
+                };
+                                
                 state.profile = action.payload 
                 state.loading = 'done' 
-                console.log(123);
             }
         )
       },
@@ -80,7 +77,7 @@ export const fetchtokenByUser = createAsyncThunk<ResToken |  null, TypeForm>(
     'auth/fetchtokenByUser',
     async (dataLogin: TypeForm,{dispatch}) => {
 
-        dispatch(setLoading('loading'))
+        // dispatch(setLoading('loading'))
         try {
             const res = await fetch('http://localhost:3001/auth/login', {
                 method: 'POST',
@@ -91,6 +88,7 @@ export const fetchtokenByUser = createAsyncThunk<ResToken |  null, TypeForm>(
             });
             const data: Promise<ResToken>= await res.json()
             localStorage.setItem('jwtToken', (await data).access_token)
+            
             return data
         } catch (error) {
             console.log(error,'error');
@@ -102,21 +100,17 @@ export const fetchtokenByUser = createAsyncThunk<ResToken |  null, TypeForm>(
 export const fetchProfileByToken = createAsyncThunk<UserAuth | null, string>(
     'auth/fetchProfileByToken',
     async (token: string, {dispatch}) => {
-        dispatch(setLoading('loading'))
-        try {
-            console.log('ế');
-            
+        // dispatch(setLoading('loading'))
+        try {           
             const res = await fetch('http://localhost:3001/auth/profile', {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-            if(!res.ok) return null
-            
-            const profile: Promise<UserAuth> = await res.json()    
-            console.log(profile,"0");
-                   
+            if(!res.ok) return null           
+            const profile: Promise<UserAuth> = await res.json()  
+            console.log(profile,"profile");
             return profile
         } catch (error) {
             return null

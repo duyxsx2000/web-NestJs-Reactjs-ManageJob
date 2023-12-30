@@ -12,7 +12,6 @@ import { User, UserSchema } from './schemas/users.schema';
     providers: [
         UsersService,
         AuthGuard,
-
     ],
 })
 export class UsersModule {}
