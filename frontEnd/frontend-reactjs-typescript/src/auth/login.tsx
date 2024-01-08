@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {GoogleOutlined, KeyOutlined} from '@ant-design/icons'
 import './login.css'
-import ButtonSample from '../component/buttonSample'
+import ButtonSample from '../component/button/buttonSample'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/store'
 import { fetchtokenByUser } from './authSlice';

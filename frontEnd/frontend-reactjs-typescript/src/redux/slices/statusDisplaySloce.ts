@@ -7,13 +7,15 @@ type JobState = {
         title: string,
         status: boolean
     }
+    modalPostJob: boolean
 }
 const initialState: JobState = {
     modalCreateUser: false,
     modalNotification: {
         title:'',
         status: false
-    }
+    },
+    modalPostJob:false
 
 };
 
@@ -26,6 +28,13 @@ export const statusDisplaySlice = createSlice({
                 state.modalCreateUser = true
             } else {
                 state.modalCreateUser = false
+            }
+        },
+        setModalPostJob: (state, action) => {           
+            if(!state.modalPostJob) {
+                state.modalPostJob = true
+            } else {
+                state.modalPostJob = false
             }
         },
         setModalNotification: (state, action) => {   
@@ -43,5 +52,5 @@ export const statusDisplaySlice = createSlice({
 
 
 const  {reducer,actions} = statusDisplaySlice;
-export const {setModalCreateUser, setModalNotification} = actions;
+export const {setModalCreateUser, setModalNotification, setModalPostJob} = actions;
 export default reducer

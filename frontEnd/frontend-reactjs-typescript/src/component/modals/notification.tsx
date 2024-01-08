@@ -28,7 +28,7 @@ const ModalNotification =()=> {
     },[notification]);
 
   return (
-    <div className={`z-50 fixed w-[300px] min-h-[150px] bg-white rounded-xl shadow-xl duration-500 transition-all ease-in-out ${!display ? '-top-[500px]' : 'top-[80px]'} right-1/2 translate-x-1/2`}>
+    <div className={`z-[100] fixed w-[300px] min-h-[150px] bg-white rounded-xl shadow-xl duration-500 transition-all ease-in-out ${!display ? '-top-[500px]' : 'top-[80px]'} right-1/2 translate-x-1/2`}>
         <p className='text-center font-semibold text-black'>Notification</p>
         {/* <div className='relative'>
             <div className=' absolute right-1 -top-[30px]'><CloseOutlined /></div>

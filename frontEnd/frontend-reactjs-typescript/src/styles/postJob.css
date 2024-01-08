@@ -36,7 +36,9 @@ ul {
     margin-left: 0px;     /* Adjust the left margin */
     
 }
-
+.ql-container {
+height: 250px !important;
+}
 ol {
     list-style-type: none;
     margin-left: 40px;

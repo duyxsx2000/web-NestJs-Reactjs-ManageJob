@@ -1,5 +1,5 @@
 import React from 'react'
-import '../styles/postJob.css'
+import '../../styles/postJob.css'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import the styles
 import 'react-quill/dist/quill.bubble.css'; // Import the styles

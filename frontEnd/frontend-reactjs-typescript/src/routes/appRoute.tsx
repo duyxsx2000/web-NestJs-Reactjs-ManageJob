@@ -3,10 +3,7 @@ import {Routes, Route, Navigate} from 'react-router-dom'
 import Login from '../auth/login'
 import { UserAuth } from '../types'
 import HomePage from '../home/homePage'
-import PostJob from '../admin/jobs/postJob'
-import AdminPage from '../admin/adminPage'
-import DefaultLayout from '../layouts/defaultLayout'
-import Dasboard from '../admin/dashboard/doasboard'
+import { AdminRoute } from './adminRoute'
 
 type Props = {
     loading: "none" | "done" | "loading",
@@ -44,42 +41,20 @@ export const AppRoute = ({
                 element= {
                     loading === "none" ?
                     <Navigate to={'/login'} replace/> : (
-                        <DefaultLayout>
-                            <HomePage/>
-                        </DefaultLayout> 
+                        <HomePage/>
                     )
    
                 }
             />
             <Route
-                path='/admin'
-                element= {
-                    loading === "none" ?
-                    <Navigate to={'/login'} replace/> : (
-                        <DefaultLayout>
-                            <AdminPage>
-                                <Dasboard/>
-                            </AdminPage>
-                        </DefaultLayout> 
-                    )
-                        
-                }
-            />
-            <Route
                 path='/admin/*'
                 element= {
-                    loading === "none" ?
-                    <Navigate to={'/login'} replace/> : (
-                        <DefaultLayout>
-                            <AdminPage>
-                                <></>
-                            </AdminPage>
-                        </DefaultLayout> 
-                    )
-                        
+                    loading != "done" ?
+                    <Login/> :
+                    <AdminRoute></AdminRoute>     
                 }
             />
-            
+           
         </Routes>
     )
 }

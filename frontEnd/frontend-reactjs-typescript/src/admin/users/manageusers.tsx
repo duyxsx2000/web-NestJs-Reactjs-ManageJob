@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
 import { useDispatch } from 'react-redux'
 import { setModalCreateUser } from '../../redux/slices/statusDisplaySloce'
-import UserCard from '../../component/userCard'
+import UserCard from '../../component/card/userCard'
 import { fetchUserByAdmin } from '../../redux/slices/usersSlice'
 import { AcctionType } from '../../types'
 import { AsyncThunkAction } from '@reduxjs/toolkit'
@@ -32,10 +32,10 @@ export default function Manageusers() {
     
   }
   return (
-    <div className='h-full'>
-      <div className='mt-[20px]  flex '>
-        <div className='min-h-[100vh] w-3/4 flex flex-col justify-between'>
-          <div className='   flex flex-wrap'>
+    <div className='h-full w-full'>
+      <div className='  flex '>
+        <div className='min-h-[100vh] w-full flex flex-col justify-between'>
+          <div className=' mt-4  flex flex-wrap'>
             {loading && (
               user.map((user, index) => {
                 return (
@@ -70,22 +70,10 @@ export default function Manageusers() {
               ) : !users && !loading && (
                 <div className='w-full h-full'><Nodata/></div>
               )
-
             }   
           </div>
           <div className='text-center font-bold w-full'>1.2.3...100</div>
-        </div>
-        
-        <div className='w-1/4  fixed top-0 right-0 h-[93vh] z-[10] px-3'>
-          <div className='mt-[70px]'>
-            <div onClick={() => dispatch(setModalCreateUser(''))} className='w-full cursor-pointer rounded-md h-[50px] text-white mt-4  bg-blue-600 font-bold flex justify-center items-center '>
-              Create New User
-            </div>
-            <div onClick={handleOnlickTest} className='w-full rounded-md h-[50px] text-white mt-4  bg-blue-600 font-bold flex justify-center items-center '>
-              test
-            </div>
-          </div>
-        </div>
+        </div>    
         {display && <ModalCreateUser />} 
       </div>
     </div>

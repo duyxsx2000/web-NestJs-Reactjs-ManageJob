@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import InputSample from '../sampleInput';
-import InputDefault from '../inputDefault';
-import InputTextDefault from '../inputDefault';
+import InputTextDefault from '../form/inputDefault';
 import {CloseOutlined, FileImageOutlined} from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { setModalCreateUser,  } from '../../redux/slices/statusDisplaySloce';
@@ -95,9 +93,9 @@ export default function ModalCreateUser() {
   }
 
   return (
-    <div className='fixed w-full h-[100vh] bg-[rgba(112,112,112,0.7)] top-0 left-0 z-30 flex justify-center items-center'> 
+    <div className='fixed w-full h-[100vh] bg-[rgba(112,112,112,0.7)] top-0 left-0 z-[90] flex justify-center items-center'> 
       {loading === 'loading' ? <Loading/> : <></>}  
-      <div className={` w-[450px] h-[640px] bg-white fixed z-30  transition-all ${status ? 'top-[40px]' : '-top-[500px]'}`}>   
+      <div className={` w-[450px] h-[640px] bg-white fixed z-[90] transition-all ${status ? 'top-[40px]' : '-top-[500px]'}`}>   
         <h1 className='text-black'>FORM CREATE NEW USER</h1>
         <div className=' relative space-y-4 w-full'>
           <div onClick={() => dispatch(setModalCreateUser(''))} className=' absolute right-2 -top-[65px]'><CloseOutlined /></div>

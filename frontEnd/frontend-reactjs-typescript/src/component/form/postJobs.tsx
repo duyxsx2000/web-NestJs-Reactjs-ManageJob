@@ -1,22 +1,21 @@
 import React, { useEffect, useState} from 'react'
-import DetailJob from '../../component/detailJob';
-import EditorBox from '../../component/editorBox';
-import { AcctionType, CreateJob } from '../../types';
+import EditorBox from './editorBox';
+import { AcctionType, CreateJob, JobType } from '../../types';
 import { useDispatch } from 'react-redux';
 import { postDataCreateJob } from '../../redux/slices/jobsSlice';
 import { AsyncThunkAction} from '@reduxjs/toolkit'
 import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk'
-import { AppDispatch, RootState } from '../../redux/store'; 
 import 'react-quill/dist/quill.snow.css'; // Import the styles
 import 'react-quill/dist/quill.bubble.css'; // Import the styles
 import '../../styles/postJob.css'
 
-
 export default function PostJob() {
-  
-  const [oppenEditText, setOppenEditText] = useState<boolean>(false); 
+
   const [status, setStatus] = useState(false)
-  const [detailJob, setDetailJob] = useState('');
+  const [date, setDate] = useState({
+    start: '2024-01-01',
+    expired: '2024-01-01'
+  })
   const [dataForm, setDataForm] = useState<CreateJob>({
     title: 'Title',
     name:'Name',
@@ -24,11 +23,11 @@ export default function PostJob() {
       start: new Date(Date.now()),
       expired:new Date(Date.now()),
     },
+
     deadline: '1 day',
     priority: 'none',
     detail: '<p>Detail:</p><p class="ql-indent-1"><span style="color: rgb(55, 65, 81);">Create a function component Reactjs with a login functionality.</span></p><p><span style="color: rgb(55, 65, 81);">Requirement: </span></p><p class="ql-indent-1">Use Tailwincss, Ant Design.</p><p class="ql-indent-1">Has a modern interface.</p><p>Suggestion: </p><p class="ql-indent-1"><span style="color: rgb(55, 65, 81);">Contact the leader for more details.</span></p><p><br></p><p><br></p><p><br></p><p><br></p>',
     recommend:[12,34],
-    idLeader:123,
   });
 
   const dispatch = useDispatch()
@@ -46,7 +45,9 @@ export default function PostJob() {
   },[dataForm])
 
   const handleOnChangeInput = (e: any) => {
-    const {name, value} = e.target;  
+    const {name, value} = e.target; 
+    console.log(value);
+     
     if(name === 'date start') {
       setDataForm({
         ...dataForm,
@@ -55,6 +56,7 @@ export default function PostJob() {
           start: new Date(value)
         }
       });
+      setDate({...date, start: value});
       return
     };
 
@@ -66,6 +68,7 @@ export default function PostJob() {
           expired: new Date(value)
         }
       });
+      setDate({...date, expired: value});
       return
     };
 
@@ -98,27 +101,27 @@ export default function PostJob() {
   }
 
   return (
-    <div className='mt-5'>
-      <div className='flex '>
-        <div className='w-3/5 min-h-[700px]  flex justify-center items-start'>
-          <div  className='w-[90%] min-h-[95%] rounded-lg h-auto border shadow-2xl bg-white mb-9 '>
+    <div className=''>
+      <div className=''>
+        <div className='w-full'>
+          <div  className=' rounded-lg h-auto border shadow-2xl bg-white mb-9 '>
             <form className='p-4'>
               <h2 className='text-center text-black font-semibold mb-8'>FORM POST JOB</h2>
               <div className='flex justify-between'>
                 <input 
                   type='text'
                   className='  mt-2 rounded-lg border-gray-300 border outline-none w-[45%] p-2  capitalize font-medium'
-                  placeholder='Title Job'
-                  name='title'
-                  value={dataForm.title}
+                  placeholder='Name Job'
+                  name='name'
+                  value={dataForm.name}
                   onChange={handleOnChangeInput}
                 />
                 <input 
                   type='text'
                   className='  mt-2 rounded-lg border-gray-300 border outline-none w-[45%] p-2  capitalize font-medium'
-                  placeholder='Name Job'
-                  name='name'
-                  value={dataForm.name}
+                  placeholder='Title Job'
+                  name='title'
+                  value={dataForm.title}
                   onChange={handleOnChangeInput}
                 />
               </div>
@@ -135,6 +138,7 @@ export default function PostJob() {
                       type='date' 
                       className='focus:outline-none focus:ring focus:border-blue-500'
                       name='date start'
+                      value={date.start}
                       onChange={handleOnChangeInput} 
                     />
                   </div>
@@ -143,6 +147,7 @@ export default function PostJob() {
                       type='date' 
                       className='focus:outline-none focus:ring focus:border-blue-500'
                       name='date expired'
+                      value={date.expired}
                       onChange={handleOnChangeInput}
                     />
                   </div>
@@ -167,10 +172,10 @@ export default function PostJob() {
                 </div>
               </div>
               <div></div>
-              <div className="editor mt-3">
+              <div className="editor mt-3 h-[300px]">
                 <EditorBox value={dataForm.detail} onChange={handleChange}/>
               </div>
-              <div className='mt-4  flex justify-center'>
+              <div className='mt-2  flex justify-center'>
                 <button
                   type='button'
                   className={`w-24 h-12 rounded-lg ${!status ? 'bg-gray-400 text-gray-800' : 'bg-[#9fd9e0] text-white'}  shadow-lg font-semibold hover:text-blue-800`}
@@ -181,15 +186,7 @@ export default function PostJob() {
 
             </form>
           </div>
-        </div>  
-
-        <div className='w-2/5 min-h-[700px]  flex justify-center items-start relative'>
-          <div className=' absolute space-y-3 left-0 top-1'>
-            <div className='w-4 h-4 bg-green-300' onClick={() => setColor('bg-green-500')}></div>
-            <div className='w-4 h-4 bg-yellow-300' onClick={() => setColor('bg-yellow-500')}></div>  
-            <div className='w-4 h-4 bg-red-300' onClick={() => setColor('bg-red-500')}></div>
-          </div>     
-        </div>
+        </div> 
       </div>
     </div>
   )

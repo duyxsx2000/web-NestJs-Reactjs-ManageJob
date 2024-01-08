@@ -4,13 +4,10 @@ import {
     UserOutlined,
     MailOutlined,
     MenuOutlined ,
-    DeleteOutlined,
-    EditOutlined,
-    FileDoneOutlined
 
 } from '@ant-design/icons';
-import { CreateUser, User } from '../types';
-import { AnyARecord } from 'dns';
+import { User } from '../../types';
+
 
 type Props = {
     color: 'bg-green-500' | 'bg-red-500' | 'bg-yellow-500',
@@ -37,7 +34,7 @@ export default function UserCard({
                 </div> */}
                 <div className='flex'>
                     <div className='w-20 h-20 rounded-full  bg-gray-300'></div>
-                    <div className={`flex-1 ml-2 ${color} p-2 text-white`}>
+                    <div className={`flex-1 ml-2 ${color} p-2 text-white rounded-lg`}>
                         <div className='flex items-center'>
                             <UserOutlined className='mr-2' />
                             <p>{user?.name}</p>
@@ -57,7 +54,7 @@ export default function UserCard({
                     <div className='mt-2'>
                         <p className=' font-semibold'>{user?.position}</p>
                         <p className=' font-semibold'>{user?.level}</p>
-                        <p className=' font-semibold'>12/12/2021</p>
+                        <p className='text-red-500 font-semibold'>{`ID ${user?.id}`}</p>
                     </div>
                     <div className='flex text-blue-500 hover:text-blue-800  h-full justify-end items-end mt-12'>
                         <MenuOutlined title="Click me to see details" onClick={onClick} style={{fontSize:'30px'}} />

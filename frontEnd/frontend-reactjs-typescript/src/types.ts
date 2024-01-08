@@ -9,13 +9,12 @@ export type CreateJob = {
     title: string,
     name: string,
     date: {
-        start: Date,
+        start: Date | string,
         expired: Date
     },
     deadline: string,
     detail: string,
     priority: string,
-    idLeader: number
     recommend: number[],
 
 }
@@ -66,5 +65,6 @@ export type JobType = {
     deadline: string,
     detail: string,
     idLeader: number,
-    recommend: Number[] 
+    idStaff: number,
+    recommend: number[] 
 }

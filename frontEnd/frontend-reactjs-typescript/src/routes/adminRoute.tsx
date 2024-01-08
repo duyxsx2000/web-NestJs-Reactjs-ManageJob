@@ -3,26 +3,42 @@ import {Routes, Route, Navigate} from 'react-router-dom'
 import Login from '../auth/login'
 import { UserAuth } from '../types'
 import HomePage from '../home/homePage'
-import PostJob from '../admin/jobs/postJob'
-
 import Dasboard from '../admin/dashboard/doasboard'
 import Manageusers from '../admin/users/manageusers'
+import AdminLayout from '../layouts/adminlayout'
+import Jobs from '../admin/jobs/jobs'
 
 export const AdminRoute = ({}) => {
 
     return (
         <Routes>
             <Route
+                path='/'
+                element= {<Navigate to={'/home'} replace/>}
+            />
+            <Route
                 path='/jobs'
-                element= {<PostJob/>}
+                element= {
+                    <AdminLayout statusStart='JOBS'>
+                        <Jobs/>
+                    </AdminLayout>
+                }
             />
             <Route
                 path='/users'
-                element= {<Manageusers/>}
+                element= {
+                    <AdminLayout statusStart='USERS'>
+                        <Manageusers/>
+                    </AdminLayout>
+                }
             />
             <Route
                 path='/dashboard'
-                element= {<Dasboard/>}
+                element= {
+                    <AdminLayout statusStart='DASHBOARD'>
+                        <Dasboard/>
+                    </AdminLayout>
+                }
             />
         </Routes>
     )

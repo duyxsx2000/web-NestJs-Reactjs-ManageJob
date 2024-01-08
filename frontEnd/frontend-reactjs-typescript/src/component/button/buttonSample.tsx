@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import './component.css'
+import '../component.css'
 
 type Props = {
     styles?:{

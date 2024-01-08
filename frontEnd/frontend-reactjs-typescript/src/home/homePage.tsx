@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import JobCard from '../component/jobCard'
+import JobCard from '../component/card/jobCard'
 import {
   UserOutlined, 
   DownOutlined,
   HddOutlined,
   UpOutlined,
   SearchOutlined,
-  CloseCircleOutlined
 } from '@ant-design/icons';
-import AdminPage from '../admin/adminPage';
+
 import { fetchJobs } from '../redux/slices/jobsSlice';
 import { useDispatch } from 'react-redux';
 import { AsyncThunkAction } from '@reduxjs/toolkit';
@@ -18,23 +17,15 @@ import { AcctionType, JobType } from '../types';
 import ModalDefault from '../component/modals/defaultModal';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import DetailJob from '../component/detailJob';
-const color = {
-  pink: 'pink-500',
-  yellow: 'yellow-500',
-  green: 'green-500'
-};
+import DetailJob from '../component/card/detailJob';
 
 export default function HomePage() {
-  const jobs = useSelector((state: RootState) => state.job.jobs)
-  const a =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+  const jobs = useSelector((state: RootState) => state.job.jobs.home)
   const [hasRunOnce, setHasRunOnce] = useState(false);
   const [width, setWidth] = useState<number>()
-  const b = [1,2,3,4,5]
-  const [dataJobs, setDataJobs] = useState(2)
   const [statusNav, setStatusNav] = useState<string>('All Jobs')
   const [display, setDisplay] = useState<string>('listJobs')
-  const [xx,setXX] = useState<JobType | null>(null)
+  const [detailJob, setDetailJob] = useState<JobType | null>(null)
   const dispatch = useDispatch()
   useEffect(() => {
     const handleResize = () => {
@@ -55,13 +46,12 @@ export default function HomePage() {
   }, [hasRunOnce]);
 
   useEffect(() => {
-    const action: UnknownAction | AsyncThunkAction<ResponseType | null, string, AsyncThunkConfig> | AcctionType = fetchJobs('');
+    const action: UnknownAction | AsyncThunkAction<ResponseType | null, string, AsyncThunkConfig> | AcctionType = fetchJobs('home');
     dispatch(action)
   },[])
 
-  const cl1 = (job: JobType) => {
-    setXX(job)
-  
+  const handleClickOppenDetailJob = (job: JobType) => {
+    setDetailJob(job)
   }
   const cl2 = () => {
   }
@@ -72,28 +62,38 @@ export default function HomePage() {
 
   const handleOnclickGetData = (name: string) => {
     setStatusNav(name)
-    setDataJobs(1)
+  
   };
 
   return (
 
     <div className='homeMain z-20 top-0 flex  '>
-      {xx && 
+      {detailJob && 
         <ModalDefault 
-          width='w-[700px]' 
+          width='w-[600px]' 
           height='h-[600px]' 
           content={(
-              <div className='h-full py-2'>
-                <div className=' relative'>
-                  <div className=' absolute -right-0 -top-2 flex items-center'>
-                    <CloseCircleOutlined onClick={() => {setXX(null)}} />
-                  </div>
+            <div className='h-full '>
+              <div className='absolute -top-[15px] -right-[220px] w-[200px] '>
+                <div>
+                  <button 
+                    className='w-full shadow-md shadow-gray-700 cursor-pointer rounded-md h-[50px] hover:text-white hover:bg-red-800  mt-4  bg-red-500 font-bold flex justify-center items-center'
+                    onClick={() => setDetailJob(null)} 
+                  >
+                    CLOSE
+                  </button>
+                  <button className='w-full shadow-md shadow-gray-700 cursor-pointer rounded-md h-[50px]  mt-4 hover:text-white hover:bg-blue-800   bg-blue-500 font-bold flex justify-center items-center'>
+                    TAKE
+                  </button>
                 </div>
-                <div className='h-full mt-2'>
-                  <DetailJob job={xx}/>
-                </div>
-                
               </div>
+              <div className=' relative'>
+              </div>
+              <div className='h-full mt-2'>
+                <DetailJob job={detailJob}/>
+              </div>
+              
+            </div>
           )}
         />
       }
@@ -140,7 +140,7 @@ export default function HomePage() {
                   <JobCard
                     key={index}
                     status='home' 
-                    onClick1={()=> cl1(job)} 
+                    onClick1={()=> handleClickOppenDetailJob(job)} 
                     onClick2={cl2} 
                     color={job.priority === 'prioritize' ? 3 : job.priority === 'urgent' ? 2 : 1}
                     job={job}
@@ -196,7 +196,7 @@ export default function HomePage() {
                 <JobCard
                   key={1} 
                   status=''
-                  onClick1={() => cl1(job)} 
+                  onClick1={() => handleClickOppenDetailJob(job)} 
                   onClick2={cl2} 
                   color={1} 
                   job={job}

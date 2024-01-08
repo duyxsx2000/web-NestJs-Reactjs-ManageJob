@@ -1,17 +1,13 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
-import ReactDOMServer from 'react-dom/server';
-import ReactQuill from 'react-quill';
+import React from 'react'
 import 'react-quill/dist/quill.snow.css'; // Import the styles
 import 'react-quill/dist/quill.bubble.css'; // Import the styles
-
 import DOMPurify from 'dompurify';
-import '../styles/postJob.css'
+import '../../styles/postJob.css'
 import { CommentOutlined, PhoneOutlined , MailOutlined } from '@ant-design/icons';
-import { CreateJob, JobType } from '../types';
+import { JobType } from '../../types';
 
 type Props = {
-  job: JobType
-    
+  job: JobType   
 }
 
 export default function DetailJob({job}:Props) {
@@ -29,7 +25,7 @@ export default function DetailJob({job}:Props) {
     <div className='w-full h-full rounded-lg p-2  mb-9 shadow-2xl bg-white flex flex-col '>
       <div className={`p-2 border-b rounded-t-lg border-gray-300 `}>
         <h3 className={`font-semibold text-center mb-6}`}>{job.title}</h3>
-        <div className='flex'>
+        <div className='flex mt-3'>
           <p className='w-[100px] font-semibold'>Start</p>
           {convertDateFormat(job.date.start.toString())} 
         </div>
