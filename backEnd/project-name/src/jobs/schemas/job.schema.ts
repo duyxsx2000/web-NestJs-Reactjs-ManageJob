@@ -1,6 +1,6 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-
+import * as mongooseTimestamp from 'mongoose-timestamp';
 export type Userdocument = HydratedDocument<Job>
 
 @Schema()
@@ -35,8 +35,12 @@ export class Job {
   @Prop()
   idLeader: Number;
 
+  @Prop()
+  idStaff: number;
+  
   @Prop({ type: [Number], default: [] })
   recommend: Number[]; 
-}
+};
 
 export const JobSchema = SchemaFactory.createForClass(Job)
+JobSchema.plugin(mongooseTimestamp);

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Request, UseGuards, ValidationPipe } from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/create-Job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
@@ -14,15 +14,39 @@ import { Role } from 'src/auth/manageRoles/role.enum';
 export class JobsController {
     constructor(private readonly jobsService: JobsService) {}
 
-    @Get()
-    async findAll(): Promise<ResponseData<{}>> {
+    @Get('/home')
+    async findHome(@Request() req): Promise<ResponseData<{}>> {
         try {
-            const allJobs = await this.jobsService.findAll()
+            const allJobs = await this.jobsService.findAll(req.user, 'user')
             return new ResponseData<{}>(allJobs, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
         } catch (error) {
             return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)
         }
 
+    };
+
+    
+    @Get('/admin')
+    async findByRoleAdmin(@Request() req): Promise<ResponseData<{}>> {
+        console.log(123);
+        
+        try {
+            const allJobs = await this.jobsService.findAll(req.user, 'admin')
+            return new ResponseData<{}>(allJobs, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
+        } catch (error) {
+            return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)
+        }
+    };
+ 
+    @Roles(Role.Leader)
+    @Get('/leader')
+    async findByRoleLeader(@Request() req): Promise<ResponseData<{}>> {
+        try {
+            const allJobs = await this.jobsService.findAll(req.user, 'leader')
+            return new ResponseData<{}>(allJobs, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
+        } catch (error) {
+            return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)
+        }
     };
 
     @Get(':id')
@@ -37,23 +61,41 @@ export class JobsController {
    
     };
 
-    @Get('dashboard/:time')
-    async getStatistics(@Param('time') time: string): Promise<ResponseData<{}>> {
+    // @Get('dashboard/:time/:type')
+    // async getStatistics(@Param('time') time: Date, @Param('type') type: 'MONTH' | 'DAY' | 'YEAR'): Promise<ResponseData<{}>> {
+    //     console.log('1');
+        
+    //     console.log(time,'---',type);
+       
+    //     try {
+    //         const res = await this.jobsService.getStatistics(time, type)
+    //         console.log(res,'res');
+            
+    //         return new ResponseData<{}>(res, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
+    //     } catch (error) {
+    //         return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)       
+    //     }
+    // };
+
+    @Get('statistics/:time/:type')
+    async getStatistics(@Param('time') time: Date, @Param('type') type: 'MONTH' | 'DAY' | 'ALL', @Request() req): Promise<ResponseData<{}>> {
+        const user = req.user
         try {
-            const res = await this.jobsService.getStatistics('')
+            const res = await this.jobsService.getStatistics(user, time, type)
+            console.log(res);
             return new ResponseData<{}>(res, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
         } catch (error) {
-            return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)       
+            return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)   
         }
-    };
+
+    }
     
     @Roles(Role.Admin)
     @Post()
-    async create(@Body(ValidationPipe) createJobDto: CreateJobDto): Promise<ResponseData<{}>> {
-        console.log(createJobDto,'create');
-        
+    async create(@Body(ValidationPipe) createJobDto: CreateJobDto, @Request() req): Promise<ResponseData<{}>> {
+        const user = req.user
         try {
-            const res = await this.jobsService.create(createJobDto);
+            const res = await this.jobsService.create(createJobDto, user);
             return new ResponseData<{}>(res, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
         } catch (error) {
             return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)   
@@ -62,7 +104,7 @@ export class JobsController {
     };
 
     @Delete(':id')
-    async delate(@Param('id', ParseIntPipe) id: number): Promise<ResponseData<{}>> {
+    async delate(@Param('id', ParseIntPipe) id: number): Promise<ResponseData<{}>> {     
         try {
             const res = await this.jobsService.delete(id);
             return new ResponseData<{}>(res, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
@@ -74,12 +116,21 @@ export class JobsController {
 
     @Patch(':id')
     async update(@Param('id',ParseIntPipe) id: number, @Body(ValidationPipe) updateJobDto: UpdateJobDto): Promise<ResponseData<{}>> {
+        console.log('=====',updateJobDto);
+        
         try {
             const res = await this.jobsService.updateJob(id, updateJobDto);
             return new ResponseData<{}>(res, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
         } catch (error) {
             return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)   
         }    
+    };
+
+    @Roles(Role.Admin)
+    @Get('statistical')
+    async statistical(){
+        return
     }
+
 
 }

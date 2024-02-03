@@ -18,7 +18,7 @@ export class UsersService {
             const users = await this.userModel.aggregate([
                 {
                     $match: {
-                        email: { $ne: email }
+                        email: { $ne: 'émail' }
                     }
                 },
             ])
@@ -29,12 +29,12 @@ export class UsersService {
         }
     };
 
-    async findOneUser(id: number) {
+    async findOneUser(id: number) { 
         try {
             const user = await this.userModel.findOne({id: id});
             return user
         } catch (error) {
-            throw new NotFoundException('error')
+            throw new NotFoundException('error') 
         }
 
     };
@@ -80,7 +80,10 @@ export class UsersService {
     async delUser(id: number) {
         try {
             await this.userModel.deleteOne({id: id})
-            return null
+            const users = await this.findAllUsers('admin@gmail.com')
+            console.log(users);
+            
+            return users
         } catch (error) {
             throw new NotFoundException('error')   
         } 

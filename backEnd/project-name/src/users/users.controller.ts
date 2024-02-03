@@ -72,10 +72,11 @@ export class UsersController {
 
     };
 
+    @Roles(Role.Admin)
     @Delete(':id')
     async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<ResponseData<{}>> {
         try {
-            const res = this.usersService.delUser(id) 
+            const res = await this.usersService.delUser(id) 
             return new ResponseData<{}>(res, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
             
          } catch (error) {

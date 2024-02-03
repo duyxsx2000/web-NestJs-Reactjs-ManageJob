@@ -15,7 +15,7 @@ import { User, UserSchema } from 'src/users/schemas/users.schema';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: {expiresIn: '6000s'}
+      signOptions: {expiresIn: '60000s'}
     })
   ],
   controllers: [AuthController],
