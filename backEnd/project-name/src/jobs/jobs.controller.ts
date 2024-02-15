@@ -61,22 +61,6 @@ export class JobsController {
    
     };
 
-    // @Get('dashboard/:time/:type')
-    // async getStatistics(@Param('time') time: Date, @Param('type') type: 'MONTH' | 'DAY' | 'YEAR'): Promise<ResponseData<{}>> {
-    //     console.log('1');
-        
-    //     console.log(time,'---',type);
-       
-    //     try {
-    //         const res = await this.jobsService.getStatistics(time, type)
-    //         console.log(res,'res');
-            
-    //         return new ResponseData<{}>(res, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
-    //     } catch (error) {
-    //         return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)       
-    //     }
-    // };
-
     @Get('statistics/:time/:type')
     async getStatistics(@Param('time') time: Date, @Param('type') type: 'MONTH' | 'DAY' | 'ALL', @Request() req): Promise<ResponseData<{}>> {
         const user = req.user
@@ -87,8 +71,7 @@ export class JobsController {
         } catch (error) {
             return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)   
         }
-
-    }
+    };
     
     @Roles(Role.Admin)
     @Post()

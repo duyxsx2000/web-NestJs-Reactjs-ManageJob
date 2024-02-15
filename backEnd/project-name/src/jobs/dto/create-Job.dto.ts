@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
 export class CreateJobDto {
+  @IsNotEmpty()
   name: string;  
   title: string;
   date: {

@@ -47,9 +47,7 @@ export class UsersController {
     async create(@Body(ValidationPipe) createUserDto: CreateUserDto ): Promise<ResponseData<{}>> {
        
         try {
-           const newUser = await this.usersService.createUser(createUserDto) 
-           console.log(newUser,'1');
-           
+           const newUser = await this.usersService.createUser(createUserDto) ;       
            return new ResponseData<{}>(newUser, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
            
         } catch (error) {
@@ -61,9 +59,7 @@ export class UsersController {
     @Post(':id')
     async updateOne(@Param('id', ParseIntPipe)id: number , @Body(ValidationPipe) updateUserDto: UpdateUserDto): Promise<ResponseData<{}>> {
         try {
-            const newUser = await this.usersService.updateUser(id,updateUserDto) 
-            console.log(newUser,'1');
-            
+            const newUser = await this.usersService.updateUser(id,updateUserDto);           
             return new ResponseData<{}>(newUser, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
             
          } catch (error) {
@@ -84,7 +80,6 @@ export class UsersController {
          }
 
     }
- 
 
     
 }

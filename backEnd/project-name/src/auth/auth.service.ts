@@ -14,7 +14,6 @@ export class AuthService {
         try {
             const user = await this.usersService.findOneAuth(signInAuthDto.email);
             const {password, ...result} = user;
-            console.log(password);
             if(password !== signInAuthDto.password) {
                 throw new UnauthorizedException('Invalid password');
             }
@@ -22,8 +21,6 @@ export class AuthService {
             const userData = {role: user.role, name: user.name, id:user.id}
             return {
                 access_token: await this.jwtService.signAsync(payload),
-                
-
             }
         } catch (error) {
             return new UnauthorizedException()

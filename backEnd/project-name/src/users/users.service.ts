@@ -79,9 +79,8 @@ export class UsersService {
 
     async delUser(id: number) {
         try {
-            await this.userModel.deleteOne({id: id})
-            const users = await this.findAllUsers('admin@gmail.com')
-            console.log(users);
+            await this.userModel.deleteOne({id: id});
+            const users = await this.findAllUsers('admin@gmail.com');
             
             return users
         } catch (error) {
@@ -91,22 +90,17 @@ export class UsersService {
     };
 
     async updateUser(id: number, updateUserDto: UpdateUserDto) {
-        console.log(updateUserDto);
         try {
             await this.userModel.updateOne(
                 {id: id},
                 {$set:updateUserDto}
             );
-            const newUser = await this.userModel.findOne({id: id})
+            const newUser = await this.userModel.findOne({id: id});
             return newUser
         } catch (error) {
             throw new NotFoundException('error')
         }
-    }
+    };
  
-
-    
-
-   
 
 }
