@@ -4,36 +4,45 @@ import Login from '../auth/login'
 import { UserAuth } from '../types'
 import HomePage from '../home/homePage'
 import { AdminRoute } from './adminRoute'
+import DefaultLayout from '../layouts/defaultLayout'
+import LeaderPage from '../dashboards/leader/leaderPage'
 
 type Props = {
     loading: "none" | "done" | "loading",
-    userAuth: UserAuth | null,
-    status: string
+    profile: UserAuth | null,
+    status: string,
+
 }
 
 export const AppRoute = ({
     loading, 
-    userAuth
+    profile
 }: Props) => {
     console.log(loading);
-    
-  
+    console.log(profile);
+    const role = profile?.role
     return (
         <Routes>
             <Route 
                 path='/' 
                 element= {
-                    loading === "done" ?
-                    <Navigate to={'/home'} replace/> :
-                    <Navigate to={'/login'} replace/>         
-                }
+                    loading === "done" ? (     
+                        <DefaultLayout>
+                            <Navigate to={'/home'} replace/>
+                        </DefaultLayout>
+                    ) :
+                    <Navigate to={'/login'} replace/>  
+                 }
             />
             <Route
                 path='/login'
                 element= {
                     loading != "done" ?
-                    <Login/> :
-                    <Navigate to={'/home'} replace/>
+                    <Login/> : (
+                        <DefaultLayout>
+                            <Navigate to={'/home'} replace/>
+                        </DefaultLayout>
+                    )
                 }
             />
             <Route
@@ -41,7 +50,9 @@ export const AppRoute = ({
                 element= {
                     loading === "none" ?
                     <Navigate to={'/login'} replace/> : (
-                        <HomePage/>
+                        <DefaultLayout>
+                            <HomePage/>
+                        </DefaultLayout>
                     )
    
                 }
@@ -49,9 +60,30 @@ export const AppRoute = ({
             <Route
                 path='/admin/*'
                 element= {
-                    loading != "done" ?
-                    <Login/> :
-                    <AdminRoute></AdminRoute>     
+                    loading != "done" ? (
+                        <Login/>
+                    ) : role != 'admin' ? (
+                        <Navigate to={'/'} replace/>
+                    ) : (
+                        <DefaultLayout>
+                             <AdminRoute></AdminRoute>  
+                        </DefaultLayout>
+                    )
+                      
+                }
+            />
+            <Route
+                path='/leader'
+                element = {
+                    loading != "done" ? (
+                        <Login/>
+                    ) : role != 'leader' ? (
+                        <Navigate to={'/'} replace/>
+                    ) : (
+                        <DefaultLayout>
+                             <LeaderPage/>  
+                        </DefaultLayout>
+                    )    
                 }
             />
            

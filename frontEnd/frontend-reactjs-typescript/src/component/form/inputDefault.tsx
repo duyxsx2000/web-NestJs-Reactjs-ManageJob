@@ -23,7 +23,7 @@ export default function InputTextDefault({
   return (
     <div className='flex flex-col items-center w-full'>
         <div className='w-3/4 flex justify-start font-semibold mb-1'>
-        <label>{label}</label>
+        <label className='text-white'>{label}</label>
         </div>
         <input
             name={name}

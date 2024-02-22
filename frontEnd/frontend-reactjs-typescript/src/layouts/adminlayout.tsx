@@ -23,7 +23,7 @@ export default function AdminLayout({children, statusStart}: Props) {
   };
   
   return (
-    <div className='flex min-h-[100vh] '>
+    <div className='flex min-h-[100vh] w-full '>
       <div className='navbar w-[50px] h-full fixed left-2  z-10 flex items-start justify-center  '>
         <div className='w-[40px]  h-[70%] bg-white shadow-2xl border border-blue-200 mt-11 rounded-[5px] flex flex-col items-center justify-between '>
           <Link 
@@ -52,20 +52,23 @@ export default function AdminLayout({children, statusStart}: Props) {
         </div>
       </div>
 
-      <div className=' w-3/4 ml-[80px] mt-[30px]'>
+      <div className='  ml-[80px] mt-[30px]   w-full'>
         {children}
       </div>
 
-      <div className=' fixed top-0 w-[250px] right-8  h-[93vh] z-[10]  px-3'>
-        <div className='mt-[90px] w-[250px]'>
+      {/* <div className=' fixed top-0 w-[250px] right-0  h-[93vh] z-[10]  px-3'>
+        <div className='mt-[90px] w-[200px]'>
           <div 
             onClick={() => dispatch(setModalCreateUser(true))} 
-            className='w-full cursor-pointer rounded-md h-[50px] text-white mt-4 flex justify-center items-center bg-blue-600 font-bold text-center '
+            className='group w-full cursor-pointer rounded-md h-[50px] text-white mt-4 flex justify-center items-center bg-blue-500 font-bold text-center '
           >
-            Create New User
+            <p className='group-hover:scale-[1.1]'>Create New User</p>
           </div>
-          <div onClick={()=>{dispatch(setModalPostJob(true))}} className='w-full  rounded-md h-[50px] text-white mt-4  bg-blue-600 font-bold flex justify-center items-center '>
-            Post Job
+          <div 
+            onClick={()=>{dispatch(setModalPostJob(true))}} 
+            className='group w-full cursor-pointer  rounded-md h-[50px] text-white mt-4  bg-blue-500 font-bold flex justify-center items-center '
+          >
+            <p className='group-hover:scale-[1.1]'>Post Job</p>
           </div>
         </div>
       </div>
@@ -79,7 +82,7 @@ export default function AdminLayout({children, statusStart}: Props) {
           )}
         />
       )}
-      {display && <ModalCreateUser />}
+      {display && <ModalCreateUser />} */}
              
     </div>
   )

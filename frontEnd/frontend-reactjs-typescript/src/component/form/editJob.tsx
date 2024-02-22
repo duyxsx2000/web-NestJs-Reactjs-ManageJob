@@ -2,40 +2,39 @@ import React, { useEffect, useState} from 'react'
 import EditorBox from './editorBox';
 import { AcctionType, CreateJob, JobType } from '../../types';
 import { useDispatch } from 'react-redux';
-import { postDataCreateJob } from '../../redux/slices/jobsSlice';
+import { actionEditjob, postDataCreateJob } from '../../redux/slices/jobsSlice';
 import { AsyncThunkAction} from '@reduxjs/toolkit'
 import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk'
 import 'react-quill/dist/quill.snow.css'; // Import the styles
 import 'react-quill/dist/quill.bubble.css'; // Import the styles
 import '../../styles/postJob.css'
-
+import {getStringDate} from '../../utils/date'
+import ButtonDefault from '../button/buttonDEfault';
 type Props = {
     job: JobType,
+    onclick: () => void
 }
-export default function EditJob({job}: Props) {
-    console.log(job);
-    
-  const [status, setStatus] = useState(false)
-  const [date, setDate] = useState({
-    start: '2024-01-01',
-    expired: '2024-01-01'
-  });
+export default function EditJob({job, onclick}: Props) {
 
-  const [dataForm, setDataForm] = useState<JobType>(job);
+    const [status, setStatus] = useState(false);
+    const [date, setDate] = useState({
+        start: getStringDate(job.date.start),
+        expired: getStringDate(job.date.expired)
+    });
+    const [dataForm, setDataForm] = useState<JobType>(job);
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    setDataForm(job);
-    return
-  },[])
+    useEffect(() => {
+        setDataForm(job);
+        return
+    },[]);
 
-  const dispatch = useDispatch()
- 
-  useEffect(() => {
-    setDataForm(job)
-    return
-  },[job])
+    useEffect(() => {
+        setDataForm(job)
+        return
+    },[job]);
 
-  useEffect(() => {
+    useEffect(() => {
     // if(!dataForm.title) return;
     // if(!dataForm.date) return;
     // if(!dataForm.deadline) return;
@@ -44,59 +43,59 @@ export default function EditJob({job}: Props) {
     // if(!dataForm.recommend) return;
     // if(!dataForm.style.color) return;
     setStatus(true)   
-  },[dataForm])
+    },[dataForm]);
 
-  const handleOnChangeInput = (e: any) => {
-    const {name, value} = e.target; 
-    console.log(value);
-     
-    if(name === 'date start') {
-      setDataForm({
-        ...dataForm,
-        date: {
-          ...dataForm.date,
-          start: new Date(value)
-        }
-      });
-      setDate({...date, start: value});
-      return
+    const handleOnChangeInput = (e: any) => {
+        const {name, value} = e.target; 
+        console.log(value);
+            
+        if(name === 'date start') {
+            setDataForm({
+            ...dataForm,
+            date: {
+                ...dataForm.date,
+                start: new Date(value)
+            }
+            });
+            setDate({...date, start: value});
+            return
+        };
+
+        if(name === 'date expired') {      
+            setDataForm({
+            ...dataForm,
+            date: {
+                ...dataForm.date,
+                expired: new Date(value)
+            }
+            });
+            setDate({...date, expired: value});
+            return
+        };
+
+        setDataForm({
+            ...dataForm,
+            [name]: value
+        });
+        return
     };
 
-    if(name === 'date expired') {      
-      setDataForm({
-        ...dataForm,
-        date: {
-          ...dataForm.date,
-          expired: new Date(value)
-        }
-      });
-      setDate({...date, expired: value});
-      return
+    const handleChange = (value: any) => {
+        setDataForm({
+            ...dataForm,
+            detail: value
+        })
     };
 
-    setDataForm({
-      ...dataForm,
-      [name]: value
-    });
-    return
-  };
-
-  const handleChange = (value: any) => {
-    setDataForm({
-      ...dataForm,
-      detail: value
-    })
-  };
-
-  const postJob = async () => { 
-    const acction: AsyncThunkAction<ResponseType | null, CreateJob, AsyncThunkConfig> | AcctionType  = postDataCreateJob(dataForm);
-    dispatch(acction)
-  }
-
-  const onClickButton = () => {
-    if(!status) return;
-    postJob()   
-  }
+    const updateJob = (action: 'DELETE' | 'UPDATE' , job: JobType) => {
+        const fetchAction: AsyncThunkAction<ResponseType | undefined, any, AsyncThunkConfig> | AcctionType = actionEditjob({action: action, job: job})
+        dispatch(fetchAction)
+    };
+    
+    const onClickButton = () => {
+        if(!status) return;
+        updateJob('UPDATE', dataForm) 
+    };
 
   return (
     <div className=''>
@@ -150,7 +149,7 @@ export default function EditJob({job}: Props) {
                     />
                   </div>
                   <div className='w-1/4'>
-                    <select className='focus:outline-none focus:ring focus:border-blue-500' name='deadline' onChange={handleOnChangeInput}>
+                    <select value={dataForm.deadline} className='focus:outline-none focus:ring focus:border-blue-500' name='deadline' onChange={handleOnChangeInput}>
                       <option value={'1 day'}>1 day</option>
                       <option value={'2 day'}>2 day</option>
                       <option value={'3 day'}>3 day</option>
@@ -161,7 +160,7 @@ export default function EditJob({job}: Props) {
                     </select>
                   </div>
                   <div className='w-1/4'>
-                    <select className='focus:outline-none focus:ring focus:border-blue-500' name='priority' onChange={handleOnChangeInput}>
+                    <select value={dataForm.status} className='focus:outline-none focus:ring focus:border-blue-500' name='priority' onChange={handleOnChangeInput}>
                       <option value={'none'}>None</option>
                       <option value={'urgent'}>Urgent</option>
                       <option value={'prioritize'}>Prioritize</option>
@@ -174,12 +173,8 @@ export default function EditJob({job}: Props) {
                 <EditorBox value={dataForm.detail} onChange={handleChange}/>
               </div>
               <div className='mt-2  flex justify-center'>
-                <button
-                  type='button'
-                  className={`w-24 h-12 rounded-lg ${!status ? 'bg-gray-400 text-gray-800' : 'bg-[#9fd9e0] text-white'}  shadow-lg font-semibold hover:text-blue-800`}
-                  onClick={onClickButton}>
-                  POST JOB
-                </button>
+                <ButtonDefault color='bg-[#9fd9e0]' onClick={onClickButton} content='UPDATE'/>
+                <ButtonDefault color='bg-red-500' onClick={onclick} content='CANCEL'/>
               </div>
 
             </form>

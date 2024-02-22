@@ -62,13 +62,19 @@ export const usersSlice = createSlice({
         .addCase(
             fetchUserByAdmin.fulfilled, 
             (state, action) => { 
-                console.log(action.payload,'ácction');
                 
                 if(!action.payload) return
                 if(action.payload.length < 1) {
                     state.data = null 
                     return
                 }
+                state.data = action.payload
+            }
+        )
+
+        .addCase(
+            upDateUser.fulfilled, 
+            (state, action) => {               
                 state.data = action.payload
             }
         )
@@ -95,16 +101,13 @@ export const submitCreateUser = createAsyncThunk<ResponseTypeUser | null,CreateU
                     body: JSON.stringify(createUser)
                 }
             );
+            
             if(!res.ok) {
-                console.log(await res.json());
-                
                 dispatch(setModalNotification({notify:'create new user error', status: false}))
                 return null
-            }
-           
-            
+            };
+                 
             const responseData: Promise<ResponseTypeUser> = await res.json()
-            console.log(responseData);
             dispatch(setModalNotification({notify:'create new user success', status: true}));
             dispatch(setModalCreateUser(""))           
             return responseData
@@ -119,9 +122,7 @@ export const submitCreateUser = createAsyncThunk<ResponseTypeUser | null,CreateU
 
 export const fetchUserByAdmin = createAsyncThunk<User[]| null, any>(
     'users/fetchUserByAdmin',
-    async (title: string,{dispatch}) => {
-        console.log('2');
-        
+    async (title: string,{dispatch}) => {       
         const token = localStorage.getItem('jwtToken'); 
         dispatch(setLoadingFetchUsers(true))
         try {
@@ -145,11 +146,41 @@ export const fetchUserByAdmin = createAsyncThunk<User[]| null, any>(
             return null
         }
     }
-  )
+);
 
+type DataUpdateUser = {
+    action: 'DELETE' | 'UPDATE' | 'COMPLETE',
+    user: User
+};
+export const upDateUser = createAsyncThunk<User[]| null, DataUpdateUser>(
+    'users/updateUser',
+    async (updateUser: DataUpdateUser, {dispatch}) => {       
+        const token = localStorage.getItem('jwtToken'); 
+        
+        try {
+            const res= await fetch(`http://localhost:3001/users/${updateUser.user.id}`,
+                {   
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}` 
+                    },
+                }
+            );
+            const responseData = await res.json(); 
 
-
-
+            if(!await responseData.data) return null;
+            dispatch(setLoadingFetchUsers(false));
+            dispatch(setModalNotification({notify:'Successfully DELETE User', status: true}));
+            return await responseData.data
+            
+        } catch (error) {
+            dispatch(setModalNotification({notify:'Successfully ERROR User', status: false}));
+            dispatch(setLoadingFetchUsers(false));
+            return null
+        }
+    }
+);
 
 const  {reducer,actions} = usersSlice;
 export const {

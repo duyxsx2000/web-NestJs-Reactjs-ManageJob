@@ -68,3 +68,14 @@ export type JobType = {
     idStaff: number,
     recommend: number[] 
 }
+
+export type CountJob = {
+    status: string,
+    count: number
+};
+
+export type CountJobs = {
+    countJobOfDay?: CountJob[]  | null
+    countJobOfMonth?: CountJob[]| null,
+    countJobOfYear?: CountJob[]| null,
+};

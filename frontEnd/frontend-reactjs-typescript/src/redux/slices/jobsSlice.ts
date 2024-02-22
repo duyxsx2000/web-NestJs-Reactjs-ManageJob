@@ -10,8 +10,9 @@ type JobState = {
     },
     loading: boolean,
     status: string,
-    dataForm: JobType | null
-}
+    dataForm: CreateJob | null
+};
+
 const initialState: JobState = {
     jobs: {
         home: null,
@@ -33,8 +34,8 @@ export const jobsSlice = createSlice({
     name:'jobs',
     initialState,
     reducers: {
-        setLoading: (state, action) => {
-            
+        setLoading: (state, action: PayloadAction<boolean>) => {
+            state.loading = action.payload   
         },
 
         deleteJob: (state, action: PayloadAction<number>) => {
@@ -43,40 +44,93 @@ export const jobsSlice = createSlice({
             state.jobs.admin = newJobs
         },
 
-        upDataAuth: (state, action) => {
-           
-        }
+        setDataForm: (state, action: PayloadAction<JobType>) => {
+            const job = {...action.payload}
+            const formJob: CreateJob = {
+                title: job.title,
+                name: job.name,
+                date:{
+                  start: job.date.start,
+                  expired:job.date.expired,
+                },
+            
+                deadline: job.deadline,
+                priority: job.priority,
+                detail:job.detail,
+                recommend:job.recommend,
+            }
+            state.dataForm = formJob
+
+        },
+
     },
+
     extraReducers: (builder) => {
 
         builder
         .addCase(
             postDataCreateJob.fulfilled, 
+
             (state, action) => {
                 if(!action.payload) {
                     return    
                 }
+                state.loading = false
 
             }
         )
+
         .addCase(
             fetchJobs.fulfilled, 
-            (state, action) => {
-                console.log(action.payload?.data, '-----', action.payload?.key);
-                
+            (state, action) => {     
+                console.log(action.payload);
+                        
                 if(!action.payload) {                    
                     return    
                 };
-
+                
                 if(action.payload.key === 'home') {
                     state.jobs.home = action.payload.data;
+                    state.loading = false;
                     return
                 };
                 
                 if(action.payload.key === 'admin') {
                     state.jobs.admin = action.payload.data;
+                    state.loading = false;
                     return
-                }        
+                } ;       
+            }
+        )
+
+        .addCase(
+            actionEditjob.fulfilled,
+            (state,action) => {
+                if(action.payload?.action === 'DELETE') {
+                    const newJobs = state.jobs.admin?.filter((job) => job.idJob != action.payload?.job.idJob)
+                    if(!newJobs) return;
+                    state.jobs.admin = newJobs;
+                    state.loading = false;
+                    return
+                };
+
+                if(action.payload?.action === 'UPDATE') {
+                    if(!state.jobs.admin) return;
+
+                    const jobs = {...state.jobs.admin}
+                    const newJobs = jobs.map((job) => {
+
+                        if(job.idJob === action.payload?.job.idJob) {
+                            return action.payload?.job
+                        };
+                        return job
+
+                    })
+
+                    state.jobs.admin = newJobs;
+                    state.loading = false;
+                    return
+                }
             }
         )
     },
@@ -89,8 +143,9 @@ export const postDataCreateJob = createAsyncThunk<ResponseType |  null, CreateJo
     async (createJob: CreateJob,{dispatch}) => {
 
         const token = localStorage.getItem('jwtToken'); 
-        dispatch(setLoading('loading'))
+        dispatch(setLoading(true))
         try {
+
             const res = await fetch('http://localhost:3001/jobs', {
                 method: 'POST',
                 headers: {
@@ -101,17 +156,16 @@ export const postDataCreateJob = createAsyncThunk<ResponseType |  null, CreateJo
             });     
 
             if(!res.ok) {
-                dispatch(setModalNotification({notify:'Failed to posted a new job.', status: false}))
+                dispatch(setModalNotification({notify:'Failed to posted a new job.', status: false}));
                 return null
-            }
+            };
 
-            const data: Promise<ResponseType> = await res.json()
-            dispatch(setModalNotification({notify:'Successfully posted a new job', status: true}))
+            const data: Promise<ResponseType> = await res.json();
+            dispatch(setModalNotification({notify:'Successfully posted a new job', status: true}));
             return data
 
         } catch (error) {
-
-            dispatch(setModalNotification({notify:'Failed to posted a new job.', status: false}))
+            dispatch(setModalNotification({notify:'Failed to posted a new job.', status: false}));
             return  null
         }
     }
@@ -122,7 +176,9 @@ export const fetchJobs = createAsyncThunk<{data: JobType[], key: string} |  null
     async (type: string,{dispatch}) => {
        
         const token = localStorage.getItem('jwtToken'); 
-        dispatch(setLoading('loading'))
+        
+        
+        dispatch(setLoading(true))
         try {
             const res = await fetch(`http://localhost:3001/jobs/${type}`, {
                 method: 'GET',
@@ -133,7 +189,8 @@ export const fetchJobs = createAsyncThunk<{data: JobType[], key: string} |  null
  
             }); 
                                 
-            if(!res.ok) return null
+            if(!res.ok) return null;
+            
             const data: Promise<ResponseJobs> = await res.json()          
             return {
                 data: (await data).data,
@@ -151,13 +208,13 @@ type DataUpdateJob = {
     job: JobType
 };
 
-export const actionEditjob = createAsyncThunk<ResponseType | undefined , DataUpdateJob>(
+export const actionEditjob = createAsyncThunk<{job: JobType, action: string} | undefined , DataUpdateJob>(
    'jobs/actionEditjob',
 
     async (updateJob: DataUpdateJob,{dispatch}) => {
 
-        console.log(updateJob);
         if(updateJob.action === 'DELETE') {
+            setLoading(true)
             try {
                 const token = localStorage.getItem('jwtToken'); 
                 const res = await fetch(`http://localhost:3001/jobs/${updateJob.job.idJob}`,{
@@ -166,10 +223,27 @@ export const actionEditjob = createAsyncThunk<ResponseType | undefined , DataUpd
                         'Conten-Type': 'application/json',
                         Authorization: `Bearer ${token}`    
                     }
-                })
-                dispatch(deleteJob(updateJob.job.idJob))
-                dispatch(setModalNotification({notify:'Successfully DELETE job', status: true}))
-                return undefined
+                });
+
+                if(!res.ok) {
+                    dispatch(setModalNotification({notify:'Error DELETE job', status: true}));
+                    return
+                };
+
+                type ResponseData = {
+                    data: JobType;
+                    message: string;
+                    statusCode: number;
+                };
+
+                const data: Promise<ResponseData> = await res.json();
+                dispatch(setModalNotification({notify:'Successfully DELETE job', status: true}));
+
+                return {
+                    job:(await data).data,
+                    action:'DELETE'
+                }
+
             } catch (error) {
                 dispatch(setModalNotification({notify:'Error DELETE job', status: true}))
                return 
@@ -193,7 +267,6 @@ export const actionEditjob = createAsyncThunk<ResponseType | undefined , DataUpd
                     dispatch(setModalNotification({notify:'Error DELETE job', status: false}))
                     return undefined
                 };
-                console.log(res.json());
                 
                 dispatch(setModalNotification({notify:'Successfully DELETE job', status: true}))
                 return undefined

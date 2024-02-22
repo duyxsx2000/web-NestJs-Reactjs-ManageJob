@@ -2,7 +2,7 @@ import React, {ReactNode, useEffect, useState} from 'react'
 type Props = {
     width: string,
     height: string,
-    content: ReactNode
+    content: ReactNode | JSX.Element
 }
 
 export default function ModalDefault({

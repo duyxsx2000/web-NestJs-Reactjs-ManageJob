@@ -4,45 +4,62 @@ import {
   EditOutlined,
   FileDoneOutlined,
   MenuOutlined,
-  SearchOutlined
+  SearchOutlined,
+  CloseCircleOutlined,
+  CloseOutlined 
 } from '@ant-design/icons';
 import { AsyncThunkAction } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
-import { actionEditjob, fetchJobs } from '../../redux/slices/jobsSlice';
+import { actionEditjob, fetchJobs } from '../../../redux/slices/jobsSlice';
+import { AcctionType, JobType, User } from '../../../types';
 import { useDispatch } from 'react-redux';
-import { AcctionType, JobType, User } from '../../types';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import Nodata from '../../component/nodata';
-import ModalDefault from '../../component/modals/defaultModal';
-import ButtonDefault from '../../component/button/buttonDEfault';
-import { fetchUserByAdmin } from '../../redux/slices/usersSlice';
-import PostJob from '../../component/form/postJobs';
-import { setModalPostJob } from '../../redux/slices/statusDisplaySloce';
-import EditJob from '../../component/form/editJob';
+import { RootState } from '../../../redux/store';
+import Nodata from '../../../component/nodata';
+import ModalDefault from '../../../component/modals/defaultModal';
+import ButtonDefault from '../../../component/button/buttonDEfault';
+import { fetchUserByAdmin } from '../../../redux/slices/usersSlice';
+import EditJob from '../../../component/form/editJob';
+import Loading from '../../../component/loading';
+import DetailJob from '../../../component/card/detailJob';
+import ButtonAddJob from '../../../component/button/buttonAddJob';
+import BarCharByJobs from '../../../component/charts/barChart';
+import { fetchDataCountJobs } from '../../../redux/slices/dashboardSlice';
+import { setModalPostJob } from '../../../redux/slices/statusDisplaySloce';
+import PostJob from '../../../component/form/postJobs';
 
 type ActionModal = {
   action: 'DELETE' | 'UPDATE',
   job: JobType
 };
 
+type DataInput = {
+  time: Date,
+  type: 'MONTH' | 'DAY' | 'YEAR'| 'ALL'
+}
 export default function Jobs() {
+  const dispatch = useDispatch();
+  const loading = useSelector((state: RootState) => state.job.loading);
+  const dataJobs = useSelector((state: RootState) => state.job.jobs.admin);
+  const dataUsers = useSelector((state: RootState) => state.users.data);
+  const dataCountJob = useSelector((state: RootState) => state.dashboard.countJobs);
+  const postJob  = useSelector((state: RootState) => state.display.modalPostJob);
 
-  const dispatch = useDispatch()
-  const dataJobs = useSelector((state: RootState) => state.job.jobs.admin)
-  const dataUsers = useSelector((state: RootState) => state.users.data)
-  const [editJob, setEDitJob] = useState<JobType | null> (null)
-  const [jobs, setJobs] = useState<JobType[] | null >()
-  const [actionModal, setActionModal] = useState<ActionModal | null>(null)
-  const [category, setCategory] = useState<'all jobs' | 'being made' | 'waiting'>('all jobs')
+  const [editJob, setEDitJob] = useState<JobType | null> (null);
+  const [detailJob, setDetailJob] = useState<JobType | null>(null)
+  const [jobs, setJobs] = useState<JobType[] | null >();
+  const [actionModal, setActionModal] = useState<ActionModal | null>(null);
+  const [category, setCategory] = useState<'all jobs' | 'being made' | 'waiting'>('all jobs');
 
   useEffect( () => {
     const actionFetchJobs: | AsyncThunkAction<ResponseType | null, string, AsyncThunkConfig> | AcctionType = fetchJobs('admin');
-    dispatch(actionFetchJobs);
+    const action: AsyncThunkAction<any, DataInput, AsyncThunkConfig> | AcctionType = fetchDataCountJobs({time: new Date(Date.now()), type: 'ALL'});
     const actionFetchUsers: AsyncThunkAction<ResponseType | null, any, AsyncThunkConfig> | AcctionType = fetchUserByAdmin('fetch'); 
-    dispatch(actionFetchUsers)   
-  },[])
 
+    dispatch(actionFetchJobs);
+    dispatch(action);
+    dispatch(actionFetchUsers) ;  
+  },[]);
 
   useEffect(() => {
 
@@ -52,59 +69,67 @@ export default function Jobs() {
     };
 
     if(category === 'all jobs') { 
-      setJobs(dataJobs)
+      setJobs(dataJobs);
       return
     };
 
     if(category === 'being made') {
+      const jobsFilter = dataJobs?.filter((job) => job.status === 'being made');
 
-      const jobsFilter = dataJobs?.filter((job) => job.status === 'being made')
       if(jobsFilter.length > 0) { 
         setJobs(jobsFilter)
         return
-      }
+      };
+
       setJobs(null);
       return
     };
 
     if(category === 'waiting') {
       const jobsFilter = dataJobs?.filter((job) => job.status === 'waiting')
+
       if(jobsFilter?.length > 0) { 
         setJobs(jobsFilter)
         return
-      }
+      };
+
       setJobs(null);
       return
     };
     
   },[category,dataJobs]);
 
+  useEffect(() => {
+    console.log(dataCountJob);
+    
+  }, [dataCountJob])
+
   const handleOnclickChangeCategory = (category: 'all jobs' | 'being made' | 'waiting') => {
     setCategory(category)
   };
-
-
 
   const handleOnlickChangeActionModal = (job: JobType, action: 'DELETE' | 'UPDATE') => {
     setActionModal({
       action: action,
       job: job
-    })
+    });
   };
 
   const handleOnlickUpdateJob = (action: 'DELETE' | 'UPDATE' , job: JobType) => {
     const fetchAction: AsyncThunkAction<ResponseType | undefined, any, AsyncThunkConfig> | AcctionType = actionEditjob({action: action, job: job})
     dispatch(fetchAction)
-  }
+  };
 
   const jopsCard = (job : JobType, width: string) => {
-    const leader = dataUsers?.find((user) => user.id === job.idLeader)
-    const staff = dataUsers?.find((user) => user.id === job.idStaff)
+
+    const leader = dataUsers?.find((user) => user.id === job.idLeader);
+    const staff = dataUsers?.find((user) => user.id === job.idStaff);
+
     return (
       <div className={`${width} h-[280px] flex justify-center items-center `}>
         <div className='w-[90%] h-[90%] bg-white shadow-md hover:shadow-xl rounded-lg flex flex-col justify-between pb-2 '>
           <div>
-            <p className=' bg-red-500 rounded-t-lg p-1 font-semibold text-center text-white'>{job.name}</p>
+            <p className=' bg-green-500 rounded-t-lg p-1 font-semibold text-center text-white'>{job.name}</p>
             <p className=' ml-2 mr-2 flex p-1 '>
               <span className='w-1/3 mr-1 font-semibold'>ID</span>
               <span>{job.idJob}</span>
@@ -118,7 +143,7 @@ export default function Jobs() {
               <span>{staff ? staff.name : 'waiting'}</span>
             </p>
             <p className=' ml-2 mr-2 flex p-1'>
-              <span className='w-1/3 mr-1 font-semibold'>Leader</span>
+              <span className='w-1/3 mr-1 font-semibold'>Leade</span>
               <span>{leader?.name}</span>
             </p>
             <p className=' ml-2 mr-2 flex p-1'>
@@ -134,7 +159,7 @@ export default function Jobs() {
             />
             <EditOutlined 
               className='hover:scale-[1.1]' 
-              onClick={() => handleOnlickChangeActionModal(job, 'DELETE')}
+              onClick={() =>setEDitJob(job)}
             />
             <FileDoneOutlined 
               className='hover:scale-[1.1]' 
@@ -142,7 +167,7 @@ export default function Jobs() {
             />
             <MenuOutlined 
               className='hover:scale-[1.1]' 
-              onClick={() => handleOnlickChangeActionModal(job, 'DELETE')}
+              onClick={() => setDetailJob(job)}
             />
           </div>
         </div>
@@ -177,15 +202,43 @@ export default function Jobs() {
               content='CANCEL'
             />
           </div>
-        </div>
-        
+        </div> 
       </div>
     )
   };
 
   return (
     <div className='w-full h-full relative flex flex-col justify-between '>
-      <button onClick={() => jobs && setEDitJob(jobs[1])}>click mee</button>
+      {loading && <Loading/>}
+      {detailJob && 
+        <ModalDefault 
+          width='w-[600px]' 
+          height='h-[600px]' 
+          content={(
+            <div className='h-full '>
+              <div className='absolute -top-[5px] right-[3px] text-white '>
+                <CloseOutlined onClick={() => setDetailJob(null)} />
+              </div>
+              <div className=' relative'>
+              </div>
+              <div className='h-full '>
+                <DetailJob job={detailJob}/>
+              </div>  
+            </div>
+          )}
+        />
+      }
+
+      {postJob && (
+        <ModalDefault
+          width='w-[700px]'
+          height='h-[300px]'
+          content={(
+            <PostJob/>
+          )}
+        />
+      )}
+
       {actionModal && (
         <ModalDefault
           width=''
@@ -199,7 +252,10 @@ export default function Jobs() {
           width='w-[700px]'
           height='h-[300px]'
           content={(
-            <EditJob job={editJob}/>
+            <EditJob 
+              job={editJob}
+              onclick={() => {setEDitJob(null)}}
+            />
           )}
         />
       )}
@@ -233,19 +289,43 @@ export default function Jobs() {
           </span>
         </div>
       </div>
-      <div>
-        <div className='w-full flex flex-wrap mt-2 '>
-          {jobs ? 
-            jobs.map((job) => jopsCard(job, 'w-1/5')) :  
-            (
-              <div className='h-[500px] w-full felx justify-center'>
-                <Nodata/>
-              </div>
-            )
-          }
+
+      <div className='flex'>
+        <div className='w-[65%] h-[100vh] overflow-auto'>
+          <div className='w-full flex flex-wrap mt-2 '>
+            <ButtonAddJob
+              onClick={() => {dispatch(setModalPostJob(true))}}
+              color='green'
+              width='w-1/4'
+            />
+            {jobs ? 
+              jobs.map((job) => jopsCard(job, 'w-1/4')) :  
+              (
+                <div className='h-[500px] w-full felx justify-center'>
+                  <Nodata/>
+                </div>
+              )
+            }
+          </div>
+        </div>
+        <div className='w-[40%] h-[100vh] mt-4 space-y-8 overflow-auto'>
+          <div className=' sticky'>
+            <BarCharByJobs
+              name ='Day'
+              countJob = {dataCountJob.countJobOfDay && dataCountJob.countJobOfDay}
+            />
+            <BarCharByJobs
+              name ='Month'
+              countJob = {dataCountJob.countJobOfMonth && dataCountJob.countJobOfMonth}
+            />
+             <BarCharByJobs
+              name ='Year'
+              countJob = {dataCountJob.countJobOfYear && dataCountJob.countJobOfYear}
+            />
+          </div>
         </div>
       </div>
-      <div className='text-center'>123....99</div>
+
     </div>
   )
 }

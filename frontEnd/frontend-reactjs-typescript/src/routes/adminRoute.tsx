@@ -3,10 +3,11 @@ import {Routes, Route, Navigate} from 'react-router-dom'
 import Login from '../auth/login'
 import { UserAuth } from '../types'
 import HomePage from '../home/homePage'
-import Dasboard from '../admin/dashboard/doasboard'
-import Manageusers from '../admin/users/manageusers'
+// import Statistics from '../dashboards/admin/statistics/statistics'
+import Manageusers from '../dashboards/admin/users/manageusers'
 import AdminLayout from '../layouts/adminlayout'
-import Jobs from '../admin/jobs/jobs'
+import Jobs from '../dashboards/admin/jobs/jobs'
+import TestApp from '../test'
 
 export const AdminRoute = ({}) => {
 
@@ -36,7 +37,7 @@ export const AdminRoute = ({}) => {
                 path='/dashboard'
                 element= {
                     <AdminLayout statusStart='DASHBOARD'>
-                        <Dasboard/>
+                        <TestApp></TestApp>
                     </AdminLayout>
                 }
             />

@@ -8,8 +8,9 @@ import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk'
 import 'react-quill/dist/quill.snow.css'; // Import the styles
 import 'react-quill/dist/quill.bubble.css'; // Import the styles
 import '../../styles/postJob.css'
+import { setModalPostJob } from '../../redux/slices/statusDisplaySloce';
 
-export default function PostJob() {
+const PostJob = () => {
 
   const [status, setStatus] = useState(false)
   const [date, setDate] = useState({
@@ -175,12 +176,18 @@ export default function PostJob() {
               <div className="editor mt-3 h-[300px]">
                 <EditorBox value={dataForm.detail} onChange={handleChange}/>
               </div>
-              <div className='mt-2  flex justify-center'>
+              <div className='mt-2  flex justify-center space-x-4'>
                 <button
                   type='button'
                   className={`w-24 h-12 rounded-lg ${!status ? 'bg-gray-400 text-gray-800' : 'bg-[#9fd9e0] text-white'}  shadow-lg font-semibold hover:text-blue-800`}
                   onClick={onClickButton}>
                   POST JOB
+                </button>
+                <button
+                  type='button'
+                  className={`w-24 h-12 rounded-lg bg-red-500 text-white  shadow-lg font-semibold hover:text-blue-800`}
+                  onClick={() => dispatch(setModalPostJob(false))}>
+                  CANCER
                 </button>
               </div>
 
@@ -191,3 +198,5 @@ export default function PostJob() {
     </div>
   )
 }
+
+export default PostJob

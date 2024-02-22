@@ -10,9 +10,7 @@ type Props = {
   job: JobType   
 }
 
-export default function DetailJob({job}:Props) {
-  console.log(job);
-  
+const DetailJob = ({job}:Props) => {
   const convertDateFormat = (isoDateString: string) => {
     const date = new Date(isoDateString);
     const day = date.getDate();
@@ -22,9 +20,10 @@ export default function DetailJob({job}:Props) {
     return formattedDate;
   }
   return (
-    <div className='w-full h-full rounded-lg p-2  mb-9 shadow-2xl bg-white flex flex-col '>
-      <div className={`p-2 border-b rounded-t-lg border-gray-300 `}>
-        <h3 className={`font-semibold text-center mb-6}`}>{job.title}</h3>
+    <div className='w-full h-full rounded-lg   mb-9 shadow-2xl bg-white flex flex-col '>
+      <div className={`px-4 border-b rounded-t-lg border-gray-300 bg-green-400 text-white`}>
+        <h3 className={`font-semibold text-center mb-6}`}>{job.name}</h3>
+        <p className='w-full text-center'>{job.title}</p>
         <div className='flex mt-3'>
           <p className='w-[100px] font-semibold'>Start</p>
           {convertDateFormat(job.date.start.toString())} 
@@ -42,10 +41,10 @@ export default function DetailJob({job}:Props) {
           Nguyễn Nhật Nam
         </div>
       </div>
-      <div className='p-2 mt-2 flex-1'>
+      <div className='p-4 mt-2 flex-1'>
       {job.detail && <div dangerouslySetInnerHTML={{ __html:DOMPurify.sanitize(job.detail)  }} />}
       </div>
-      <div className='p-2 text-end font-semibold flex items-center justify-end space-x-5'>
+      <div className='p-4 text-end font-semibold flex items-center justify-end space-x-5'>
         <p>Leader Nguyễn Nhật Nam </p>
         <div className='flex items-center space-x-2 '>
           <span className='hover:text-blue-800 flex items-center'><CommentOutlined/></span>
@@ -55,4 +54,6 @@ export default function DetailJob({job}:Props) {
       </div>
     </div>
   )
-}
+};
+
+export default DetailJob

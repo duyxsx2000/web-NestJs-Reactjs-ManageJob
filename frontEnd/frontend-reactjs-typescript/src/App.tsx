@@ -12,6 +12,7 @@ import ModalNotification from './component/modals/notification';
 function App() {
   const [status, setStatus] = useState(false)
   const loading = useSelector((state: RootState) => state.auth.loading)
+  const profile = useSelector((state: RootState) => state.auth.profile)
   const dispatch = useDispatch()
   
   const loadingAuth = (token: string) => {
@@ -21,17 +22,17 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem('jwtToken');   
+    console.log(token);
+    
     if(!token) return
     loadingAuth(token);
     setStatus(true)
   },[]);
 
   return (
-    <div className="App">
+   <div className="App">
       <ModalNotification/> 
-      <DefaultLayout>
-        {loading && <AppRoute loading={loading} status='alo' userAuth={null}/>}
-      </DefaultLayout> 
+      {loading && <AppRoute loading={loading} status='alo' profile={profile}/>}
     </div>
   );
 }

@@ -93,14 +93,14 @@ export default function ModalCreateUser() {
   }
 
   return (
-    <div className='fixed w-full h-[100vh] bg-[rgba(112,112,112,0.7)] top-0 left-0 z-[90] flex justify-center items-center'> 
+    <div className='fixed w-full h-[100vh]  bg-[rgba(112,112,112,0.7)] top-0 left-0 z-[90] flex justify-center items-center'> 
       {loading === 'loading' ? <Loading/> : <></>}  
-      <div className={` w-[450px] h-[640px] bg-white fixed z-[90] transition-all ${status ? 'top-[40px]' : '-top-[500px]'}`}>   
-        <h1 className='text-black'>FORM CREATE NEW USER</h1>
+      <div className={` w-[450px] h-[640px] fixed z-[90] bg-gradient-to-b from-green-400 to-green-300 transition-all ${status ? 'top-[40px]' : '-top-[500px]'}`}>   
+        <h1 className='text-white'>FORM CREATE NEW USER</h1>
         <div className=' relative space-y-4 w-full'>
-          <div onClick={() => dispatch(setModalCreateUser(''))} className=' absolute right-2 -top-[65px]'><CloseOutlined /></div>
+          <div onClick={() => dispatch(setModalCreateUser(''))} className='text-white absolute right-2 -top-[65px]'><CloseOutlined /></div>
           <InputTextDefault 
-            borderColor={`${loading === 'error' ? 'border-red-800' : 'border-blue-800'}`} 
+            borderColor={`${loading === 'error' ? 'border-red-800' : 'border-green-500'}`} 
             placeholder='User name' 
             label='User Name'
             value={createUser.name}
@@ -109,7 +109,7 @@ export default function ModalCreateUser() {
             onChange={handleOnchangeInput}
           />
           <InputTextDefault 
-            borderColor={`${loading === 'error' ? 'border-red-800' : 'border-blue-800'}`} 
+            borderColor={`${loading === 'error' ? 'border-red-800' : 'border-green-500'}`} 
             placeholder='Email' 
             label='Email'
             value={createUser.email}
@@ -118,7 +118,7 @@ export default function ModalCreateUser() {
             onChange={handleOnchangeInput}
           />
           <InputTextDefault 
-            borderColor={`${loading === 'error' ? 'border-red-800' : 'border-blue-800'}`}  
+            borderColor={`${loading === 'error' ? 'border-red-800' : 'border-green-500'}`}  
             placeholder='Number phone' 
             label='Number phone'
             value={createUser.phone}
@@ -127,7 +127,7 @@ export default function ModalCreateUser() {
             onChange={handleOnchangeInput}
           />
           <InputTextDefault 
-            borderColor={`${loading === 'error' ? 'border-red-800' : 'border-blue-800'}`} 
+            borderColor={`${loading === 'error' ? 'border-red-800' : 'border-green-500'}`} 
             placeholder='Position' 
             label='Position'
             value={createUser.position}
@@ -136,7 +136,7 @@ export default function ModalCreateUser() {
             onChange={handleOnchangeInput}
           />
           <InputTextDefault 
-            borderColor={`${loading === 'error' ? 'border-red-800' : 'border-blue-800'}`} 
+            borderColor={`${loading === 'error' ? 'border-red-800' : 'border-green-500'}`} 
             placeholder='Password' 
             label='Password'
             value={createUser.password}
@@ -148,22 +148,23 @@ export default function ModalCreateUser() {
             <div className=' w-3/4 flex justify-between'>
               <select 
                 name='level' 
-                className=' outline-none w-1/3 border-2 p-2 border-blue-800'
+                className=' outline-none w-1/3 border-2 p-2 border-green-500'
                 onChange={handleOnchangeInput}
               >
                 <option >Level</option>
-                <option value='Intern'>Intern</option>
                 <option value='Fresher'>Fresher</option>
-                <option value='Mid'>Mid</option>
+                <option value='Junior'>Junior</option>
+                <option value='Senior'>Senior</option>
+                <option value='Leade'>Leade</option>
               </select>
               <select 
                 name='role' 
-                className=' outline-none w-1/3 border-2 p-2 border-blue-800'
+                className=' outline-none w-1/3 border-2 p-2 border-green-500'
                 onChange={handleOnchangeInput}
               >
                 <option >Role</option>
                 <option value='user'>User</option>
-                <option value='leader'>Leader</option>
+                <option value='leader'>Leade</option>
                 <option value='admin'>Admin</option>
               </select>
               <div className="flex items-center">
@@ -183,7 +184,7 @@ export default function ModalCreateUser() {
           <div className='flex justify-center'>
             <button 
               onClick={handleOnclickPost}
-              className={`w-3/4 ${valid ? 'bg-blue-800 text-white' : 'bg-gray-500 text-gray-800 '} p-2 text-center font-semibold hover:shadow-xl`}
+              className={`w-3/4 ${valid ? 'bg-blue-800 text-white' : 'bg-gray-500 text-gray-300 '} p-2 text-center font-semibold hover:shadow-xl`}
             >
               Create
             </button>

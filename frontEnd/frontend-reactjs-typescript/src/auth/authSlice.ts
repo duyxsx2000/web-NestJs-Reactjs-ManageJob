@@ -13,7 +13,7 @@ const data: UserAuth = {
 const initialState: AuthState = {
     profile: data,
     test: '',
-    loading:null,
+    loading: null,
     token:''
 };
 
@@ -40,6 +40,10 @@ export const authSlice = createSlice({
             state.loading = 'loading'              
         },
 
+        setLoadingNone:(state, action) => {
+            state.loading = 'none'
+        },
+
         upDataAuth: (state, action) => {
             state.profile = action.payload
         }
@@ -49,13 +53,14 @@ export const authSlice = createSlice({
         builder
         .addCase(
             fetchtokenByUser.fulfilled, 
-            (state, action) => {
+            (state, action) => {             
                 if(!action.payload) return undefined
                 const token = action.payload.access_token
                 state.token = token;
                 state.loading = 'done'
             }
         )
+
         .addCase(
             fetchProfileByToken.fulfilled, 
             (state, action) => {
@@ -76,8 +81,6 @@ export const authSlice = createSlice({
 export const fetchtokenByUser = createAsyncThunk<ResToken |  null, TypeForm>(
     'auth/fetchtokenByUser',
     async (dataLogin: TypeForm,{dispatch}) => {
-
-        // dispatch(setLoading('loading'))
         try {
             const res = await fetch('http://localhost:3001/auth/login', {
                 method: 'POST',
@@ -88,7 +91,7 @@ export const fetchtokenByUser = createAsyncThunk<ResToken |  null, TypeForm>(
             });
             const data: Promise<ResToken>= await res.json()
             localStorage.setItem('jwtToken', (await data).access_token)
-            
+            // dispatch(setLoading('done'))
             return data
         } catch (error) {
             console.log(error,'error');
@@ -100,7 +103,7 @@ export const fetchtokenByUser = createAsyncThunk<ResToken |  null, TypeForm>(
 export const fetchProfileByToken = createAsyncThunk<UserAuth | null, string>(
     'auth/fetchProfileByToken',
     async (token: string, {dispatch}) => {
-        // dispatch(setLoading('loading'))
+        
         try {           
             const res = await fetch('http://localhost:3001/auth/profile', {
                 method: 'GET',
@@ -110,7 +113,7 @@ export const fetchProfileByToken = createAsyncThunk<UserAuth | null, string>(
             });
             if(!res.ok) return null           
             const profile: Promise<UserAuth> = await res.json()  
-            console.log(profile,"profile");
+            dispatch(setLoading('done'))
             return profile
         } catch (error) {
             return null
@@ -120,5 +123,5 @@ export const fetchProfileByToken = createAsyncThunk<UserAuth | null, string>(
 )
 
 const  {reducer,actions} = authSlice;
-export const {setLoading} = actions;
+export const {setLoading, setLoadingNone} = actions;
 export default reducer

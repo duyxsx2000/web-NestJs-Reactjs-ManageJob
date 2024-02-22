@@ -62,7 +62,7 @@ const JobCard = ({
 
     },[])
     return (
-        <div className=' z-30 w-full h-full flex flex-col items-center container   '  >
+        <div className=' z-30 w-full h-full flex flex-col items-center cursor-grab container select-none  '  >
             <div className={`h-[90%] bg-white group flex flex-col  w-[90%] rounded-lg shadow-lg  relative z-30 hover:shadow-2xl `} >
                 <div className={`rounded-t-lg ${style.name}  text-white font-medium text-center p-1 `}>
                     <p className='group-hover:scale-[1.1]'>{job.name}</p>
