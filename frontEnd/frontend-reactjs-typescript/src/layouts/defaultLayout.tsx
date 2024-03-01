@@ -5,14 +5,14 @@ type Props ={
 }
 export default function DefaultLayout({children}: Props) {
   return (
-    <>
+    <div className='flex flex-col h-[100vh]'>
       <Navbar/>
-      <div className=' min-h-[100vh]'>
+      <div className='grow'>
         {children}
       </div>
-      <div  style={{height: '50px', background: 'pink'}} className=' relative z-40'>
+      {/* <div  style={{height: '50px', background: 'pink'}} className=' relative z-40'>
         <div className='bg-red-200 absolute z-40'>gg</div>
-      </div>  
-    </>
+      </div>   */}
+    </div>
   )
 }

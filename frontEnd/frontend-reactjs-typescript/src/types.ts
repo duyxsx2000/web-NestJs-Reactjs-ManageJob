@@ -79,3 +79,12 @@ export type CountJobs = {
     countJobOfMonth?: CountJob[]| null,
     countJobOfYear?: CountJob[]| null,
 };
+export type TaskList = {
+    id: number,
+    name: string
+}
+export interface DataTask  {
+    id: number,
+    name: string,
+    taskList: TaskList[]
+}

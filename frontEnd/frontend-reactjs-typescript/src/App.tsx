@@ -30,7 +30,7 @@ function App() {
   },[]);
 
   return (
-   <div className="App">
+   <div className="App w-[100vw]">
       <ModalNotification/> 
       {loading && <AppRoute loading={loading} status='alo' profile={profile}/>}
     </div>

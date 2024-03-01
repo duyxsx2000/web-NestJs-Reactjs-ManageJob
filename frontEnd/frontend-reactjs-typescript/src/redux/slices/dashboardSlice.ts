@@ -107,7 +107,7 @@ export const fetchDataCountJobs = createAsyncThunk<CountJobs |  null, DataInput>
         dispatch(setLoading(true))
         try {
 
-            const res = await fetch(`http://localhost:3001/jobs/statistics/${dataInput.time}/${dataInput.type}`,{
+            const res = await fetch(`http://localhost:3002/jobs/statistics/${dataInput.time}/${dataInput.type}`,{
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',

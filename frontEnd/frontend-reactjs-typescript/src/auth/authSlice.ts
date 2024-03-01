@@ -82,7 +82,7 @@ export const fetchtokenByUser = createAsyncThunk<ResToken |  null, TypeForm>(
     'auth/fetchtokenByUser',
     async (dataLogin: TypeForm,{dispatch}) => {
         try {
-            const res = await fetch('http://localhost:3001/auth/login', {
+            const res = await fetch('http://localhost:3002/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', 
@@ -105,7 +105,7 @@ export const fetchProfileByToken = createAsyncThunk<UserAuth | null, string>(
     async (token: string, {dispatch}) => {
         
         try {           
-            const res = await fetch('http://localhost:3001/auth/profile', {
+            const res = await fetch('http://localhost:3002/auth/profile', {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`

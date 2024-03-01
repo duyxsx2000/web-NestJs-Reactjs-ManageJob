@@ -146,7 +146,7 @@ export const postDataCreateJob = createAsyncThunk<ResponseType |  null, CreateJo
         dispatch(setLoading(true))
         try {
 
-            const res = await fetch('http://localhost:3001/jobs', {
+            const res = await fetch('http://localhost:3002/jobs', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ export const fetchJobs = createAsyncThunk<{data: JobType[], key: string} |  null
         
         dispatch(setLoading(true))
         try {
-            const res = await fetch(`http://localhost:3001/jobs/${type}`, {
+            const res = await fetch(`http://localhost:3002/jobs/${type}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -217,7 +217,7 @@ export const actionEditjob = createAsyncThunk<{job: JobType, action: string} | u
             setLoading(true)
             try {
                 const token = localStorage.getItem('jwtToken'); 
-                const res = await fetch(`http://localhost:3001/jobs/${updateJob.job.idJob}`,{
+                const res = await fetch(`http://localhost:3002/jobs/${updateJob.job.idJob}`,{
                     method: 'DELETE',
                     headers: {
                         'Conten-Type': 'application/json',
@@ -254,7 +254,7 @@ export const actionEditjob = createAsyncThunk<{job: JobType, action: string} | u
             try {
                 const newJob = {...updateJob.job,status:'Complete'}
                 const token = localStorage.getItem('jwtToken'); 
-                const res = await fetch(`http://localhost:3001/jobs/${updateJob.job.idJob}`,{
+                const res = await fetch(`http://localhost:3002/jobs/${updateJob.job.idJob}`,{
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',

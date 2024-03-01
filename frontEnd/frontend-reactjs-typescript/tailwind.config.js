@@ -7,6 +7,8 @@ module.exports = {
     extend: {
       colors:{
         'bg-1':'rgba(185, 180, 180, 0.1)',
+        'bg-f8' : '#F8F8FF',
+        't-1': '#172B4D' 
       }
     },
   },

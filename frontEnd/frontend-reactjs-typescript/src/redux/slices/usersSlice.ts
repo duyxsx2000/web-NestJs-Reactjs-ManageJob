@@ -91,7 +91,7 @@ export const submitCreateUser = createAsyncThunk<ResponseTypeUser | null,CreateU
         const token = localStorage.getItem('jwtToken'); 
         dispatch(setLoadingCreateUser('loading'))
         try {
-            const res= await fetch('http://localhost:3001/users',
+            const res= await fetch('http://localhost:3002/users',
                 {   
                     method: 'POST',
                     headers: {
@@ -126,7 +126,7 @@ export const fetchUserByAdmin = createAsyncThunk<User[]| null, any>(
         const token = localStorage.getItem('jwtToken'); 
         dispatch(setLoadingFetchUsers(true))
         try {
-            const res= await fetch('http://localhost:3001/users',
+            const res= await fetch('http://localhost:3002/users',
                 {   
                     method: 'GET',
                     headers: {
@@ -158,7 +158,7 @@ export const upDateUser = createAsyncThunk<User[]| null, DataUpdateUser>(
         const token = localStorage.getItem('jwtToken'); 
         
         try {
-            const res= await fetch(`http://localhost:3001/users/${updateUser.user.id}`,
+            const res= await fetch(`http://localhost:3002/users/${updateUser.user.id}`,
                 {   
                     method: 'DELETE',
                     headers: {
