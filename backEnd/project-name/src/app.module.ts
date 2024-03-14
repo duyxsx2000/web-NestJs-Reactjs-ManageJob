@@ -5,13 +5,15 @@ import { UsersModule } from './users/users.module';
 import { JobsModule } from './jobs/jobs.module';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { RoomsModule } from './rooms/rooms.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb+srv://duymongodb:cqJVG0Df7qF4r5s9@cluster0.hv3hrwq.mongodb.net/NestNew'),
     AuthModule,
     UsersModule,
-    JobsModule, 
+    JobsModule,
+    RoomsModule, 
     
     
   ],

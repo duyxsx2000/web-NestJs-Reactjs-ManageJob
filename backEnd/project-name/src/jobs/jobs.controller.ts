@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Request, UseGuards, ValidationPipe } from '@nestjs/common';
 import { JobsService } from './jobs.service';
-import { CreateJobDto } from './dto/create-Job.dto';
-import { UpdateJobDto } from './dto/update-job.dto';
+import { CreateJobDto } from '../dtos/jobDtos/create-Job.dto';
+import { UpdateJobDto } from '../dtos/jobDtos/update-job.dto';
 import { ResponseData } from 'src/global/globalClass';
 import { HttpMessage, HttpStatus } from 'src/global/globalEnum';
 import { AuthGuard } from 'src/auth/auth.guard';
