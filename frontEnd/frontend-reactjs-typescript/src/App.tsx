@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './redux/store';
 import { AsyncThunkAction} from '@reduxjs/toolkit'
 import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk'
-import { fetchProfileByToken } from './auth/authSlice';
+import { fetchProfileByToken, setLoading } from './auth/authSlice';
 import DefaultLayout from './layouts/defaultLayout';
 import ModalNotification from './component/modals/notification';
 
@@ -22,17 +22,20 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem('jwtToken');   
-    console.log(token);
+
+    if(!token) {
+      dispatch(setLoading('none'));
+      return
+    };
     
-    if(!token) return
     loadingAuth(token);
     setStatus(true)
-  },[]);
+  },[loading]);
 
   return (
-   <div className="App w-[100vw]">
+   <div className="App ">
       <ModalNotification/> 
-      {loading && <AppRoute loading={loading} status='alo' profile={profile}/>}
+      {loading && profile && <AppRoute loading={loading} status='alo' profile={profile}/>}
     </div>
   );
 }

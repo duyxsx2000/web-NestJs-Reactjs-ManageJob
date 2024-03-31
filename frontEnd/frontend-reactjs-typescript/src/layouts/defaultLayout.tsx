@@ -7,7 +7,7 @@ export default function DefaultLayout({children}: Props) {
   return (
     <div className='flex flex-col h-[100vh]'>
       <Navbar/>
-      <div className='grow'>
+      <div className='h-[95%] w-full'>
         {children}
       </div>
       {/* <div  style={{height: '50px', background: 'pink'}} className=' relative z-40'>

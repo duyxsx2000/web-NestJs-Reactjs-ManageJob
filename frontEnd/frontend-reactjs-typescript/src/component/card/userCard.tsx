@@ -39,7 +39,8 @@ export default function UserCard({
                             <p>{user?.name}</p>
                         </div>
                         <div className='flex items-center font-semibold'>
-                            <p>{user?.position && user?.position.length > 22 ? `${user?.position.slice(0, 22)}...` : user?.position}</p>
+                            <p>{}</p>
+                            {/* user?.position && user?.position.length > 22 ? `${user?.position.slice(0, 22)}...` : user?.position */}
                         </div>
                         <div className='flex items-center mt-2'>
                             <div className='flex items-center'>

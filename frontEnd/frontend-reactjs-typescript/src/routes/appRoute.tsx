@@ -2,54 +2,72 @@ import React from 'react'
 import {Routes, Route, Navigate} from 'react-router-dom'
 import Login from '../auth/login'
 import { UserAuth } from '../types'
-import HomePage from '../home/homePage'
-import { AdminRoute } from './adminRoute'
+import HomePage from '../pages/homePage'
+
 import DefaultLayout from '../layouts/defaultLayout'
-import LeaderPage from '../dashboards/leader/leaderPage'
+
+import StartPage from '../pages/startPage'
+import StartLayout from '../layouts/defaultLayoutz'
+import RoomPage from '../pages/roomPage'
 
 type Props = {
-    loading: "none" | "done" | "loading",
+    loading: "none" | "done" | "loading" | "signIn",
     profile: UserAuth | null,
     status: string,
+};
 
+type RoutesType = {
+    path: string,
+    element: JSX.Element,
+    layout?: string
 }
-
 export const AppRoute = ({
     loading, 
     profile
 }: Props) => {
-    console.log(loading);
-    console.log(profile);
+    console.log(loading,'loading');
+    console.log(profile,'profile');
     const role = profile?.role
     return (
         <Routes>
             <Route 
                 path='/' 
                 element= {
-                    loading === "done" ? (     
-                        <DefaultLayout>
-                            <Navigate to={'/home'} replace/>
-                        </DefaultLayout>
-                    ) :
-                    <Navigate to={'/login'} replace/>  
-                 }
+                    loading === "done" && profile ?  (
+                        profile.role === 'admin' ? <Navigate to={'/manage'} replace/> : <Navigate to={'/working'} replace/>
+                    ) : (
+                        <Navigate to={'/start'} replace/>
+                    )       
+                }
             />
+            <Route 
+                path='/start' 
+                element= {
+                    loading === 'none' ? (
+                        <StartLayout><StartPage/></StartLayout>
+                    ) : loading === 'signIn' ? (
+                        <Navigate to={'/signIn'} replace/>
+                    ) : loading === 'done' && (
+                        profile?.role === 'admin' ? <Navigate to={'/manage'} replace/> : <Navigate to={'/working'} replace/>
+                    )
+                }
+            /> 
             <Route
-                path='/login'
+                path='/signIn'
                 element= {
                     loading != "done" ?
-                    <Login/> : (
-                        <DefaultLayout>
-                            <Navigate to={'/home'} replace/>
-                        </DefaultLayout>
+                    <StartLayout>
+                        <Login/>
+                    </StartLayout> : (    
+                        <Navigate to={'/manage'} replace/>     
                     )
                 }
             />
             <Route
-                path='/home'
+                path='/manage'
                 element= {
                     loading === "none" ?
-                    <Navigate to={'/login'} replace/> : (
+                    <Navigate to={'/signIn'} replace/> : (
                         <DefaultLayout>
                             <HomePage/>
                         </DefaultLayout>
@@ -58,32 +76,14 @@ export const AppRoute = ({
                 }
             />
             <Route
-                path='/admin/*'
+                path='/room/:id'
                 element= {
-                    loading != "done" ? (
-                        <Login/>
-                    ) : role != 'admin' ? (
-                        <Navigate to={'/'} replace/>
-                    ) : (
+ (
                         <DefaultLayout>
-                             <AdminRoute></AdminRoute>  
+                            <RoomPage/>
                         </DefaultLayout>
                     )
-                      
-                }
-            />
-            <Route
-                path='/leader'
-                element = {
-                    loading != "done" ? (
-                        <Login/>
-                    ) : role != 'leader' ? (
-                        <Navigate to={'/'} replace/>
-                    ) : (
-                        <DefaultLayout>
-                             <LeaderPage/>  
-                        </DefaultLayout>
-                    )    
+   
                 }
             />
            

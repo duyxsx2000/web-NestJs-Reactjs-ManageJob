@@ -1,7 +1,6 @@
-// 
 import React from 'react'
 
-export default function modalCreateUser() {
+export default function dashBoard() {
   return (
     <div>
       

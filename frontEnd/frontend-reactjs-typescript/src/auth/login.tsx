@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import {GoogleOutlined, KeyOutlined} from '@ant-design/icons'
+
 import './login.css'
+import { GoogleOutlined, FacebookOutlined, HomeOutlined } from '@ant-design/icons';
 import ButtonSample from '../component/button/buttonSample'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/store'
 import { fetchtokenByUser } from './authSlice';
 import { AsyncThunkAction} from '@reduxjs/toolkit'
 import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk'
-
-
+import NavbaStart from '../component/navs/navbaStart'
 
 type TypeForm = {
     password: string,
@@ -21,12 +21,12 @@ type ResToken = {
 
 export default function Login() {
     
-    const data12= useSelector((state: RootState) => state.auth.profile)
+ 
     const dispatch = useDispatch()
 
     const [dataForm, setDataForm] = useState<TypeForm>({
-        password:'duy123',
-        email:'duy123@gmail.com'
+        password:'',
+        email:''
     });
 
     const [status, setStatus] = useState<boolean>(true);
@@ -61,68 +61,43 @@ export default function Login() {
     };
 
     return (
-        <div className='main'>
-            <h1 >LOGIN FORM </h1>
-            <div className='container'>
-                <div className='content'>
-                    <h2>LOGIN HERE</h2>
-                    <form style={{margin:"50px 0 0 0"}}>
-
-                        <div style={{display:'flex', justifyContent:'center', height: '50px', margin: "30px 0 0 0"} }>
-                            <div className={`${status ? 'container-input' : 'unContainer-input'}`}>
-                                <input
-                                    className='inputLogin' 
-                                    placeholder='Email'
-                                    name='email'
-                                    value={dataForm?.email}
-                                    onChange={(e) => handleOnChange(e)}
-                                />
-                                <GoogleOutlined style={{fontSize:'25px', color: 'white'}} />
-                            </div>
-                        </div>
-
-                        <div style={{display:'flex', justifyContent:'center', height: '50px', margin: "30px 0 0 0"} }>
-                            <div className={`${status ? 'container-input' : 'unContainer-input'}`}>
-                                <input
-                                    className='inputLogin' 
-                                    placeholder='Password'
-                                    name='password'
-                                    value={dataForm?.password}
-                                    onChange={(e) => handleOnChange(e)} 
-                                />
-                                <KeyOutlined style={{fontSize:'25px', color: 'white'}} />  
-                            </div>
-                        </div>
-
-                        <div className='option' style={{display: 'flex', justifyContent: 'center', margin:'20px 0 0 0'}}>
-                            <div style={{display: 'flex', justifyContent: 'space-between', width: '70%'}}>
-                                <div style={{display: 'flex', width:'50%', alignItems: 'center'}}>
-                                    <div className="custom-checkbox">
-                                        <input  type='checkbox'/>
-                                    </div>
-                                    <p>Remmber Me</p>
-                                </div>
-                                <p >Forgot password</p>
-                            </div>
-                        </div>
-
-                        <div style={{display:'flex',justifyContent:'center', margin:'20px 0 0 0'}}>
-                            <div style={{width:'200px',height:'50px', display:'flex', justifyContent:'center'}}>
-                                <ButtonSample 
-                                    loading={false} 
-                                    onClick={handleClickButton}
-                                    validation={true}
-                                >
-                                    LOGIN
-                                </ButtonSample>
-                            </div>
-                            
-                        </div>
-
-                    </form>
+        <div className='flex justify-center items-center mt-11'>
+            <div className='w-[400px] h-[500px] bg-white rounded-[5px]'>
+                <div className='text-center p-2 bg-green-500 text-white font-semibold text-[20px] rounded-t-[5px]'>
+                    <p>Sign in now</p>
+                </div>
+                <div className='px-4 mt-[50px]'>
+                    <input
+                        className='w-full border-2 p-2 rounded-[5px] border-green-500 outline-none'
+                        placeholder='Email'
+                        value={dataForm.email}
+                        name='email'
+                        onChange={(e) => handleOnChange(e)}
+                    />
+                </div>
+                <div className='px-4 mt-[30px]'>
+                    <input
+                        className='w-full border-2 p-2 rounded-[5px] border-green-500 outline-none'
+                        placeholder='Password'
+                        value={dataForm.password}
+                        name='password'
+                        onChange={(e) => handleOnChange(e)}
+                    />
+                </div>
+                <div className='px-4 mt-[30px]'>
+                    <button
+                        className='w-full border-2 p-2 rounded-[5px] bg-green-500 text-white font-semibold'
+                        onClick={handleClickButton}
+                    >
+                        Sign In
+                    </button>
+                </div>
+                <div className='text-[30px] space-x-3 mt-4 text-center'>
+                    <HomeOutlined style={{color:'black', cursor:'pointer'}}/>
+                    <GoogleOutlined style={{color:'red', cursor:'pointer'}}/>
+                    <FacebookOutlined style={{color:'blue', cursor:'pointer'}} />
                 </div>
             </div>
-
         </div>
     )
 }

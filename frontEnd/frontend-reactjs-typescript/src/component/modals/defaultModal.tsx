@@ -1,14 +1,14 @@
-import React, {ReactNode, useEffect, useState} from 'react'
+import React, { ReactNode, useEffect, useState} from 'react'
 type Props = {
     width: string,
     height: string,
-    content: ReactNode | JSX.Element
+    children: ReactNode
 }
 
 export default function ModalDefault({
   width,
   height,
-  content
+  children
 }: Props) {
 
   const [status, setStatus] = useState(false);
@@ -23,8 +23,8 @@ export default function ModalDefault({
 
   return (
     <div className='fixed w-full h-[100vh]  bg-[rgba(112,112,112,0.7)] top-0 left-0 z-[90] flex justify-center items-center'>
-      <div className={` ${width} ${height} bg-white fixed z-[90] rounded-lg shadow-md shadow-gray-500   transition-all ${status ? 'top-[40px]' : '-top-[500px]'}`}>   
-       {content}
+      <div className={` ${width} ${height} bg-white fixed z-[90] rounded-[5px] shadow-md shadow-gray-500   transition-all ${status ? 'top-[40px]' : '-top-[500px]'}`}>   
+       {children}
       </div>
     </div>
   )

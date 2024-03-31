@@ -2,7 +2,7 @@ import React, { useEffect, useState} from 'react'
 import EditorBox from './editorBox';
 import { AcctionType, CreateJob, JobType } from '../../types';
 import { useDispatch } from 'react-redux';
-import { actionEditjob, postDataCreateJob } from '../../redux/slices/jobsSlice';
+import {postDataCreateJob } from '../../services/tasks/getDataRooms';
 import { AsyncThunkAction} from '@reduxjs/toolkit'
 import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk'
 import 'react-quill/dist/quill.snow.css'; // Import the styles
@@ -88,8 +88,8 @@ export default function EditJob({job, onclick}: Props) {
     };
 
     const updateJob = (action: 'DELETE' | 'UPDATE' , job: JobType) => {
-        const fetchAction: AsyncThunkAction<ResponseType | undefined, any, AsyncThunkConfig> | AcctionType = actionEditjob({action: action, job: job})
-        dispatch(fetchAction)
+        // const fetchAction: AsyncThunkAction<ResponseType | undefined, any, AsyncThunkConfig> | AcctionType = actionEditjob({action: action, job: job})
+        // dispatch(fetchAction)
     };
     
     const onClickButton = () => {

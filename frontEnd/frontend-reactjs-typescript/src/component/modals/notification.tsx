@@ -18,7 +18,7 @@ const ModalNotification =()=> {
         const timeOut1 = setTimeout(() => {
             setDisplay(false)
             dispatch(setModalNotification({notify:'', status: status}))
-        }, 2000);
+        }, 1200);
 
         if(!notification) return
         return () => {
@@ -28,7 +28,7 @@ const ModalNotification =()=> {
     },[notification]);
 
   return (
-    <div className={`z-[100] fixed w-[300px] min-h-[150px] bg-white rounded-xl shadow-xl duration-500 transition-all ease-in-out ${!display ? '-top-[500px]' : 'top-[80px]'} right-1/2 translate-x-1/2`}>
+    <div className={`z-[100] fixed w-[300px] min-h-[150px] bg-white rounded-xl shadow-xl duration-500 transition-all ease-in-out ${!display ? '-top-[500px]' : 'top-[40px]'} right-1/2 translate-x-1/2`}>
         <p className='text-center font-semibold text-black'>Notification</p>
         {/* <div className='relative'>
             <div className=' absolute right-1 -top-[30px]'><CloseOutlined /></div>

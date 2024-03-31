@@ -5,15 +5,19 @@ import  statusDisplayReducer  from './slices/statusDisplaySloce';
 import userSReducer from './slices/usersSlice';
 import dashboardReducer from './slices/dashboardSlice';
 import dataTaskReducer from './slices/dataTaskSlice';
+import roomReducer from './slices/roomSlice'
+import groupReducer from './slices/groupSlice'
 
 export const store = configureStore({
   reducer: {
+    rooms: roomReducer,
     task: dataTaskReducer,
     auth: authReducer,
     job: jobsReducer,
     dashboard: dashboardReducer,
     display: statusDisplayReducer,
-    users: userSReducer
+    users: userSReducer,
+    group: groupReducer
   },
 });
 

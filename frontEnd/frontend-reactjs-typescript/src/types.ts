@@ -2,7 +2,7 @@ export type UserAuth = {
     email: string,
     name: string,
     role: string,
-    id: number,
+    idUser: string,
 }
 
 export type CreateJob = {
@@ -33,14 +33,9 @@ export type CreateUser = {
 export type User ={
     email: string,
     name: string,
-    position: string,
     role: string,
-    level: string,
-    phone: number,
-    password: string,
     id: number,
-    idJobs: number[],
-    wage: number
+    postDate: Date
 }
 
 export type ResponseType = {
@@ -79,12 +74,20 @@ export type CountJobs = {
     countJobOfMonth?: CountJob[]| null,
     countJobOfYear?: CountJob[]| null,
 };
+
 export type TaskList = {
     id: number,
     name: string
-}
+};
+
 export interface DataTask  {
     id: number,
     name: string,
     taskList: TaskList[]
-}
+};
+
+export type CreateAdminAccount = {
+    name: string,
+    email: string,
+    password: string
+};

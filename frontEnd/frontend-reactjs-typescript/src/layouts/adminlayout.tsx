@@ -1,5 +1,5 @@
 import React, { ReactNode, useState, useEffect } from 'react'
-import { AdminRoute } from '../routes/adminRoute';
+
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setModalCreateUser, setModalPostJob } from '../redux/slices/statusDisplaySloce';
@@ -23,8 +23,8 @@ export default function AdminLayout({children, statusStart}: Props) {
   };
   
   return (
-    <div className='flex min-h-[100vh] w-full '>
-      <div className='navbar w-[50px] h-full fixed left-2  z-10 flex items-start justify-center  '>
+    <div className='flex h-[100vh] w-full '>
+      <div className='navbar w-1/2 h-[10%] fixed left-2  z-10 flex items-start justify-center  '>
         <div className='w-[40px]  h-[70%] bg-white shadow-2xl border border-blue-200 mt-11 rounded-[5px] flex flex-col items-center justify-between '>
           <Link 
             to={'/admin/jobs'}
