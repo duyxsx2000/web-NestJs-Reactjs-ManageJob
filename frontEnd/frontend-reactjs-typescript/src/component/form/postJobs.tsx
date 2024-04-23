@@ -2,7 +2,7 @@ import React, { useEffect, useState} from 'react'
 import EditorBox from './editorBox';
 import { AcctionType, CreateJob, JobType } from '../../types';
 import { useDispatch } from 'react-redux';
-import { postDataCreateJob } from '../../services/tasks/getDataRooms';
+import { postDataCreateJob } from '../../services/fetchApi/getDataRooms';
 import { AsyncThunkAction} from '@reduxjs/toolkit'
 import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk'
 import 'react-quill/dist/quill.snow.css'; // Import the styles
@@ -174,7 +174,7 @@ const PostJob = () => {
               </div>
               <div></div>
               <div className="editor mt-3 h-[300px]">
-                <EditorBox value={dataForm.detail} onChange={handleChange}/>
+                <EditorBox value={dataForm.detail} height='h-[200px]' onChange={handleChange}/>
               </div>
               <div className='mt-2  flex justify-center space-x-4'>
                 <button

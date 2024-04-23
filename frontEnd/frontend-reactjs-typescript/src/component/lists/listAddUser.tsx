@@ -11,7 +11,7 @@ import Stick from '../actions/stick';
 
 type Props = {
     list: any[]
-    onClick: (id: string, role: string) => void
+    onClick: (id: string, role: string, name: string, email: string) => void
 }
 export default function ListAddUser({list, onClick}: Props) {
 
@@ -24,15 +24,15 @@ export default function ListAddUser({list, onClick}: Props) {
             </div>
         </div>
         <div className='overflow-auto h-[85%]'>
-            <ul className='list-none mt-2 p-2'>
+            <ul className='list-none  p-2 '>
                 {list.map((item, index) => (
-                <li key={index} className='p-1 border-b border-gray-300'>
+                <li key={index} className='p-1 m-0 border-b  border-gray-300'>
                     <div className='flex justify-between items-center'>
                         <div>
                             <p>Nguyen Van Nam</p>
                             <p className='text-[10px]'>nam123@gmail.com</p>
                         </div>
-                        <Stick onClick={onClick} id={item.id}/>
+                        <Stick onClick={onClick} id={item.id} name={item.name} email={item.email}/>
                     </div>
                 </li>
                 ))}

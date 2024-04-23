@@ -3,7 +3,8 @@ import {
   CloseOutlined,
   UserAddOutlined,
   SearchOutlined,
-  CheckOutlined
+  CheckOutlined,
+  PlusOutlined
 
 } from '@ant-design/icons';
 
@@ -18,15 +19,18 @@ import { CreateRoom } from '../types/typesSlice';
 import ListAddUser from '../component/lists/listAddUser';
 import FormCreateNewRoom from '../component/form/formCreateNewRoom';
 import Search from '../component/search';
+import AddUserForm from '../component/form/addUser';
 
 
 export default function HomePage() {
   const list = [1,2,3,4,5,6,7,8,9,0]
-  const idGroup = useSelector((state: RootState) => state.group.data?.group.idGroup)
+  const idGroup = useSelector((state: RootState) => state.group.data?.idGroup)
   const titleRooms = useSelector((state: RootState) => state.group.data?.rooms)
   const users = useSelector((state: RootState) => state.group.data?.members)
+  const profile = useSelector((state: RootState) => state.auth.profile)
   const [action, setAction] = useState<String>('rooms')
   const [modal,setModal] = useState('none')
+  const [addUser, setAddUser] = useState(false)
   const dispatch = useDispatch()
  
   useEffect(() => {
@@ -34,38 +38,80 @@ export default function HomePage() {
 
     
   },[]);
-  useEffect(()=> {
-    console.log(titleRooms,users,'----');
-    console.log(idGroup);
-  },[titleRooms,users])
 
   const listRoom = () => {
+    console.log(profile?.idUser,'prrr', titleRooms);
+    const yourRooms = titleRooms?.filter((room) => room.members.find(member => member.idMember === profile?.idUser));
+    const allRoom = titleRooms?.filter((room) => !room.members.find(member => member.idMember === profile?.idUser));
+    const yourWaiting = yourRooms?.filter((room) => room.members.find(member => member.status === 'waiting' && member.idMember === profile?.idUser) );
+    const yourJoin = yourRooms?.filter((room) => room.members.find(member => member.status === 'join' && member.idMember === profile?.idUser ? room : undefined));
+
+    console.log(allRoom,'ýyyy');
+    
     return (
-      <div className='flex flex-wrap mt-6 overflow-auto w-full '>
-        <div className='w-1/4 h-[110px]'>
-          <div className='h-5/6 w-5/6'>
-            <button
-              onClick={(e) => {setModal('create')}}
-              className="w-full h-full cursor-pointer rounded-[2px] bg-gray-300 flex font-semibold justify-center items-center hover:bg-gray-400"
-            >
-              Create new room
-            </button>
-          </div>
-        </div>
-        {titleRooms && titleRooms.map((room, index) => (
-          <div key={index} className='w-1/4 h-[110px]'>
-            <div className='h-5/6 w-5/6'>
-              <RoomCard titleRoom={room}/>
+      <div className='mt-6'>
+        {yourJoin && yourJoin.length >= 1 &&(
+          <div>
+            <p className=' font-semibold text-[20px]'>Your Rooms</p>
+            <div className='flex flex-wrap mt-6  overflow-auto w-full '>
+              {yourJoin.map((room, index) => 
+                <div key={index} className='w-1/4 h-[110px]'>
+                  <div className='h-5/6 w-5/6'>
+                    <RoomCard titleRoom={room} type='join'/>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        ))}
-      </div>
+        )}
+        {yourWaiting && yourWaiting.length >= 1 &&(
+          <div>
+          <p className=' font-semibold text-[20px]'>Waiting accept</p>
+            <div className='flex flex-wrap mt-6  overflow-auto w-full '>
+              {yourWaiting.map((room, index) => 
+                room.members.map(member => member.idMember === profile?.idUser && member.status === 'waiting' ? (
+                  <div key={index} className='w-1/4 h-[110px]'>
+                    <div className='h-5/6 w-5/6'>
+                      <RoomCard titleRoom={room} type='waiting'/>
+                    </div>
+                  </div>
+                ) : <div key={index}></div>
+              ))}
+            </div>
+          </div>
+        )}
+        <p className=' font-semibold mt-2 text-[20px]'>All Rooms</p>
+        <div className='flex flex-wrap mt-6  overflow-auto w-full '>
+          {profile?.role === 'admin' && (
+            <div className='w-1/4 h-[110px]'>
+              <div className='h-5/6 w-5/6'>
+                <button
+                  type='button'
+                  onClick={(e) => {setModal('create')}}
+                  className="w-full h-full cursor-pointer rounded-[2px] bg-gray-300 flex font-semibold justify-center items-center hover:bg-gray-400"
+                >
+                  Create new room
+                </button>
+              </div>
+            </div>
+          )}
+          {allRoom && allRoom.map((room, index) => 
+            (
+              <div key={index} className='w-1/4 h-[110px]'>
+                <div className='h-5/6 w-5/6'>
+                  <RoomCard titleRoom={room} />
+                </div>
+              </div>
+            )
+          )}
+        </div>
+     </div>
     )
   };
 
   const listUsers = () => {
     return (
-      <div className=' mt-6 w-full h-full '>
+      <div className=' mt-6 w-full max-h-full border-2 border-gray-200 '>
         <div className='w-full flex bg-red-200'>
             <div className='w-[5%] p-3 text-left '>STT</div>
             <div className='w-[30%] p-3 text-left'>Name</div> 
@@ -74,7 +120,7 @@ export default function HomePage() {
             <div className='w-[15%] p-3 text-left'>Date</div>
             <div className='w-[5%] p-3 text-left -translate-x-4'>...</div>
         </div>
-        <div className=' overflow-auto h-[500px]'>
+        <div className=' overflow-auto max-h-[500px]'>
           {users && users.map((user, index) => {
             return (
               <div className={`w-full flex  ${index % 2 ? 'bg-green-200' : ''} hover:bg-gray-300 cursor-pointer`} key={index}>
@@ -82,22 +128,36 @@ export default function HomePage() {
                 <div className='w-[30%] p-3'>{user.name}</div>
                 <div className='w-[30%] p-3'>{user.email}</div>
                 <div className='w-[15%] p-3'>{user.role}</div>
-                <div className='w-[15%] p-3'>{getStringDate(user.postDate)}</div>
+                <div className='w-[15%] p-3'>{getStringDate(user.date)}</div>
                 <div className='w-[5%] p-3'>...</div>
               </div>
             )
           })}
+  
         </div>
+        {!addUser ? (
+          <div onClick={()=> setAddUser(true)} className={`w-full p-3 bg-gray-100 hover:bg-gray-300 hover:text-white text-center cursor-pointer flex justify-center items-center `}>
+            <PlusOutlined />
+            <p className='text-center font-medium ml-2'>Add User</p>
+          </div>
+        ) : idGroup && (
+          <div className={`w-full  `}>
+            <AddUserForm idGroup={idGroup} closeModal={() => {setAddUser(false)}}/>
+          </div>
+        )}
       </div>
     )
   };
 
 
+  if(!profile) return <></>
   
   return (
-    <div className='h-[100vh]'>
-      <Search/>
-      <div className='flex h-[100vh] w-full text-t-1 justify-center  space-x-12'>
+    <div className=''>
+      {/* <Search/> */}
+      
+      <div className='flex  w-full text-t-1 justify-center  space-x-12'>
+      
         {modal === 'create' && idGroup && (
           <ModalDefault
             width='w-[320px]'

@@ -15,7 +15,8 @@ const initialState: AuthState = {
     profile: data,
     test: '',
     loading: 'none',
-    token:''
+    token:'',
+    reload: false
 };
 
 type ResToken = {
@@ -30,6 +31,7 @@ interface AuthState {
     profile: UserAuth |  null,
     test: string,
     loading: "done" | "none" | "loading" | null,
+    reload: boolean,
     token: string
 };
 
@@ -37,6 +39,9 @@ export const authSlice = createSlice({
     name:'auth',
     initialState,
     reducers: {
+        setReload: (state, action) => {
+            state.reload = action.payload
+        },
         setLoading: (state, action) => {
             console.log(action.payload,'pl');
             
@@ -51,7 +56,7 @@ export const authSlice = createSlice({
             state.profile = action.payload
         }
     },
-    extraReducers: (builder) => {
+    extraReducers: (builder) => { 
 
         builder
         .addCase(
@@ -107,7 +112,9 @@ export const fetchtokenByUser = createAsyncThunk<ResToken |  null, TypeForm>(
                 return null
             }
             localStorage.setItem('jwtToken', (await data).access_token)
-            // dispatch(setLoading('done'))
+            console.log((await data).access_token,'token');
+            
+            dispatch(setLoading('done'))
             dispatch(setModalNotification({notify: 'Sign success', status: true}));
             return {
                 access_token: (await data).access_token
@@ -184,5 +191,5 @@ export const createNewAdminforCompany = createAsyncThunk<any, CreateAdminAccount
 );
 
 const  {reducer,actions} = authSlice;
-export const {setLoading, setLoadingNone} = actions;
+export const {setLoading, setLoadingNone, setReload} = actions;
 export default reducer

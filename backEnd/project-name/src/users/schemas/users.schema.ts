@@ -20,10 +20,7 @@ export class User {
     role: Role;
 
     @Prop()
-    phone: number
-
-    @Prop()
-    id: string;
+    idUser: string;
 
     @Prop({ type: Date, default: new Date(Date.now()) })
     postDate: Date;

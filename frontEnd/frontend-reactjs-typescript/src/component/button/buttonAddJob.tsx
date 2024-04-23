@@ -18,7 +18,8 @@ const ButtonAddJob = ({
             <PlusOutlined 
                 style={{fontSize:'50px'}} 
                 className='group-hover:scale-[1.5] group-hover:'
-                onClick={onClick} />
+                onClick={onClick} 
+            />
             </span>
         </div>
     </div>

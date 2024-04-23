@@ -5,7 +5,11 @@ import { UsersModule } from './users/users.module';
 import { JobsModule } from './jobs/jobs.module';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RoomsModule } from './rooms/rooms.module';
+import { GroupModule } from './groups/groups.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { TableModule } from './table/table.module';
+import { TaskModule } from './task/task.module';
+import { RoomModule } from './room/room.module';
 
 @Module({
   imports: [
@@ -13,9 +17,11 @@ import { RoomsModule } from './rooms/rooms.module';
     AuthModule,
     UsersModule,
     JobsModule,
-    RoomsModule, 
-    
-    
+    GroupModule,
+    DashboardModule,
+    TableModule,
+    TaskModule,
+    RoomModule,   
   ],
   
   controllers: [AppController],

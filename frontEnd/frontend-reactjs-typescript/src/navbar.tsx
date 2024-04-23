@@ -5,7 +5,8 @@ import { setLoadingNone } from './auth/authSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from './redux/store';
 import { UserAuth } from './types';
-
+import { StarOutlined, StarFilled, StarTwoTone, BellOutlined } from '@ant-design/icons';
+import './component/component.css'
 export default function Navbar() {
   const style = 'font-semibold hover:text-blue-500 cursor-pointer';
   const profile = useSelector((state: RootState) => state.auth.profile)
@@ -32,8 +33,12 @@ export default function Navbar() {
         <div className={style}>MEETING ROOMS</div>
         <div className={style}>ClENDAR</div>
         <div className={style}>DASHBOARD</div>
+        <div className=' relative flex items-center font-semibold text-[20px]'>
+          <div className=' blinking-dot -top-1 -left-1 absolute'></div>
+          <BellOutlined />
+        </div>
       </div> 
-      <div onClick={handleClick} className={style}><Link to='/login'>Logout</Link></div>
+      <div onClick={handleClick} className={style}><Link to='/signIn'>Logout</Link></div>
     </div>
   )
 }

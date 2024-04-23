@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function dashBoard() {
+export default function DashBoard() {
   return (
     <div>
       

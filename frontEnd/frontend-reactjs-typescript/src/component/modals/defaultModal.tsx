@@ -22,8 +22,8 @@ export default function ModalDefault({
 
 
   return (
-    <div className='fixed w-full h-[100vh]  bg-[rgba(112,112,112,0.7)] top-0 left-0 z-[90] flex justify-center items-center'>
-      <div className={` ${width} ${height} bg-white fixed z-[90] rounded-[5px] shadow-md shadow-gray-500   transition-all ${status ? 'top-[40px]' : '-top-[500px]'}`}>   
+    <div className='fixed w-full min-h-[100vh]   overflow-auto bg-[rgba(112,112,112,0.7)] top-0 left-0 z-[90] flex justify-center items-center'>
+      <div className={` ${width} ${height} bg-white fixed z-[90] rounded-[5px] shadow-md shadow-gray-500   transition-all ${status ? 'top-[20px]' : '-top-[500px]'}`}>   
        {children}
       </div>
     </div>

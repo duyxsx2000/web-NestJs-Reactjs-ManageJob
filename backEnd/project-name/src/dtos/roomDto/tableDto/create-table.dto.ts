@@ -5,4 +5,7 @@ export class CreateTable {
     @IsString()
     title: string
 
+    @IsString()
+    idRoom: string
 }
+

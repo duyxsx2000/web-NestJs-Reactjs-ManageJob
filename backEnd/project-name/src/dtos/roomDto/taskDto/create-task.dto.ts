@@ -5,7 +5,11 @@ export class CreateTask {
     @IsString()
     title: string
 
-    @IsNotEmpty()
     @IsString()
     idTable: string
+
+    @IsString()
+    idRoom: string
+
+
 }

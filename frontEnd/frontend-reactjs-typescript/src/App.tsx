@@ -14,6 +14,7 @@ function App() {
   const loading = useSelector((state: RootState) => state.auth.loading)
   const profile = useSelector((state: RootState) => state.auth.profile)
   const dispatch = useDispatch()
+  console.log('olaolaola');
   
   const loadingAuth = (token: string) => {
     const acction: AsyncThunkAction<any, string, AsyncThunkConfig> | any = fetchProfileByToken(token);

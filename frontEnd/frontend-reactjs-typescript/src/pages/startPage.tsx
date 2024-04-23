@@ -277,35 +277,36 @@ export default function StartPage() {
   }
   return (
     <>
-        <div className=' relative transition-all flex justify-between'>
-          <div>
-            <div className=''>
-              <p className='text-[50px] text-white font-bold'>Hello, Bear</p>
-              <p className='text-[20px] text-white'>Where you can easily manage projects and personnel</p>
-            </div>
-            <div className='flex mt-24  space-x-8'>
-              <button 
-                onClick={() => handleChangeForm('create')}
-                type='button'
-                className='p-2 rounded-full text-[20px] text-white font-semibold bg-green-600 w-[200px] hover:border-2 hover:bg-transparent hover:border-green-600'>
-                Create
-              </button>
-              <button
-                type='button'
-                onClick={() =>  handleChangeForm('join')}
-                className='p-2 rounded-full text-[20px] text-white border-2 font-semibold border-white  w-[200px] hover:border-green-600 hover:text-green-600'>
-                Join
-              </button>
-            </div>
+      <div className=' relative transition-all flex justify-between'>
+        <div>
+          <div className=''>
+            <p className='text-[50px] text-white font-bold'>Hello, Bear</p>
+            <p className='text-[20px] text-white'>Where you can easily manage projects and personnel</p>
           </div>
-          {}
-          <div className={`transition-all fixed bg-white w-[500px] rounded-[5px] h-[600px] top-[80px] shadow-lg shadow-black  ${!oppenCreateForm ? '-right-full' : 'right-[200px] '} `}>
-            {createForm()}
+          <div className='flex mt-24  space-x-8'>
+            <button 
+              onClick={() => handleChangeForm('create')}
+              type='button'
+              className='p-2 rounded-full text-[20px] text-white font-semibold bg-green-600 w-[200px] hover:border-2 hover:bg-transparent hover:border-green-600'>
+              Create
+            </button>
+            <button
+              type='button'
+              onClick={() =>  handleChangeForm('join')}
+              className='p-2 rounded-full text-[20px] text-white border-2 font-semibold border-white  w-[200px] hover:border-green-600 hover:text-green-600'>
+              Join
+            </button>
           </div>
+        </div>
+        {}
+        <div className={`transition-all fixed bg-white w-[500px] rounded-[5px] h-[600px] top-[80px] shadow-lg shadow-black  ${!oppenCreateForm ? '-right-full' : 'right-[200px] '} `}>
+          {createForm()}
         </div>
         <div className={`transition-all fixed bg-white w-[500px] rounded-[5px] h-[600px] top-[80px] shadow-lg shadow-black  ${!oppenJoinForm ? '-right-full' : 'right-[200px] '} `}>
-            {joinForm()}
+          {joinForm()}
         </div>
-        </>
+      </div>
+
+    </>
   )
 }

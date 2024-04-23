@@ -19,6 +19,7 @@ interface JobState {
     loading: boolean;
     status: string;
     dataForm: CreateJob | null;
+    notify:string
 };
 
 const initialState: JobState = {
@@ -29,15 +30,10 @@ const initialState: JobState = {
     },
     loading: false,
     status:'none',
-    dataForm: null
+    dataForm: null,
+    notify:''
 
 };
-
-type ResponseJobs = {
-    data: JobType[],
-    message: string,
-    statusCode: number
-}
 
 export const dashboardSlice = createSlice({
     name:'dashboard',
@@ -45,6 +41,10 @@ export const dashboardSlice = createSlice({
     reducers: {
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload   
+        },
+
+        setNotify: (state, action : PayloadAction<string>) => {         
+            state.notify = action.payload
         },
 
         setDataForm: (state, action: PayloadAction<JobType>) => {
@@ -136,5 +136,5 @@ export const fetchDataCountJobs = createAsyncThunk<CountJobs |  null, DataInput>
 
 
 const  {reducer,actions} = dashboardSlice;
-export const {setLoading} = actions;
+export const {setLoading, setNotify} = actions;
 export default reducer

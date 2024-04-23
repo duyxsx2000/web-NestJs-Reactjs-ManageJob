@@ -34,11 +34,10 @@ export class UsersController {
         } catch (error) {
             return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)
         }
- 
     };
 
     @Get(':id')
-    async findOne(@Param('id', ParseIntPipe) id : number): Promise<ResponseData<{}>> {
+    async findOne(@Param('id', ParseIntPipe) id : string): Promise<ResponseData<{}>> {
          
         try {
             const user = await this.usersService.findOneUser(id)
@@ -54,7 +53,7 @@ export class UsersController {
 
     @Post('/create')
     async create(@Body(ValidationPipe) createUserDto: CreateUserDto ): Promise<ResponseData<{}>> {
-       console.log('create1');
+       console.log('create1', createUserDto);
        
         try {
            const newUser = await this.usersService.createUser(createUserDto) ;       
@@ -65,6 +64,38 @@ export class UsersController {
         }
         
     };
+
+    @Post('/createAccount/:idGroup')
+    async createUserByAccount(
+        @Param('idGroup') idGroup: string,
+        @Body(ValidationPipe) createUser: CreateUserDto
+    ): Promise<ResponseData<{}>> {
+        try {
+            
+            const groupAfterUpdate = await this.usersService.createAccountForUser(createUser, idGroup)
+            if(!groupAfterUpdate) {
+                return new ResponseData<{}>(undefined,  HttpStatus.ERROR, HttpMessage.ERROR)  
+            }
+            return new ResponseData<{}>(groupAfterUpdate, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
+            
+         } catch (error) {
+             return new ResponseData<{}>(undefined,  HttpStatus.ERROR, HttpMessage.ERROR)  
+         }
+    }
+
+    @Post('/createCodeJoin/:idGroup/')
+    async createCodeJoin(
+        @Param('idGroup') idGroup: string,
+        @Body(ValidationPipe) createUser: UpdateUserDto
+    ): Promise<ResponseData<{}>> {
+        try {
+
+            return new ResponseData<{}>('', HttpStatus.SUCCESS, HttpMessage.SUCCESS)
+            
+         } catch (error) {
+             return new ResponseData<{}>('error',  HttpStatus.ERROR, HttpMessage.ERROR)  
+         }
+    }
 
     @Post(':id')
     async updateOne(@Param('id', ParseIntPipe)id: number , @Body(ValidationPipe) updateUserDto: UpdateUserDto): Promise<ResponseData<{}>> {

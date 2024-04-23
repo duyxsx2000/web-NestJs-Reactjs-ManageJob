@@ -3,8 +3,9 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { json } from "stream/consumers";
 import { setLoading } from "../../redux/slices/jobsSlice";
 import { apiGetGroup } from "../../api/apiTask";
+import { Group, ResponseDataType } from "../../types/typesSlice";
 
-export const getDataStartGroup= createAsyncThunk<any |  null, any>(
+export const getDataStartGroup= createAsyncThunk<Group | undefined, any>(
     'group/getDataStartGroup',
     async ({dispatch}) => {
         const token = localStorage.getItem('jwtToken');    
@@ -18,11 +19,13 @@ export const getDataStartGroup= createAsyncThunk<any |  null, any>(
             });
 
             if(!res.ok) return
-            return await res.json()
+            const response: ResponseDataType<{title: string, data: Group}> = await res.json()
+            const group = response.data.data
+            return group
 
         } catch (error) {
 
-          return  null
+          return  undefined
         }
     }
 );

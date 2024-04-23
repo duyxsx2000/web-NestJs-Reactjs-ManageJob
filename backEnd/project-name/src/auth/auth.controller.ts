@@ -28,10 +28,7 @@ export class AuthController {
     @UseGuards(AuthGuard)
     @Get('profile')
     getProfile(@Request() req) { 
-     
-      const email = req.user.email
-      console.log(email);
-      
+      const email = req.user.email     
       return this.authService.profile(email);
     }
 }

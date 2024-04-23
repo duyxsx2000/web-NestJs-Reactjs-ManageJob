@@ -9,6 +9,7 @@ import DefaultLayout from '../layouts/defaultLayout'
 import StartPage from '../pages/startPage'
 import StartLayout from '../layouts/defaultLayoutz'
 import RoomPage from '../pages/roomPage'
+import ProfilePage from '../pages/profilePage'
 
 type Props = {
     loading: "none" | "done" | "loading" | "signIn",
@@ -34,7 +35,7 @@ export const AppRoute = ({
                 path='/' 
                 element= {
                     loading === "done" && profile ?  (
-                        profile.role === 'admin' ? <Navigate to={'/manage'} replace/> : <Navigate to={'/working'} replace/>
+                        profile.role === 'admin' ? <Navigate to={'/manage'} replace/> : <Navigate to={'/profile'} replace/>
                     ) : (
                         <Navigate to={'/start'} replace/>
                     )       
@@ -48,7 +49,7 @@ export const AppRoute = ({
                     ) : loading === 'signIn' ? (
                         <Navigate to={'/signIn'} replace/>
                     ) : loading === 'done' && (
-                        profile?.role === 'admin' ? <Navigate to={'/manage'} replace/> : <Navigate to={'/working'} replace/>
+                        profile?.role === 'admin' ? <Navigate to={'/manage'} replace/> : <Navigate to={'/profile'} replace/>
                     )
                 }
             /> 
@@ -75,10 +76,24 @@ export const AppRoute = ({
    
                 }
             />
+
+            <Route
+                path='/profile'
+                element= {
+                    loading === "none" ?
+                    <Navigate to={'/signIn'} replace/> : (
+                        <DefaultLayout>
+                            <ProfilePage/>
+                        </DefaultLayout>
+                    )
+   
+                }
+            />
             <Route
                 path='/room/:id'
                 element= {
- (
+                    loading === "none" ?
+                    <Navigate to={'/signIn'} replace/> : (
                         <DefaultLayout>
                             <RoomPage/>
                         </DefaultLayout>

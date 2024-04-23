@@ -63,8 +63,11 @@ export default function FormCreateNewRoom({listUser, idGroup, onClick}: Props) {
         priority: '',
         members:[{
             idMember:'',
-            role: 'admin'
-        }]
+            role: 'admin',
+            name:'',
+            email:'',
+            status: 'join'
+        }],
     })
     const dispatch = useDispatch()
     useEffect(() => {
@@ -81,14 +84,17 @@ export default function FormCreateNewRoom({listUser, idGroup, onClick}: Props) {
                 members: [
                     {
                         idMember: profile.idUser,
-                        role: 'admin'
+                        role: 'Admin',
+                        name:profile.name,
+                        status:'join',
+                        email: profile.email
                     }
                 ]
             })
         }
     },[profile]);
 
-    const handleChangeMember = (id: string, role: string) => {
+    const handleChangeMember = (id: string, role: string, name: string, email: string) => {
 
         const room = {...createRoom};
         const index = room.members.findIndex(member => member.idMember === id);
@@ -112,7 +118,10 @@ export default function FormCreateNewRoom({listUser, idGroup, onClick}: Props) {
                 ...room.members,
                 {
                     idMember: id, 
-                    role: role
+                    role: role,
+                    status: 'waiting',
+                    name: name,
+                    email: email
                 }
             ]
         });
@@ -250,7 +259,7 @@ export default function FormCreateNewRoom({listUser, idGroup, onClick}: Props) {
             >
                 {priority}
             </button>
-            {addUser && <ListAddUser onClick={(id: string, role: string) => handleChangeMember(id, role)} list={list}/>}
+            {addUser && <ListAddUser onClick={(id: string, role: string, name: string, email: string) => handleChangeMember(id, role, name, email)} list={list}/>}
             {addUPriority  && (
                 <div className=' absolute w-[135px]  bg-white -right-[50%] rounded-[5px]'>
                 <div 

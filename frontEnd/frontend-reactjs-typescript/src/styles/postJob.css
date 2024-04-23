@@ -1,4 +1,19 @@
-.ql-toolbar.ql-snow {
+
+
+.rol::-webkit-scrollbar {
+    width: 8px; /* Độ rộng của thanh trượt */
+  }
+  
+  .rol::-webkit-scrollbar-thumb {
+    background-color: #a1a1a1; /* Màu nền của thanh trượt */
+    border-radius: 5px; /* Bo góc cho thanh trượt */
+  }
+  
+  .rol::-webkit-scrollbar-track {
+    background-color: #eee; /* Màu nền của phần track (không phải thumb) */
+  }
+  
+  .ql-toolbar.ql-snow {
     background: #9fd9e0;
     
    
@@ -33,11 +48,15 @@ font-size: 1.2em !important;
 }
 ul {
     list-style-type: disc; /* Change to square or circle if desired */
-    margin-left: 0px;     /* Adjust the left margin */
+    margin: 0px; 
+    padding-inline-start:0px;
+    margin-block-start : 0px /* Adjust the left margin */
     
 }
 .ql-container {
-height: 250px !important;
+min-height: 150px !important;
+background-color: white;
+
 }
 ol {
     list-style-type: none;

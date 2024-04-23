@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { CreateJob, JobType, ResponseType } from "../../types";
 import { setModalNotification, setModalPostJob } from "./statusDisplaySloce";
 import { json } from "stream/consumers";
-import {fetchJobs, postDataCreateJob } from "../../services/tasks/getDataRooms";
+import {fetchJobs, postDataCreateJob } from "../../services/fetchApi/getDataRooms";
 
 type JobState = {
     jobs: {

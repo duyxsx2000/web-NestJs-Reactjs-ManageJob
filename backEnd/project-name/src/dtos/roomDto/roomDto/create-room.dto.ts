@@ -1,22 +1,59 @@
 import { IsArray, IsNotEmpty, IsString, ValidateNested } from "class-validator";
 
-class Member {
+export class Member {
     @IsNotEmpty()
     @IsString()
-    id: string
+    idMember: string
 
     @IsNotEmpty()
     @IsString()
-    rome: string
+    role: string
+
+    @IsString()
+    status: string
+
+    @IsString()
+    name: string
+
+    @IsString()
+    email: string
 };
+class task {
+    idTask: string
+    title: string
+}
+
+class table {
+    idTable:string
+    title: string
+}
 
 export class CreateRoom {
     @IsNotEmpty()
     @IsString()
     title: string
 
+    @IsString()
+    mainTask: string
+
+    @IsString()
+    background: string
+
+    @IsString()
+    priority: string
+
+    @IsString()
+    idGroup: string
+
+    @IsString()
+    idRoom: string
+
     @IsNotEmpty()
     @IsArray()
     @ValidateNested({ each: true })
-    member: Member[];
-}
+    members: Member[];
+
+    @ValidateNested({each: true})
+    tables: table[]
+};
+

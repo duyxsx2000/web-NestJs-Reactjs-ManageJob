@@ -14,14 +14,16 @@ export class AuthService {
         try {
             const user = await this.usersService.findOneAuth(signInAuthDto.email);
             const {password, ...result} = user;
+
             if(password !== signInAuthDto.password) {
                 throw new UnauthorizedException('Invalid password');
-            }
-            const payload = {sub: user.id, userName: user.name, roles: user.role, email: user.email};
-            const userData = {role: user.role, name: user.name, id:user.id}
+            };
+
+            const payload = {idUser: user.idUser, userName: user.name, roles: user.role, email: user.email};
             return {
                 access_token: await this.jwtService.signAsync(payload),
-            }
+            };
+
         } catch (error) {
             return new UnauthorizedException()
         }
@@ -30,7 +32,9 @@ export class AuthService {
     async profile(email: string) {
         try {
             const user =  await this.usersService.findOneAuth(email);
-            const userData = {role: user.role, name: user.name, id:user.id, email: user.email}
+            console.log('user signin', user.email);
+            
+            const userData = {role: user.role, name: user.name, idUser:user.idUser, email: user.email}
             return userData
         } catch (error) {
             throw new Notification('error')
