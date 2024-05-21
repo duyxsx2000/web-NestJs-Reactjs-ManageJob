@@ -24,13 +24,26 @@ export class Task {
     @Prop()
     title: string
 
+    @Prop({
+        type: {
+            datePost: Date,
+            dateDeadlineEnd: Date,
+            dateDeadlineStart: Date
+        }
+    })
+    dates: {
+        datePost: Date,
+        dateDeadlineStart: Date,
+        dateDeadlineEnd: Date
+    }
+
     @Prop({type: [{
         date: Date,
         name: String,
         idMember: String,
         detail: String
     }]})
-    action: {
+    actions: {
         date: Date,
         name: string,
         idMember: string,
@@ -42,14 +55,14 @@ export class Task {
             idMember: String,
             name: String,
             role: String,
-            notify: String
+            notify: Boolean
         }
     ]})    
-    member: {
+    members: {
         idMember: string,
         name: string,
         role: string,
-        notify: string
+        notify: boolean
     }[]
 
     @Prop()

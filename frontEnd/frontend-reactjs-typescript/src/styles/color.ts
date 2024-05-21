@@ -1,14 +1,24 @@
 export const backgroundColor = {
-    red:'bg-gradient-to-br from-red-400 to-red-600',
-    green:'bg-gradient-to-br from-green-400 to-green-600',
-    yellow:'bg-gradient-to-br from-yellow-400 to-yellow-600',
-    pink:'bg-gradient-to-br from-pink-400 to-pink-600',
-    orange:'bg-gradient-to-br from-orange-400 to-orange-600',
-    cyan:'bg-gradient-to-br from-cyan-400 to-cyan-600',
+    red:'bg-gradient-to-br from-red-300 to-red-400',
+    green:'bg-gradient-to-br from-green-300 to-green-400',
+    yellow:'bg-gradient-to-br from-yellow-300 to-yellow-400',
+    pink:'bg-gradient-to-br from-pink-300 to-pink-400',
+    orange:'bg-gradient-to-br from-orange-300 to-orange-400',
+    cyan:'bg-gradient-to-br from-cyan-300 to-cyan-400',
     none:''
 }
 
 export const backgroundColorBg = {
+    red:'bg-red-400',
+    green:'bg-green-400',
+    yellow:'bg-yellow-400',
+    pink:'bg-pink-400',
+    orange:'bg-orange-400',
+    cyan:'bg-cyan-400',
+    none:''
+}
+
+export const backgroundColorBg1 = {
     red:'bg-red-500',
     green:'bg-green-500',
     yellow:'bg-yellow-500',
@@ -18,24 +28,14 @@ export const backgroundColorBg = {
     none:''
 }
 
-export const backgroundColorBg1 = {
-    red:'bg-red-600',
-    green:'bg-green-600',
-    yellow:'bg-yellow-600',
-    pink:'bg-pink-600',
-    orange:'bg-orange-600',
-    cyan:'bg-cyan-600',
-    none:''
-}
-
 export const listAbs = [
  'left-0',
-'left-[20px]',
 'left-[40px]',
-'left-[60px]',
-'left-[80px]',
+'left-[55px]',
+'left-[70px]',
+'left-[85px]',
 'left-[100px]',
-'left-[120px]'
+'left-[115px]'
 ]
 
 export const listZ = [

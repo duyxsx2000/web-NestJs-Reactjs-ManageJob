@@ -2,13 +2,14 @@ import React, { ReactNode, useEffect, useState} from 'react'
 type Props = {
     width: string,
     height: string,
-    children: ReactNode
+    children: ReactNode,
+    type?: string
 }
 
 export default function ModalDefault({
   width,
   height,
-  children
+  children,
 }: Props) {
 
   const [status, setStatus] = useState(false);

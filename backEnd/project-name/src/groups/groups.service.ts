@@ -6,11 +6,6 @@ import { Model } from 'mongoose';
 import { randumId } from 'src/utils/randumId';
 import { CreateNewRoom} from 'src/dtos/roomDto/roomDto/createNewRoom';
 import { CreateGroup } from 'src/dtos/roomDto/groupDto/create-group.dto';
-import { CreateTable } from 'src/dtos/roomDto/tableDto/create-table.dto';
-import { CreateTask } from 'src/dtos/roomDto/taskDto/create-task.dto';
-import { Ids3, Table } from 'src/types/typeDefaults';
-import { UpdateRoom } from 'src/dtos/roomDto/roomDto/update-room.dto';
-import { table } from 'console';
 
 @Injectable()
 export class GroupsService {

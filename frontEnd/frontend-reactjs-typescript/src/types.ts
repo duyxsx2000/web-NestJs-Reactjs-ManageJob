@@ -3,6 +3,14 @@ export type UserAuth = {
     name: string,
     role: string,
     idUser: string,
+};
+
+export type ChangeMember = {
+    idTask: string,
+    idRoom: string,
+    idMember: string,
+    name: string,
+    action: string
 }
 
 export type CreateJob = {

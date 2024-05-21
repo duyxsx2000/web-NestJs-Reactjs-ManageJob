@@ -2,8 +2,9 @@ import { AsyncThunkAction } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
 import { getDataStartGroup } from '../fetchApi/fetchApiGroup copy';
 import { AcctionType } from '../../types';
-import { createAccountForUser, createNewRoom, createNewTable, createNewTask } from '../fetchApi/fetchApiRoom';
+import { createAccountForUser, createNewTable, createNewTask } from '../fetchApi/fetchApis';
 import { CreateAccount, CreateRoom, CreateTable, CreateTask } from '../../types/typesSlice';
+import { createNewRoom } from '../fetchApi/fetchApiRooms';
 
 const actionCreateNewRoom = (createRoom: CreateRoom) => {
     const action: | AsyncThunkAction<ResponseType | null, string, AsyncThunkConfig> | AcctionType= createNewRoom(createRoom);

@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { CreateJob, JobType, ResponseType } from "../../types";
 import { setModalNotification, setModalPostJob } from "./statusDisplaySloce";
 import { json } from "stream/consumers";
-import {fetchJobs, postDataCreateJob } from "../../services/fetchApi/getDataRooms";
+// import {fetchJobs, postDataCreateJob } from "../../services/fetchApi/getDataRooms";
 
 type JobState = {
     jobs: {
@@ -66,75 +66,6 @@ export const jobsSlice = createSlice({
 
     },
 
-    extraReducers: (builder) => {
-
-        builder
-        .addCase(
-            postDataCreateJob.fulfilled, 
-
-            (state, action) => {
-                if(!action.payload) {
-                    return    
-                }
-                state.loading = false
-
-            }
-        )
-
-        .addCase(
-            fetchJobs.fulfilled, 
-            (state, action) => {     
-                console.log(action.payload);
-                        
-                if(!action.payload) {                    
-                    return    
-                };
-                
-                if(action.payload.key === 'home') {
-                    state.jobs.home = action.payload.data;
-                    state.loading = false;
-                    return
-                };
-                
-                if(action.payload.key === 'admin') {
-                    state.jobs.admin = action.payload.data;
-                    state.loading = false;
-                    return
-                } ;       
-            }
-        )
-
-        // .addCase(
-        //     actionEditjob.fulfilled,
-        //     (state,action) => {
-        //         if(action.payload?.action === 'DELETE') {
-        //             const newJobs = state.jobs.admin?.filter((job) => job.idJob != action.payload?.job.idJob)
-        //             if(!newJobs) return;
-        //             state.jobs.admin = newJobs;
-        //             state.loading = false;
-        //             return
-        //         };
-
-        //         if(action.payload?.action === 'UPDATE') {
-        //             if(!state.jobs.admin) return;
-
-        //             const jobs = {...state.jobs.admin}
-        //             const newJobs = jobs.map((job) => {
-
-        //                 if(job.idJob === action.payload?.job.idJob) {
-        //                     return action.payload?.job
-        //                 };
-        //                 return job
-
-        //             })
-
-        //             state.jobs.admin = newJobs;
-        //             state.loading = false;
-        //             return
-        //         }
-        //     }
-        // )
-    },
 });
 
 

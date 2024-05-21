@@ -10,17 +10,23 @@ const apiEditTable = 'http://localhost:3002/group/editTable/t';
 const apiUpdateRoom = 'http://localhost:3002/room/updateRoom';
 const apiUpdateTable = 'http://localhost:3002/table/updateTable';
 const apiCreateTask = 'http://localhost:3002/task/create';
-const apiUpdateTask = 'http://localhost:3002/group/update/task/t';
+const apiUpdateTask = 'http://localhost:3002/task/updataTask';
+const apiUpdateMemberTask = 'http://localhost:3002/task/setMember/t';
 const apijoinRoom = 'http://localhost:3002/room/waiting/joinRoom';
+const  apiAddMemberForRoom = 'http://localhost:3002/room/addMember/joinRoom';
+const  apiDeleteMemberByRoom = 'http://localhost:3002/room/deleteMember';
 const apiDelateRoom = 'http://localhost:3002/room/delete';
 const apiAcceptMember = 'http://localhost:3002/room/acceptMember';
+
 
 export {
     apiUrl,
     apiGetGroup,
     apiCreateRoom,
     apiAcceptMember,
+    apiUpdateMemberTask,
     apiDelateRoom,
+    apiAddMemberForRoom,
     apiGetDataRoomById,
     apiCreateAccount,
     apiCreateTable,
@@ -31,6 +37,7 @@ export {
     apiCreateTask,
     apiUpdateTask,
     apiGetDataTaskById,
-    apiUpdateTable
+    apiUpdateTable,
+    apiDeleteMemberByRoom
     
 }

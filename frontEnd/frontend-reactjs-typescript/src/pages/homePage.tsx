@@ -20,6 +20,7 @@ import ListAddUser from '../component/lists/listAddUser';
 import FormCreateNewRoom from '../component/form/formCreateNewRoom';
 import Search from '../component/search';
 import AddUserForm from '../component/form/addUser';
+import { Link, Navigate, useParams } from 'react-router-dom';
 
 
 export default function HomePage() {
@@ -32,21 +33,25 @@ export default function HomePage() {
   const [modal,setModal] = useState('none')
   const [addUser, setAddUser] = useState(false)
   const dispatch = useDispatch()
- 
+  const {key} = useParams();
+  
+  useEffect(() => {
+    if(key) {
+      setAction(key)
+      console.log(key,'keyyyy');
+      
+    }
+  },[key])
   useEffect(() => {
     dispatch(actionGetStartGroup);
-
-    
   },[]);
 
   const listRoom = () => {
-    console.log(profile?.idUser,'prrr', titleRooms);
+  
     const yourRooms = titleRooms?.filter((room) => room.members.find(member => member.idMember === profile?.idUser));
     const allRoom = titleRooms?.filter((room) => !room.members.find(member => member.idMember === profile?.idUser));
     const yourWaiting = yourRooms?.filter((room) => room.members.find(member => member.status === 'waiting' && member.idMember === profile?.idUser) );
     const yourJoin = yourRooms?.filter((room) => room.members.find(member => member.status === 'join' && member.idMember === profile?.idUser ? room : undefined));
-
-    console.log(allRoom,'ýyyy');
     
     return (
       <div className='mt-6'>

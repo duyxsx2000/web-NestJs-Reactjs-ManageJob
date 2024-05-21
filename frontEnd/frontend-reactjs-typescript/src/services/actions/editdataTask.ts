@@ -1,9 +1,10 @@
 import { AsyncThunkAction } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
 import { getDataStartGroup } from '../fetchApi/fetchApiGroup copy';
-import { AcctionType } from '../../types';
-import { fetchEditTable, createNewRoom, createNewTable, patchUpdateRoom, patchUpdateTable } from '../fetchApi/fetchApiRoom';
-import { CreateRoom, CreateTable, EditTable, UpdateRoom, UpdateTable } from '../../types/typesSlice';
+import { AcctionType, ChangeMember } from '../../types';
+import { fetchEditTable, createNewTable, patchUpdateRoom, patchUpdateTable } from '../fetchApi/fetchApis';
+import { CreateRoom, CreateTable, EditTable, UpdateRoom, UpdateTable, UpdateTaskDto } from '../../types/typesSlice';
+import { updateMemberTask, updateTask } from '../fetchApi/fetchApiTask';
 
 const actionEditTable = (editTable: EditTable) => {
     const action: | AsyncThunkAction<ResponseType | null, string, AsyncThunkConfig> | AcctionType= fetchEditTable(editTable);
@@ -20,10 +21,22 @@ const actionUpdateTable = (updateTable: UpdateTable) => {
     return action
 };
 
+const actionUpdateTask = (updataTaskDto: UpdateTaskDto) => {
+    const action: | AsyncThunkAction<ResponseType | null, string, AsyncThunkConfig> | AcctionType= updateTask(updataTaskDto);
+    return action
+};
+
+const actionUpdateMembrTask = (changeMember: ChangeMember) => {
+    const action: | AsyncThunkAction<ResponseType | null, string, AsyncThunkConfig> | AcctionType= updateMemberTask(changeMember);
+    return action
+};
+
 
 
 export {
     actionEditTable,
     actionUpdateTable,
-    actionUpdateRoom 
+    actionUpdateRoom ,
+    actionUpdateTask,
+    actionUpdateMembrTask
 }

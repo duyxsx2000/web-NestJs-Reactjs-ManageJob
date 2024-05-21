@@ -2,7 +2,7 @@ import React, { useEffect, useState} from 'react'
 import EditorBox from './editorBox';
 import { AcctionType, CreateJob, JobType } from '../../types';
 import { useDispatch } from 'react-redux';
-import { postDataCreateJob } from '../../services/fetchApi/getDataRooms';
+// import { postDataCreateJob } from '../../services/fetchApi/getDataRooms';
 import { AsyncThunkAction} from '@reduxjs/toolkit'
 import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk'
 import 'react-quill/dist/quill.snow.css'; // Import the styles
@@ -92,8 +92,8 @@ const PostJob = () => {
   };
 
   const postJob = async () => { 
-    const acction: AsyncThunkAction<ResponseType | null, CreateJob, AsyncThunkConfig> | AcctionType  = postDataCreateJob(dataForm);
-    dispatch(acction)
+    // const acction: AsyncThunkAction<ResponseType | null, CreateJob, AsyncThunkConfig> | AcctionType  = postDataCreateJob(dataForm);
+    // dispatch(acction)
   }
 
   const onClickButton = () => {

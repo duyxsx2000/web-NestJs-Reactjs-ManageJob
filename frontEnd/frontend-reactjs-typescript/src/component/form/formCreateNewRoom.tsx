@@ -194,7 +194,7 @@ export default function FormCreateNewRoom({listUser, idGroup, onClick}: Props) {
                 <ul className='list-none flex space-x-3 mt-2'>
                     <li 
                         id='none' 
-                        className='w-[30px] h-[30px] border border-gray-300 rounded-[2px] text-black flex justify-center items-center text-[25px]'
+                        className=' ml-0 w-[30px] h-[30px] border border-gray-300 rounded-[2px] text-black flex justify-center items-center text-[25px]'
                         onClick={(e) => handleSetColor(e.currentTarget.id)}
                     >
                         {color === 'none' && <CheckOutlined />}

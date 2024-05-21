@@ -19,7 +19,7 @@ const RoomCard = ({titleRoom, type}: Props) => {
 
     const handlePostReqJoinRoom = (idRoom: string, idGroup: string) => {
         if(status?.status === 'waiting' || status?.status === 'join') return
-        const action = actionReqToJoinRoom({idRoom:idRoom, idGroup: idGroup})
+        const action = actionReqToJoinRoom({idRoom:idRoom, idGroup: idGroup, status: 'waiting'})
         dispatch(action)
     }
    

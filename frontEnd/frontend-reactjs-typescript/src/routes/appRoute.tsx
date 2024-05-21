@@ -60,12 +60,12 @@ export const AppRoute = ({
                     <StartLayout>
                         <Login/>
                     </StartLayout> : (    
-                        <Navigate to={'/manage'} replace/>     
+                        <Navigate to={'/manage/rooms'} replace/>     
                     )
                 }
             />
             <Route
-                path='/manage'
+                path='/manage/:key'
                 element= {
                     loading === "none" ?
                     <Navigate to={'/signIn'} replace/> : (

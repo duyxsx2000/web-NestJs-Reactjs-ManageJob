@@ -1,22 +1,20 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { CreateJob, JobType, ResponseType } from "../../types";
-import { setModalNotification, setModalPostJob } from "./statusDisplaySloce";
-import {  fetchJobs, postDataCreateJob } from "../../services/fetchApi/getDataRooms";
-import { Table, Task, TypeMember, TypeRoom, TypeTable} from "../../types/typesSlice";
-import { createNewRoom, createNewTable, createNewTask, fetchEditTable, fetchTables, getDataRoomById, getDataTaskById, patchUpdateRoom, patchUpdateTable } from "../../services/fetchApi/fetchApiRoom";
-import { log } from "console";
+import { createSlice,PayloadAction } from "@reduxjs/toolkit";
+import {JobType} from "../../types";
+import { ActionTask, MemberTask, Table, Task, TypeMember, TypeRoom, TypeTable} from "../../types/typesSlice";
+import {createNewTable, createNewTask, fetchEditTable, fetchTables,getDataTaskById, patchUpdateRoom, patchUpdateTable } from "../../services/fetchApi/fetchApis";
+import { deleteMembeByRoom, getDataRoomById, postAddJoinRoom } from "../../services/fetchApi/fetchApiRooms";
 
 interface RoomSlice {
     data: {
         room: TypeRoom | undefined,
         table: TypeTable[] | undefined
-        task: Task | undefined
+        task: Task | undefined,
+
     }
     dataTask: Task | undefined
-
-    
     loading: boolean
-    role: string
+    role: string,
+    color: boolean
 }
 
 const initialState: RoomSlice = {
@@ -24,10 +22,12 @@ const initialState: RoomSlice = {
     data: {
         room: undefined,
         table: [],
-        task: undefined
+        task: undefined,
+
     },
     dataTask: undefined,
-    role: 'admin'
+    role: '',
+    color: false
 };
 
 export const roomSlice = createSlice({
@@ -42,14 +42,18 @@ export const roomSlice = createSlice({
      
         },
 
+        setColorG: (state, action: PayloadAction<boolean>) => {
+            if(!state.data.table) return
+            state.color = action.payload
+        },
+
         delateTask: (state,action) => {
             state.dataTask = undefined
         },
 
         setLisstUser: (state, action: PayloadAction<TypeMember>) => {
             if(!action.payload || !state.data.room?.members) return
-            console.log('setttttt');
-            
+        
             const cloneMebsers = [...state.data.room?.members]
             const newMembers = cloneMebsers.map(member => member.idMember != action.payload.idMember ? member : {
                 ...action.payload,
@@ -67,8 +71,27 @@ export const roomSlice = createSlice({
             ) as TypeTable[];
             state.data.table = newTable
         },
+
         setRoom: (state, action: PayloadAction<TypeRoom>) => {
             state.data.room = action.payload
+        },
+
+        setActionTask: (state, action: PayloadAction<ActionTask[]>) => {
+            if(!state.dataTask?.actions) return
+            state.dataTask.actions = action.payload
+        },
+
+        setMemberTask: (state, action: PayloadAction<MemberTask[]>) => {
+            if(!state.dataTask?.actions) return
+            console.log(action.payload,'act');
+            
+            state.dataTask.members = action.payload   
+        },
+
+        joinTask: (state, action: PayloadAction<MemberTask>) => {
+            if(!state.dataTask?.actions) return       
+            state.dataTask.members.push(action.payload)
+            
         },
 
         setDataForm: (state, action: PayloadAction<JobType>) => {
@@ -99,8 +122,11 @@ export const roomSlice = createSlice({
         .addCase(
             getDataRoomById.fulfilled, 
             (state, action) => {     
-                if(action.payload) {                  
+                if(action.payload) {      
+                    console.log(action.payload.role);
+                                
                     state.data.room = action.payload
+                    state.role = action.payload.role
                 }
                
                 
@@ -176,6 +202,28 @@ export const roomSlice = createSlice({
 
             }
         )
+
+        .addCase(
+            postAddJoinRoom.fulfilled,
+            (state,action) => {
+
+              if(!action.payload) return;
+              if(!state.data.room?.members) return;
+              state.data.room.members = action.payload.members;
+
+            }
+        )
+
+        .addCase(
+            deleteMembeByRoom.fulfilled,
+            (state,action) => {
+
+              if(!action.payload) return;
+              if(!state.data.room?.members) return;   
+              state.data.room.members = action.payload.members;
+
+            }
+        )
     },
 });
 
@@ -185,5 +233,15 @@ export const roomSlice = createSlice({
 
 
 const  {reducer,actions} = roomSlice;
-export const {setTables, setRoom,delateTask, changeTable, setLisstUser} = actions;
+export const {
+    setTables, 
+    setRoom,
+    delateTask, 
+    changeTable, 
+    setLisstUser, 
+    setColorG, 
+    setActionTask,
+    setMemberTask,
+    joinTask
+} = actions;
 export default reducer

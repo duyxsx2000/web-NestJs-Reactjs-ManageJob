@@ -3,47 +3,13 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 import { json } from "stream/consumers";
 import { setLoading } from "../../redux/slices/jobsSlice";
-import { AcceptMember, CreateAccount, CreateRoom, CreateTable, CreateTask, EditTable, Group, IDs3, ResponseDataType, Table, Task, TitleRoom, TypeMember, TypeRoom, TypeTable, UpdateRoom, UpdateTable, UpdateTask } from "../../types/typesSlice";
-import { apiAcceptMember, apiCreateAccount, apiCreateRoom, apiCreateTable, apiCreateTask, apiDelateRoom, apiEditTable, apiGetDataRoomById, apiGetDataTaskById, apiUpdateRoom, apiUpdateTable, apiUpdateTask, apifetchTable, apijoinRoom } from "../../api/apiTask";
+import { AcceptMember, AddMemberFR, CreateAccount, CreateRoom, CreateTable, CreateTask, EditTable, Group, IDs3, ResponseDataType, Table, Task, TitleRoom, TypeMember, TypeRoom, TypeTable, UpdateRoom, UpdateTable, UpdateTask } from "../../types/typesSlice";
+import { apiAcceptMember, apiAddMemberForRoom, apiCreateAccount, apiCreateRoom, apiCreateTable, apiCreateTask, apiDelateRoom, apiEditTable, apiGetDataRoomById, apiGetDataTaskById, apiUpdateRoom, apiUpdateTable, apiUpdateTask, apifetchTable, apijoinRoom } from "../../api/apiTask";
 import { pushRooms } from "../../redux/slices/groupSlice";
 import { setNotify } from "../../redux/slices/dashboardSlice";
 import { setLisstUser, setRoom } from "../../redux/slices/roomSlice";
 import { setReload } from "../../auth/authSlice";
 
-
-export const createNewRoom = createAsyncThunk<Group| undefined, CreateRoom>(
-    'group/createNewRoom',
-    async (createRoom: CreateRoom,{dispatch}) => {
-        const token = localStorage.getItem('jwtToken');
-        console.log(createRoom,'create');
-        try {
-            const res = await fetch(apiCreateRoom,{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify(createRoom)
-            });
-
-            if(!res.ok){
-                console.log(res); 
-                dispatch(setModalNotification({notify: 'create new room error', status: false})) ;
-                return
-            };
-
-            dispatch(setModalNotification({notify: 'create new room success', status: true}));
-
-            const response: ResponseDataType<{title: string, data: Group}>= await res.json();
-            const newRoom = response.data.data
-            return newRoom
-
-        } catch (error) {
-
-          return  
-        }
-    }
-);
 
 export const createAccountForUser = createAsyncThunk<Group | undefined, CreateAccount>(
     'rooms/createAccountForUser',
@@ -60,7 +26,6 @@ export const createAccountForUser = createAsyncThunk<Group | undefined, CreateAc
             });
 
             if(!res.ok){
-                console.log('error'); 
                 dispatch(setModalNotification({notify: 'create new User error', status: false})) ;
                 return
             };
@@ -190,35 +155,21 @@ export const fetchEditTable = createAsyncThunk<TypeRoom | undefined, EditTable>(
     }
 );
 
-export const getDataRoomById = createAsyncThunk<TypeRoom | undefined,any>(
-    'rooms/getDataRoomById',
-    async (idRoom: string) => {
-        const token = localStorage.getItem('jwtToken');
-        console.log(token,'tktktktkt');
-        
-        const res = await fetch(`${apiGetDataRoomById}/${idRoom}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-        });
-     
-        const response: ResponseDataType<{data: TypeRoom, title: string}> = await res.json()
-        const room = response.data.data      
-        return room
-    }
-);
-type Ids2 = {
+
+
+
+
+type Ids3 = {
     idRoom: string,
-    idGroup: string
+    idGroup: string,
+    status: string
 };
 
-export const postReqToJoinRoom = createAsyncThunk<Group | undefined,Ids2>(
+export const postReqToJoinRoom = createAsyncThunk<Group | undefined,Ids3>(
     'rooms/postRequestToJoinRoom',
-    async (ids: Ids2) => {
+    async (ids: Ids3) => {
         const token = localStorage.getItem('jwtToken');    
-        const res = await fetch(`${apijoinRoom}/${ids.idRoom}/${ids.idGroup}`, {
+        const res = await fetch(`${apijoinRoom}/${ids.idRoom}/${ids.idGroup}/${ids.status}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -231,30 +182,7 @@ export const postReqToJoinRoom = createAsyncThunk<Group | undefined,Ids2>(
     }
 );
 
-export const deleteRoom = createAsyncThunk<any | undefined,Ids2>(
-    'rooms/delateRoom',
-    async (ids: Ids2, {dispatch}) => {
-        const token = localStorage.getItem('jwtToken');  
-        const res = await fetch(`${apiDelateRoom}/${ids.idRoom}/${ids.idGroup}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-        });
-        console.log(await res.json(), 'ress');
-        if(!res.ok)  {
-            dispatch(setModalNotification({notify: 'Delete room error', status: false})) ;
-            return undefined
-        }
-        dispatch(setReload(true))
-        dispatch(setModalNotification({notify: 'Delete success error', status: true})) ;
 
-        // const response: ResponseDataType<{data: TypeRoom, title: string}> = await res.json()
-        // const room = response.data.data      
-        return undefined
-    }
-);
 
 export const fetchTables = createAsyncThunk<TypeTable[]| undefined,string[]>(
     'rooms/fetchTables',

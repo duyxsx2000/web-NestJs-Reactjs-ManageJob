@@ -13,6 +13,12 @@ class Member {
     name: string
 }
 
+class Date {
+    datePost: Date
+    dateDeadlinestart:Date
+    dateDeadlineEnd: Date
+
+}
 class Action {
     title: string
 
@@ -30,6 +36,13 @@ export class CreateNewTask {
     @IsString()
     idTask: string
 
+    @IsString()
+    idTable: string
+
+    
+    @IsString()
+    change: string
+
     @IsNotEmpty()
     @IsArray()
     @ValidateNested({ each: true })
@@ -38,7 +51,14 @@ export class CreateNewTask {
     @IsNotEmpty()
     @IsArray()
     @ValidateNested({ each: true })
-    action: Action[]; 
+    actions: Action[]; 
+
+    @IsString()
+    detail: string; 
+
+    @IsNotEmpty()
+    @ValidateNested({ each: true })
+    dates: Date; 
 
 
 

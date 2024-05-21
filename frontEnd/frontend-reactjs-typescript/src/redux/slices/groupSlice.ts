@@ -1,10 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { CreateJob, JobType, ResponseType, User } from "../../types";
-import { setModalNotification, setModalPostJob } from "./statusDisplaySloce";
-import {fetchJobs, postDataCreateJob } from "../../services/fetchApi/getDataRooms";
 import { CreateRoom, Group, TitleRoom } from "../../types/typesSlice";
 import { getDataStartGroup } from "../../services/fetchApi/fetchApiGroup copy";
-import { createAccountForUser, createNewRoom, postReqToJoinRoom } from "../../services/fetchApi/fetchApiRoom";
+import { createAccountForUser,postReqToJoinRoom } from "../../services/fetchApi/fetchApis";
+import { createNewRoom } from "../../services/fetchApi/fetchApiRooms";
 
 interface GroupSlice {
     data: Group| null

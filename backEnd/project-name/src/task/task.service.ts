@@ -8,6 +8,9 @@ import { CreateTask } from 'src/dtos/roomDto/taskDto/create-task.dto';
 import { randumId } from 'src/utils/randumId';
 import { UpdateTask } from 'src/dtos/roomDto/taskDto/update-task.dto';
 import { Room } from 'src/room/schemas/room.schema';
+import { UpdateNewTask } from 'src/dtos/roomDto/taskDto/updateNewTask.dto';
+import { ChangeMember } from 'src/types/typeDefaults';
+import { MemberTaskDto } from 'src/dtos/roomDto/taskDto/changeMemberTask.dto';
 
 @Injectable()
 export class TaskService {
@@ -17,7 +20,7 @@ export class TaskService {
         @InjectModel(Room.name) private RoomModel: Model<Room>
     ) {}
 
-    async createTask(createTask: CreateTask, user:{idUser: string, name:string}) {
+    async createTask(createTask: CreateTask, user) {
         try {
             const newId = async () => {
                 const id = randumId('r')
@@ -37,16 +40,26 @@ export class TaskService {
             const newTask = {
                 title: createTask.title,
                 idTask: idTask,
+                dates: {
+                    datePost: new Date(Date.now()),
+                },
                 detail:'',
-                action: [
+                actions: [
                     {
                         date: new Date(Date.now()),
                         idMember:user.idUser,
-                        detail:`<p>${user.name} created new Task</p>`,
+                        name: user.userName,
+                        detail:`<p>${user.userName} created new Task</p>`,
                         
                     }
                 ],
-                members:[]
+                members:[{
+                    idMember: user.idUser,
+                    name: user.userName,
+                    role: 'Create',
+                    notify: true
+
+                }]
             };
 
             await this.TaskModel.create(newTask);
@@ -74,8 +87,121 @@ export class TaskService {
         } catch (error) {
             throw new NotFoundException('error')
         }
-    }
-    async updateTask(updateTask: UpdateTask) {
+    };
 
+    async updateTask(updateTask: UpdateNewTask) {
+
+    
+        
+        
+        const updateFields = {};
+
+        for (const key in updateTask) {
+          if (updateTask[key] !== undefined) {
+            updateFields[key] = updateTask[key];
+          }
+        };
+        console.log(updateFields);
+        try {
+            
+            const updatedDocument = await this.TaskModel.findOneAndUpdate(
+                {idTask: updateTask.idTask},
+                { $set: updateFields },
+                { new: true }
+            );
+
+            if(updateTask.change === 'set title') {
+                
+                await this.TableModel.updateOne(
+                    {idTable: updateTask.idTable, "tasks.idTask": updateTask.idTask},
+                    {
+                        $set: {
+                            'tasks.$':{
+                                idTask: updateTask.idTask,
+                                title: updateTask.title
+                            }
+                        }
+                    }
+
+                )
+            };
+
+            if(updateTask.change === 'add member') {
+                
+                const updatedDocument = await this.TaskModel.findOneAndUpdate(
+                    {idTask: updateTask.idTask},
+                    { $push: { members: { $each: updateTask.members[updateTask.members.length - 1] } } },
+                    { new: true }
+                );
+            };
+
+            if(updateTask.change === 'remove member') {
+                
+                const updatedDocument = await this.TaskModel.findOneAndUpdate(
+                    {idTask: updateTask.idTask},
+                    { $pull: { members: { $in: updateTask.members } } },
+                    { new: true }
+                );
+            };
+  
+            
+            return updateFields
+        } catch (error) {
+            console.log('error');
+            
+        }
+    };
+
+
+    async changeMemberTask(memberTaskDto: MemberTaskDto) {
+        console.log(memberTaskDto,'ggg');
+
+        if(memberTaskDto.action === 'Add member') {
+            try {
+                const updatedDocument = await this.TaskModel.findOneAndUpdate(
+                    {idTask: memberTaskDto.idTask,},
+                    { $push: { members: { $each: [{
+                        idMember: memberTaskDto.idMember,
+                        name: memberTaskDto.name,
+                        role: 'Member',
+                        notify: true
+                    }]}}},
+                    { new: true }
+                );
+                return updatedDocument
+            } catch (error) {
+                throw new NotFoundException('error')
+            }
+        };
+
+        if(memberTaskDto.action === 'Remove member') {
+            try {
+                const updatedDocument = await this.TaskModel.findOneAndUpdate(
+                    {idTask: memberTaskDto.idTask},
+                    { $pull: {members: {idMember: memberTaskDto.idMember}} },
+                    { new: true }
+                );
+                return updatedDocument
+            } catch (error) {
+                throw new NotFoundException('error')
+            }
+        }
+        
+    }
+
+    async deleteTask(idTask: string, idTable) {
+        try {
+            await this.TaskModel.deleteOne({idTask: idTask});
+            await this.TableModel.updateOne(
+                {idTable: idTable},
+                {
+                    $pull: {
+                        'tasks':{idTask: idTask}
+                    }
+                }
+            )
+        } catch (error) {
+            
+        }
     }
 }

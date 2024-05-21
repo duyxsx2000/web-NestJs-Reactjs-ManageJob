@@ -10,3 +10,9 @@ export type Ids3 = {
     idTask: string,
     idUser: string
 }
+export type ChangeMember = {
+    idTask: string,
+    idRoom: string,
+    idMember: string,
+    name: string
+}

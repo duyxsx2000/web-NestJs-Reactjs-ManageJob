@@ -6,6 +6,13 @@ type Members = {
     role: string,
     date: Date,
     status: String
+};
+
+export type  Actions = {
+    title: string,
+    date: Date,
+    idMember?: string,
+    nameMember?: string
 }
 
 export type Userdocument = HydratedDocument<Room>;

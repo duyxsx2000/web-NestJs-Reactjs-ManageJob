@@ -8,9 +8,7 @@ import { CreateNewRoom} from 'src/dtos/roomDto/roomDto/createNewRoom';
 import { ResponseData } from 'src/global/globalClass';
 import { CreateGroup } from 'src/dtos/roomDto/groupDto/create-group.dto';
 import { HttpMessage, HttpStatus } from 'src/global/globalEnum';
-import { CreateTable } from 'src/dtos/roomDto/tableDto/create-table.dto';
-import { UpdateRoom } from 'src/dtos/roomDto/roomDto/update-room.dto';
-import { CreateTask } from 'src/dtos/roomDto/taskDto/create-task.dto';
+
 
 
 @UseGuards(AuthGuard,RolesGuard)
@@ -42,7 +40,7 @@ export class GroupsController {
         ); 
 
         return
-    }
+    };
 
     
     @Get('/getGroup/admin/g')

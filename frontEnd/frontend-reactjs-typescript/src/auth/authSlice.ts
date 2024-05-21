@@ -42,9 +42,8 @@ export const authSlice = createSlice({
         setReload: (state, action) => {
             state.reload = action.payload
         },
-        setLoading: (state, action) => {
-            console.log(action.payload,'pl');
-            
+
+        setLoading: (state, action) => { 
             state.loading = action.payload              
         },
 
@@ -62,12 +61,11 @@ export const authSlice = createSlice({
         .addCase(
             fetchtokenByUser.fulfilled, 
             (state, action) => {       
-                console.log(action.payload,'action');
-                      
-                if(!action.payload) return undefined
-                const token = action.payload.access_token
+           
+                if(!action.payload) return undefined;
+                const token = action.payload.access_token;
                 state.token = token;
-                state.loading = 'loading'
+                state.loading = 'loading';
             }
         )
 
@@ -91,8 +89,7 @@ export const authSlice = createSlice({
 export const fetchtokenByUser = createAsyncThunk<ResToken |  null, TypeForm>(
     'auth/fetchtokenByUser',
     async (dataLogin: TypeForm,{dispatch}) => {
-        console.log(dataLogin);
-        
+     
         try {
             const res = await fetch('http://localhost:3002/auth/login', {
                 method: 'POST',
@@ -120,7 +117,6 @@ export const fetchtokenByUser = createAsyncThunk<ResToken |  null, TypeForm>(
                 access_token: (await data).access_token
             }
         } catch (error) {
-            console.log(error,'error');
             return  null
         }
     }
@@ -160,7 +156,6 @@ export const fetchProfileByToken = createAsyncThunk<UserAuth | null, string>(
 export const createNewAdminforCompany = createAsyncThunk<any, CreateAdminAccount>(
     'auth/createNewAdminforCompany',
     async (createAdminAccount: CreateAdminAccount,{dispatch}) => {
-        console.log(createAdminAccount,'account');
         const accountAdmin = {
             ...createAdminAccount,
             role: 'admin'
@@ -184,7 +179,6 @@ export const createNewAdminforCompany = createAsyncThunk<any, CreateAdminAccount
             const data = await res.json()
             return data
         } catch (error) {
-            console.log(error,'error');
             return  null
         }
     }

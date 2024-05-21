@@ -2,9 +2,6 @@ import React, { useEffect, useState} from 'react'
 import EditorBox from './editorBox';
 import { AcctionType, CreateJob, JobType } from '../../types';
 import { useDispatch } from 'react-redux';
-import {postDataCreateJob } from '../../services/fetchApi/getDataRooms';
-import { AsyncThunkAction} from '@reduxjs/toolkit'
-import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk'
 import 'react-quill/dist/quill.snow.css'; // Import the styles
 import 'react-quill/dist/quill.bubble.css'; // Import the styles
 import '../../styles/postJob.css'

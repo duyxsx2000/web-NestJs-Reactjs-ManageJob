@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Room } from './schemas/room.schema';
+import { Actions, Room } from './schemas/room.schema';
 import { Model } from 'mongoose';
 import { CreateNewRoom } from 'src/dtos/roomDto/roomDto/createNewRoom';
 import { randumId } from 'src/utils/randumId';
@@ -8,12 +8,14 @@ import { GroupsService } from 'src/groups/groups.service';
 import { Group } from 'src/groups/schemas/group.schema';
 import { UpdateRoom } from 'src/dtos/roomDto/roomDto/update-room.dto';
 import { Member } from 'src/dtos/roomDto/roomDto/create-room.dto';
+import { User } from 'src/users/schemas/users.schema';
 
 @Injectable()
 export class RoomService {
     constructor(
         @InjectModel(Room.name) private RoomsModel: Model<Room>,
         @InjectModel(Group.name) private GroupModel: Model<Group>,
+        @InjectModel(User.name) private UserModel: Model<User>,
         private groupService: GroupsService
         
     ) {}
@@ -81,6 +83,26 @@ export class RoomService {
         }
     };
 
+    async updateActions(idRoom: string, action: Actions) {
+        try {
+            console.log('action', idRoom, action);
+            
+            await this.RoomsModel.updateOne(
+                {
+                    'idRoom': idRoom,
+                },
+                {
+                    $push: {
+                        'actions': action
+                    }
+                }
+            );
+            return true
+        } catch (error) {
+            throw new NotFoundException('error');
+        }
+    }
+
     async findOneroomById(idRoom: string, idUser: string) {
         try {  
             const roomByid = await this.RoomsModel.aggregate([
@@ -99,8 +121,14 @@ export class RoomService {
             if(!roomByid[0]) {
                 
                 throw new NotFoundException('error')    
-            };   
-            return roomByid[0]
+            };  
+            
+            const role = roomByid[0].members.find(member => member.idMember === idUser).role
+    
+            return {
+                ...roomByid[0],
+                role: role
+            }
         } catch (error) {
             throw new NotFoundException('error')
         }
@@ -117,7 +145,6 @@ export class RoomService {
 
             const member = roomUpdate.members.find(member => member.idMember === idUser)
 
-            console.log(member);
             
             if(!member || member.role != 'Admin') throw new NotFoundException('error');
 
@@ -155,12 +182,13 @@ export class RoomService {
         }
     };
 
-    async joinRoom(idRoom: string, idGroup: string, user) {
+    async joinRoom(idRoom: string, idGroup: string, user, status: string) {
         try {
             const member = await this.RoomsModel.findOne({
                 'idRoom': idRoom,
                 'members.idMember': user.idUser
-            })
+            });
+
             if(member) throw new NotFoundException('error');
 
             await this.RoomsModel.updateOne(
@@ -170,7 +198,7 @@ export class RoomService {
                         idMember: user.idUser,
                         name: user.userName,
                         role: 'Member',
-                        status:'waiting',
+                        status:status,
                         email: user.email
                     },
                 }}
@@ -182,7 +210,7 @@ export class RoomService {
                     idMember: user.idUser,
                 
                     role: 'Member',
-                    status: 'waiting'
+                    status: status
                 }}}
             )
 
@@ -192,7 +220,91 @@ export class RoomService {
         } catch (error) {
             throw new NotFoundException('error');
         }
+    };
+
+    async deleteMember(idRoom: string, idGroup: string, idUser: string, user) {
+        try {
+            const room = await this.findOneroomById(idRoom, user.idUser)
+            if(!room) return;
+
+            const role = room.role
+
+            if(role != 'Admin') return;
+
+            await this.RoomsModel.updateOne(
+                {idRoom: idRoom}, 
+                {
+                    $pull: {
+                        'members': {idMember : idUser}
+                    }
+                }
+                
+            );
+
+
+            await this.updateActions(idRoom, {
+                title: `${user.userName} was remove ${idUser}`,
+                date: new Date(Date.now())
+            })
+
+            await this.GroupModel.updateOne(
+                { "idGroup": idGroup, "rooms.idRoom": idRoom },
+                { $pull: { "rooms.$.members": {
+                    idMember: idUser,
+                }}}
+            );
+
+            const roomAfterUpdate = await this.findOneroomById(idRoom,user.idUser)
+            if(!roomAfterUpdate)throw new NotFoundException('error');
+            return roomAfterUpdate
+        } catch (error) {
+            throw new NotFoundException('error');
+        }
     }
+    async addMemberForRoom(idRoom: string, idGroup: string, idUser: string) {
+        try {
+            const member = await this.UserModel.findOne({
+                idUser: idUser
+            });
+
+            if(!member) throw new NotFoundException('error');
+
+            await this.RoomsModel.updateOne(
+                {idRoom: idRoom},
+                {$push: {
+                    members: {
+                        idMember: member.idUser,
+                        name: member.name,
+                        role: 'Member',
+                        status:'join',
+                        email: member.email
+                    },
+                }}
+            );
+
+            await this.updateActions(idRoom,{
+                title: `${member.name} join room`, 
+                date: new Date(Date.now())
+            });
+
+            await this.GroupModel.updateOne(
+                { "idGroup": idGroup, "rooms.idRoom": idRoom },
+                { $push: { "rooms.$.members": {
+                    idMember: member.idUser,
+                
+                    role: 'Member',
+                    status: 'join'
+                }}}
+            )
+
+            const room = await this.RoomsModel.findOne({idRoom: idRoom})
+            if(!room) throw new NotFoundException('error');
+            return room
+        } catch (error) {
+            throw new NotFoundException('error');
+        }
+    }
+
 
     async acceptMember(member: Member, idRoom: string) {
         try {

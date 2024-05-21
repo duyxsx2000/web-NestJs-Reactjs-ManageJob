@@ -23,13 +23,13 @@ import { actionCreateNewTable } from '../../services/actions/createNewData';
 import { useDispatch } from 'react-redux';
 import FormCreateNewTable from '../form/formCreateNewTable';
 import OperationModal from '../modals/operationModal';
-import { changeTable, setTables } from '../../redux/slices/roomSlice';
+import { changeTable, setColorG, setTables } from '../../redux/slices/roomSlice';
 import { actionUpdateRoom, actionUpdateTable } from '../../services/actions/editdataTask';
 import FormCreateNewTask from '../form/formCreateTask';
 import '../../styles/postJob.css'
 import ModalDefault from '../modals/defaultModal';
 import DetailTask from './detailTask';
-import { fetchTables } from '../../services/fetchApi/fetchApiRoom';
+import { fetchTables } from '../../services/fetchApi/fetchApis';
 import { actionAcceptMember, actionFetchTable } from '../../services/actions/getDataRoom';
 import '../component.css'
 import MenuRoom from '../menus/menuRoom';
@@ -62,6 +62,7 @@ export default function RomPage({room}: Props) {
   const [ids, setIds] = useState<IDs3 | undefined>()
   const [detailTask, setDetailTask] = useState<string | undefined>()
   const [newTask, setNewTask] = useState<number>()
+  const [color, setColor] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -70,15 +71,8 @@ export default function RomPage({room}: Props) {
     const ids = room.tables.map((table) => table.idTable)
     const actionTable = actionFetchTable(ids);
     dispatch(actionTable)
-  },[room])
+  },[room]);
 
-  const handeleAcceptMember = (member: TypeMember)=> {
-    const action = actionAcceptMember({
-      idRoom: room.idRoom,
-      member:member
-    });
-    dispatch(action)
-  }
   const handleSetTables = (tables: Table[]) => {
     dispatch(setTables(tables))
     const actionchangeTable = actionUpdateRoom({
@@ -256,7 +250,7 @@ export default function RomPage({room}: Props) {
         onDragEnd={(e) => handleSortTable(e)}
         onDragOver={(e) => handleOnDragOver(e)}
       > 
-        {type === 'space' && <div className={`absolute rounded-[5px] z-[90] w-full h-full ${room.background ? backgroundColorBg[room.background] : 'bg-gray-200'}`}></div>}
+        {type === 'space' && <div className={`absolute rounded-[5px] z-[90] w-full h-full ${room.background && !color ? backgroundColorBg[room.background] : 'bg-gray-200'}`}></div>}
 
         <div className={` relative w-[310px] shadow-md rounded-[5px] flex flex-col  max-h-full bg-white active:opacity-100   text-t-1 ${reservePlace?.drag === reservePlace?.drop &&  reservePlace?.drop === indexTable ?'bg-red-800' : ''}`}>
           {operationModal && operationModal === indexTable + 1 && (
@@ -439,7 +433,7 @@ export default function RomPage({room}: Props) {
   };
 
   return (
-    <div className={`h-full grow overflow-hidden   flex  ${backgroundColor[room.background]}`}>
+    <div className={`h-full grow overflow-hidden   flex  ${!color ? backgroundColor[room.background] : 'bg-gray-200'}`}>
 
       {detailTask && ids && (
         <ModalDefault
@@ -460,11 +454,14 @@ export default function RomPage({room}: Props) {
         width='w-[600px]'
         type= 'top'
       >
-          <AddMember clickClose={()=> setAddMember(false)}/>
+          <AddMember 
+            clickClose={()=> setAddMember(false)}
+            idRoom={room.idRoom}
+          />
       </ModalRoom>
       )}
       <div className={`flex flex-col ${menu ? 'w-3/4' : 'w-full'} `}>
-        <div className={`h-[8%] z-[50] border-b border-gray-300 flex w-full items-center p-2 ${room.background ? 'text-white' : 'text-black'} ${backgroundColorBg1[room.background]} `}>
+        <div className={`h-[8%] z-[50] border-b border-gray-300 flex w-full items-center p-2 ${!room.background || color ? 'text-black' : 'text-white'} ${color ? 'bg-white' : backgroundColorBg1[room.background]} `}>
           <div className='flex h-full'>
             <p className='font-bold  ml-4 text-[20px]'>
               {room.title}
@@ -472,27 +469,34 @@ export default function RomPage({room}: Props) {
             <p className=' ml-2 text-[10px] h-full flex items-start'>
               {`#${room.idRoom}`}
             </p>
-            <div className={`h-full w-[33px] ${backgroundColor[room.background]} rounded-[5px] ml-4 cursor-pointer`}>
-              
+            <div className='flex items-center ml-8'>
+              <div 
+                onClick={()=> {
+                  color ? setColor(false) : setColor(true);
+                  color ? dispatch(setColorG(false)) : dispatch(setColorG(true))
+                }}
+                className={`rounded-[5px] w-[60px] ${!color ? backgroundColorBg[room.background] : 'bg-white'} border border-gray-300  h-2/3`}
+              >
+                <div className={`w-[30px] ${color ? 'translate-x-full bg-gray-300' : backgroundColorBg1[room.background]} border transition-all rounded-[5px]  h-full`}></div>
+              </div>
             </div>
+
           </div>
           <div className='grow flex justify-end h-full'>
             <div className='w-[300px] relative  border-l border-gray-300 mr-10 cursor-pointer flex   '>
-             <div 
-                onClick={()=> setAddMember(true)}
-                className='flex items-center mr-1  ml-1'>
-                <span className='text-[20px] justify-center w-[50px] h-[30px] flex items-center border-2 bg-gray-400 rounded-full'>
-                  <UserAddOutlined/>
-                </span>
-              </div>
+
               {room.members.find(user => user.status === 'waiting') && (
                 <div className='blinking-dot absolute left-2 -top-1'></div>
               )}
               <div className=' relative w-2/4 ml-4 '>
-                {listUsers && (
-                  <ListUser  idRoom={room.idRoom} />
-                )}
                 <div 
+                  onClick={()=> setAddMember(true)}
+                  className='flex absolute z-[90] items-center mr-1  ml-1 top-1'>
+                  <span className='text-[20px] text-white justify-center w-[50px] h-[30px] flex items-center border-2 bg-gray-400 rounded-full'>
+                    <UserAddOutlined/>
+                  </span>
+                </div>
+                {/* <div 
                   onClick={() => {!listUsers ? setListUsers('ggggg') : setListUsers(null)}}
                   className={`absolute w-[30px] h-[30px] bg-red-400 shadow-md  text-white ${listAbs[0]} ${listZ[0]} top-1 rounded-full flex justify-center items-center`}
                 >
@@ -502,9 +506,9 @@ export default function RomPage({room}: Props) {
                       <CaretDownOutlined />
                     </span>
                   </div>
-                </div> 
+                </div>  */}
                 {room.members.map((member,index) => index <= 5 ? (
-                  <div className={`absolute w-[30px] h-[30px] ${index % 2 ? 'bg-gray-500' : 'bg-red-400'} text-white ${listAbs[index +1]} ${listZ[index +1]} top-1 rounded-full flex justify-center items-center`}>
+                  <div className={`absolute w-[30px] h-[30px] ${index % 2 ? 'bg-gray-400' : 'bg-red-400'} text-white ${listAbs[index +1]} ${listZ[index +1]} top-1 rounded-full flex justify-center items-center`}>
                     <UserOutlined  />
                   </div> 
                 ) : <></>

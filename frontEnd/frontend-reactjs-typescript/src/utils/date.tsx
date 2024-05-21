@@ -8,4 +8,19 @@ const getStringDate = (time: Date) => {
     return formattedDate
 };
 
-export {getStringDate}
+function calculateDaysDifference(targetDate: Date): number {
+    const currentDate: Date = new Date();
+    const target: Date = new Date(targetDate);
+    if (isNaN(target.getTime())) {
+       return 0
+    };
+
+    const differenceInMilliseconds: number = target.getTime() - currentDate.getTime() ;
+    const differenceInDays: number = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+
+    return differenceInDays;
+}
+
+
+
+export {getStringDate, calculateDaysDifference}

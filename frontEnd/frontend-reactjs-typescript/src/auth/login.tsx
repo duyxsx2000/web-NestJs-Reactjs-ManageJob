@@ -1,19 +1,16 @@
 import React, { useState } from 'react'
-
 import './login.css'
 import { GoogleOutlined, FacebookOutlined, HomeOutlined } from '@ant-design/icons';
-import ButtonSample from '../component/button/buttonSample'
 import { useSelector, useDispatch } from 'react-redux'
-import { RootState } from '../redux/store'
 import { fetchtokenByUser } from './authSlice';
 import { AsyncThunkAction} from '@reduxjs/toolkit'
 import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk'
-import NavbaStart from '../component/navs/navbaStart'
 
 type TypeForm = {
     password: string,
     email: string
-}
+};
+
 type ResToken = {
     access_token: string,
 };
@@ -21,14 +18,12 @@ type ResToken = {
 
 export default function Login() {
     
- 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const [dataForm, setDataForm] = useState<TypeForm>({
         password:'',
         email:''
     });
-
     const [status, setStatus] = useState<boolean>(true);
 
     const postDataLogin = async () => {
@@ -36,17 +31,15 @@ export default function Login() {
             const action: AsyncThunkAction<ResToken, TypeForm, AsyncThunkConfig> | any = fetchtokenByUser(dataForm);
             dispatch(action);
         } catch (error) {
-            console.error('Error during login:', error);
         }
     };
    
-
     const handleClickButton = () =>{
 
         if(!dataForm || !dataForm.email || !dataForm.password) {
             setStatus(false);
             return
-        }
+        };
         postDataLogin()     
     };
 
@@ -56,8 +49,7 @@ export default function Login() {
             ...dataForm,
             [name]: value
         });
-        setStatus(true) ;
-        
+        setStatus(true) ;   
     };
 
     return (

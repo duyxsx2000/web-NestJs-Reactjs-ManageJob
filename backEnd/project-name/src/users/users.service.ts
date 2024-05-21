@@ -77,7 +77,6 @@ export class UsersService {
     }
 
     async createUser(createUserDto: CreateUserDto) {
-        console.log(createUserDto);
         const randumId = async () => {
             let id = 'u';
             const string = 'qwertyuiopasdfghjklzxcvbnm1234567890';
@@ -150,9 +149,7 @@ export class UsersService {
             }
             const checkEmail = await this.userModel.findOne({email: newUser.email});
 
-            if (checkEmail) {
-                console.log('eeerrr');
-                
+            if (checkEmail) {         
                 throw new NotFoundException('error')
             };
 

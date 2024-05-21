@@ -11,25 +11,22 @@ import {
 } from '@ant-design/icons';
 
 import { useDispatch } from 'react-redux';
-import { AsyncThunkAction } from '@reduxjs/toolkit';
-import { AsyncThunkConfig } from '@reduxjs/toolkit/dist/createAsyncThunk';
-import { UnknownAction } from '@reduxjs/toolkit';
-import { AcctionType, JobType } from '../types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import RomPage from '../component/rooms/romPage';
-import { Navigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { actionGetDataRoom } from '../services/actions/getDataRoom';
-import { TypeRoom } from '../types/typesSlice';
 import { backgroundColorBg, backgroundColorBg1 } from '../styles/color';
 import { setReload } from '../auth/authSlice';
-import { log } from 'console';
 const lists = [1,2,4,343,43,43]
+
 export default function RoomPage() {
  
   const [list, setList] = useState<'room' | 'task'>('room')
+  const listRoom = useSelector((state: RootState) => state.group.data?.rooms)
   const profile = useSelector((state: RootState) => state.auth.profile)
   const room = useSelector((state: RootState) => state.rooms.data.room)
+  const color = useSelector((state: RootState) => state.rooms.color)
   const notify = useSelector((state: RootState) => state.dashboard.notify);
   const reLoad = useSelector((state: RootState) => state.auth.reload)
   const dispatch = useDispatch()
@@ -54,22 +51,21 @@ export default function RoomPage() {
 
   },[reLoad])
 
-
-  if(!id ) {
-    return <Navigate to={'/manage'} replace/>
+ 
+  if(
+    !id || 
+    reLoad || 
+    !listRoom || 
+    !profile) {
+    return <Navigate to={'/manage/rooms'} replace/>
   };
 
-  if(reLoad ) {
-    return <Navigate to={'/manage'} replace/>
-  };
+  const rooms = listRoom.filter(room => room.members.find(member => member.idMember === profile?.idUser))
 
-  console.log(room);
-  
-  if(!profile) return <></>
   return (
     <div className='flex h-full w-full  text-t-1 '>
       {room && aside ? (
-        <div className={` transition-all  min-w-[270px] ${backgroundColorBg1[room.background]} ${!room.background ? 'text-black' : 'text-white'}  h-full border-r border-gray-200 `}>
+        <div className={` transition-all  min-w-[270px] ${!color ? backgroundColorBg1[room.background] : 'bg-white'} ${!room.background || color ? 'text-black' : 'text-white'}  h-full border-r border-gray-200 `}>
           <div className=' relative h-[80px] flex p-2 items-center  border-b border-gray-200'>
             <div className='w-[60px] rounded-full bg-gray-400 h-[60px]'></div>
             <div className='ml-2'>
@@ -84,18 +80,18 @@ export default function RoomPage() {
             </div>
           </div>
           <div className=' mt-2 '>
-            <div className='flex items-center px-4 py-2  hover:bg-[rgba(185,185,185,0.3)]'>
+            <Link to={`/manage/rooms`} className='flex items-center px-4 py-2  hover:bg-[rgba(185,185,185,0.3)]'>
               <BorderOutlined />
-              <p className='ml-3'>Room</p>
-            </div>
-            <div className='flex items-center px-4 py-2 hover:bg-[rgba(185,185,185,0.3)]'>
+              <p className='ml-3'>Rooms</p>
+            </Link>
+            <Link to={`/manage/users`} className='flex items-center px-4 py-2 hover:bg-[rgba(185,185,185,0.3)]'>
               <UserOutlined />
               <p className='ml-3'>User</p>
-            </div>
-            <div className='flex items-center px-4 py-2 hover:bg-[rgba(185,185,185,0.3)]'>
+            </Link >
+            <Link  to={`/manage/dashboard`} className='flex items-center px-4 py-2 hover:bg-[rgba(185,185,185,0.3)]'>
               <ProjectOutlined />
               <p className='ml-3'>Dashboard</p>
-            </div>
+            </Link>
             <div className='flex items-center px-4 py-2 hover:bg-[rgba(185,185,185,0.3)]'>
               <SettingOutlined />
               <p className='ml-3'>Setting</p>
@@ -117,12 +113,14 @@ export default function RoomPage() {
               </p>
             </div>
             <ul className='list-none overflow-auto'>
-              {list === 'room' && lists.map((room, index) => (
+              {list === 'room' && rooms && rooms.map((room, index) => (
                 <li key={index} className='ml-0'>
-                  <div className=' flex items-center px-4 h-[40px] hover:bg-[rgba(185,185,185,0.3)]'>
-                    <div className='w-[30px] h-[30px] rounded-sm bg-blue-500'></div>
-                    <p className='ml-2'>Room name</p>
-                  </div>
+                  <Link to={`/room/${room.idRoom}`}>
+                    <div className=' flex items-center px-4 h-[40px] hover:bg-[rgba(185,185,185,0.3)]'>
+                      <div className={`w-[30px] h-[30px] rounded-[5px] ${backgroundColorBg1[room.background]} border border-white shadow-md`}></div>
+                      <p className='ml-2'>{room.title}</p>
+                    </div>
+                  </Link>
                 </li>
               ))}
               {list === 'task' && lists.map((room, index) => (

@@ -13,12 +13,13 @@ type Props = {
     id: string,
     name: string,
     email: string
-}
+};
+
 const Stick = ({onClick, id, name, email}: Props) => {
 
-    const [stick, setStick] = useState(false)
-    const [role, setRole] = useState(false)
-    const [listRole, setListRole] = useState(['Member','Lead','Admin'])
+    const [stick, setStick] = useState(false);
+    const [role, setRole] = useState(false);
+    const [listRole, setListRole] = useState(['Member','Lead','Admin']);
 
     const handleOnClick = (index: number) => {
         const roles = [...listRole];
@@ -26,17 +27,14 @@ const Stick = ({onClick, id, name, email}: Props) => {
         roles[0] = roles[index];
         roles[index] = temp;
         onClick(id,roles[0], name, email);
-
-        
         setListRole(roles);
         setRole(false)
     };
   
     const  handleOnClickStick = (id: string) => {
-    stick ? setStick(false) : setStick(true);
-    onClick(id,listRole[0], name, email)
-
-   }
+        stick ? setStick(false) : setStick(true);
+        onClick(id,listRole[0], name, email);
+    }
     return (
         <div className='flex items-center space-x-1'>                          
             {stick && (

@@ -1,24 +1,49 @@
-export type Task = {
+export type ActionTask = {
+    date: Date,
+    detail: string,
+    name: string,
+    idMember: string
+}
+
+export type MemberTask = {
+ 
+    role: string,
+    idMember: string,
+    name: string,
+    notify: boolean
+
+}
+
+export interface Task  {
     idTask: string,
     title: string,
-    actions: {
-        date: Date,
-        title: string,
-        name: string
-    }[],
-    members:{
-        role: string,
-        id: string,
-        name: string,
-        notify: boolean
-    }[],
-    date: {
-        post: Date,
-        expired: Date
+    actions: ActionTask[],
+    members:MemberTask[],
+    dates: {
+        datePost: Date,
+        dateDeadlineStart: Date
+        dateDeadlineEnd: Date
     },
     priority: string,
     detail: string
 };
+
+export interface UpdateTaskDto  {
+    change: string,
+    idTask: string,
+    idTable?: string,
+    title?: string,
+    actions?: ActionTask[],
+    members?:MemberTask[],
+    dates?: {
+        datePost?: Date,
+        dateDeadlineStart?: Date
+        dateDeadlineEnd?: Date
+    },
+    priority?: string,
+    detail?: string
+};
+
 export type IDs3 = {idRoom: string, idTable: string, idTask: string}
 export type UpdateTask = {
     task: Task,
@@ -64,7 +89,7 @@ export type ResponseDataType<T> = {
 export type TypeMember = {
 
         idMember: string,
-        role: string,
+        role: 'Admin' | 'Lead' | 'Member'
         status: string,
         name:string,
         email: string
@@ -109,13 +134,8 @@ export interface TypeRoom {
     title: string,
     mainTask: string,
     background: 'pink' | 'red' | 'yellow' | 'green'| 'none' | 'cyan' | 'orange'
-    members: {
-        idMember: string,
-        role:string,
-        status:string,
-        name: string,
-        email: string
-    }[],
+    members: TypeMember[]
+
     actions: {
         idMember: string,
         title: string,
@@ -123,9 +143,10 @@ export interface TypeRoom {
         nameMember: string
     }[]
 
-    tables: Table[] | []
+    tables: Table[] | [],
+    role: string
 };
-type MemberGroup = {
+export type MemberGroup = {
     idMember: string,
     role: string,
     email: string,
@@ -169,4 +190,10 @@ export type UpdateTable = {
         }[]
     }[]
 
-}
+};
+
+ export type AddMemberFR = {
+    idRoom: string,
+    idGroup: string,
+    idMember: string
+};
