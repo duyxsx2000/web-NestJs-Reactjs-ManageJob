@@ -23,38 +23,14 @@ type Props = {
     onClick: () => void
 }
 export default function FormCreateNewRoom({listUser, idGroup, onClick}: Props) {
-
-    const list = [
-        {
-        name: 'Đỗ khương Duy',
-        id: 'duy123'
-        },
-        {
-            name: 'Đỗ khương Duy',
-            id: 'duy124'
-        },
-        {
-            name: 'Đỗ khương Duy',
-            id: 'duy125'
-        },
-        {
-            name: 'Đỗ khương Duy',
-            id: 'duy126'
-        },
-        {
-            name: 'Đỗ khương Duy',
-            id: 'duy127'
-        }
-    ]
-    const profile = useSelector((state: RootState) => state.auth.profile)
-    console.log(profile,'prf');
-    
-    const [addUser, setAddUser] = useState(false)
-    const [addUPriority, setAPriority] = useState(false)
-    const [priority, setPriority] = useState('priority')
-    const [color, setColor] = useState('none')
-    const [validate, setValidate] = useState(false)
-    const [status, setStatus] = useState(true)
+    const listMember = useSelector((state: RootState) => state.group.data?.members); 
+    const profile = useSelector((state: RootState) => state.auth.profile); 
+    const [addUser, setAddUser] = useState(false);
+    const [addUPriority, setAPriority] = useState(false);
+    const [priority, setPriority] = useState('priority');
+    const [color, setColor] = useState('none');
+    const [validate, setValidate] = useState(false);
+    const [status, setStatus] = useState(true);
     const [createRoom, setCreateRoom] = useState<CreateRoom>({
         idGroup: idGroup,
         title: '',
@@ -68,8 +44,10 @@ export default function FormCreateNewRoom({listUser, idGroup, onClick}: Props) {
             email:'',
             status: 'join'
         }],
-    })
-    const dispatch = useDispatch()
+    });
+
+    const dispatch = useDispatch();
+
     useEffect(() => {
         if(createRoom.title && createRoom.mainTask) {
             setValidate(true)
@@ -162,7 +140,10 @@ export default function FormCreateNewRoom({listUser, idGroup, onClick}: Props) {
         const action = actionCreateNewRoom(createRoom);
         dispatch(action)
         onClick()   
-    }
+    };
+
+    if(!listMember) return <></>
+
   return (
     <div className=' relative p-2'>
         <p className='w-full text-center mt-2 font-medium'>Create New Room</p>
@@ -259,7 +240,7 @@ export default function FormCreateNewRoom({listUser, idGroup, onClick}: Props) {
             >
                 {priority}
             </button>
-            {addUser && <ListAddUser onClick={(id: string, role: string, name: string, email: string) => handleChangeMember(id, role, name, email)} list={list}/>}
+            {addUser && <ListAddUser onClick={(id: string, role: string, name: string, email: string) => handleChangeMember(id, role, name, email)} listMember={listMember}/>}
             {addUPriority  && (
                 <div className=' absolute w-[135px]  bg-white -right-[50%] rounded-[5px]'>
                 <div 

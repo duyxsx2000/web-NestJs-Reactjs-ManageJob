@@ -1,6 +1,6 @@
 export const backgroundColor = {
     red:'bg-gradient-to-br from-red-300 to-red-400',
-    green:'bg-gradient-to-br from-green-300 to-green-400',
+    green:'bg-gradient-to-br from-green-200 to-green-300',
     yellow:'bg-gradient-to-br from-yellow-300 to-yellow-400',
     pink:'bg-gradient-to-br from-pink-300 to-pink-400',
     orange:'bg-gradient-to-br from-orange-300 to-orange-400',
@@ -10,7 +10,7 @@ export const backgroundColor = {
 
 export const backgroundColorBg = {
     red:'bg-red-400',
-    green:'bg-green-400',
+    green:'bg-green-300',
     yellow:'bg-yellow-400',
     pink:'bg-pink-400',
     orange:'bg-orange-400',
@@ -20,7 +20,7 @@ export const backgroundColorBg = {
 
 export const backgroundColorBg1 = {
     red:'bg-red-500',
-    green:'bg-green-500',
+    green:'bg-green-400',
     yellow:'bg-yellow-500',
     pink:'bg-pink-500',
     orange:'bg-orange-500',

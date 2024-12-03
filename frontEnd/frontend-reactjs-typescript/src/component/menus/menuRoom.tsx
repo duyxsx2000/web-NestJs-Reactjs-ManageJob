@@ -94,7 +94,7 @@ export default function MenuRoom({
                         </div>
                         <div 
                             className='p-1 cursor-pointer px-3 flex items-center hover:bg-gray-100 rounded-[5px]'
-                            onClick={onClickUsers}
+                            onClick={()=>onClickUsers()}
                         >
                             <UserOutlined style={{fontSize:'15px', marginRight:'8px'}}/>
                             Users

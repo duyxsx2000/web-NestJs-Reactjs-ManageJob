@@ -48,6 +48,7 @@ export default function ListUser({ idRoom}: Props) {
         };
 
     }, []);
+    
     useEffect(()=> {
         if(!nowListMemberByRoom) return
         const waiting = nowListMemberByRoom.find(member => member.status === 'waiting')

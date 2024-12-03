@@ -18,13 +18,18 @@ export class Table {
     @Prop()
     title: string
 
+    @Prop()
+    status: string
+
     @Prop({type:[{
         idTask: String,
-        title: String
+        title: String,
+        members: [String]
     }]})
     tasks: {
         idTask: string,
         title: string
+        members: string[]
     }
 
 }

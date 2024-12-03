@@ -46,8 +46,7 @@ export class UsersController {
             
         } catch (error) {
             return new ResponseData<{}>(null, HttpStatus.ERROR, HttpMessage.ERROR)
-        }
-        
+        }    
     }
 
 
@@ -61,8 +60,20 @@ export class UsersController {
            
         } catch (error) {
             return new ResponseData<{}>('error',  HttpStatus.ERROR, HttpMessage.ERROR)  
-        }
-        
+        }   
+    };
+
+    @Get('/markNotify/:id')
+    async setNotify(@Param('id') id : string): Promise<ResponseData<{}>> {
+
+       
+        try {
+           const newUser = await this.usersService.markNotify(id);       
+           return new ResponseData<{}>(newUser, HttpStatus.SUCCESS, HttpMessage.SUCCESS)
+           
+        } catch (error) {
+            return new ResponseData<{}>('error',  HttpStatus.ERROR, HttpMessage.ERROR)  
+        }   
     };
 
     @Post('/createAccount/:idGroup')

@@ -18,11 +18,12 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { actionGetDataRoom } from '../services/actions/getDataRoom';
 import { backgroundColorBg, backgroundColorBg1 } from '../styles/color';
 import { setReload } from '../auth/authSlice';
-const lists = [1,2,4,343,43,43]
+const lists = [1]
 
 export default function RoomPage() {
  
   const [list, setList] = useState<'room' | 'task'>('room')
+
   const listRoom = useSelector((state: RootState) => state.group.data?.rooms)
   const profile = useSelector((state: RootState) => state.auth.profile)
   const room = useSelector((state: RootState) => state.rooms.data.room)
@@ -32,8 +33,6 @@ export default function RoomPage() {
   const dispatch = useDispatch()
   const [aside, setAside] = useState<boolean>(true)
   const {id} = useParams();
-
-  console.log(room,'roommm');
   
   useEffect(() => {
     
@@ -67,7 +66,10 @@ export default function RoomPage() {
       {room && aside ? (
         <div className={` transition-all  min-w-[270px] ${!color ? backgroundColorBg1[room.background] : 'bg-white'} ${!room.background || color ? 'text-black' : 'text-white'}  h-full border-r border-gray-200 `}>
           <div className=' relative h-[80px] flex p-2 items-center  border-b border-gray-200'>
-            <div className='w-[60px] rounded-full bg-gray-400 h-[60px]'></div>
+            <Link 
+              to={'/profile/personalInformation'}
+              className='w-[60px] rounded-full bg-gray-400 h-[60px]'
+            />
             <div className='ml-2'>
               <p className=' font-semibold'>{profile.name}</p>
               <p className='text-red-500 font-semibold'>{profile.role}</p>
@@ -116,20 +118,25 @@ export default function RoomPage() {
               {list === 'room' && rooms && rooms.map((room, index) => (
                 <li key={index} className='ml-0'>
                   <Link to={`/room/${room.idRoom}`}>
-                    <div className=' flex items-center px-4 h-[40px] hover:bg-[rgba(185,185,185,0.3)]'>
+                    <div className=' flex items-center px-4 h-[40px] '>
                       <div className={`w-[30px] h-[30px] rounded-[5px] ${backgroundColorBg1[room.background]} border border-white shadow-md`}></div>
-                      <p className='ml-2'>{room.title}</p>
+                      <p className='ml-2'>{room.title}hhh</p>
                     </div>
                   </Link>
                 </li>
               ))}
-              {list === 'task' && lists.map((room, index) => (
-                <li key={index} className='ml-0'>
-                  <div className=' flex items-center px-4 h-[40px] p-2 mt-2 '>
-                    <p className='ml-2 hover:bg-[rgba(185,185,185,0.3)] cursor-pointer border w-full rounded-[5px]  p-2 border-gray-300  mt-2'>Task name</p>
-                  </div>
-                </li>
-              ))}
+              {/* {list === 'task' ? lists.length > 0 ? (
+                  lists.map((room, index) => (
+                    <li key={index} className='ml-0'>
+                      <div className=' flex items-center px-4 h-[40px] p-2 mt-2 '>
+                        <p className='ml-2 hover:bg-[rgba(185,185,185,0.3)] cursor-pointer border w-full rounded-[5px]  p-2 border-gray-300  mt-2'>Task name</p>
+                      </div>
+                    </li>
+                ) 
+              )) : (
+                <div>no tasks</div>
+              )} */}
+              {list === 'task' && <div className='text-center'>No task</div>}
             </ul>
           </div>
       </div>

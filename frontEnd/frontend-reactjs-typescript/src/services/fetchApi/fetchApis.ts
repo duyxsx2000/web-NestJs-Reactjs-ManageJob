@@ -1,20 +1,21 @@
 import { setModalNotification } from "../../redux/slices/statusDisplaySloce";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
-import { json } from "stream/consumers";
-import { setLoading } from "../../redux/slices/jobsSlice";
 import { AcceptMember, AddMemberFR, CreateAccount, CreateRoom, CreateTable, CreateTask, EditTable, Group, IDs3, ResponseDataType, Table, Task, TitleRoom, TypeMember, TypeRoom, TypeTable, UpdateRoom, UpdateTable, UpdateTask } from "../../types/typesSlice";
 import { apiAcceptMember, apiAddMemberForRoom, apiCreateAccount, apiCreateRoom, apiCreateTable, apiCreateTask, apiDelateRoom, apiEditTable, apiGetDataRoomById, apiGetDataTaskById, apiUpdateRoom, apiUpdateTable, apiUpdateTask, apifetchTable, apijoinRoom } from "../../api/apiTask";
-import { pushRooms } from "../../redux/slices/groupSlice";
-import { setNotify } from "../../redux/slices/dashboardSlice";
+
 import { setLisstUser, setRoom } from "../../redux/slices/roomSlice";
-import { setReload } from "../../auth/authSlice";
+import { setLoading } from "../../auth/authSlice";
+import Password from "antd/es/input/Password";
+
 
 
 export const createAccountForUser = createAsyncThunk<Group | undefined, CreateAccount>(
     'rooms/createAccountForUser',
     async (createAccount: CreateAccount,{dispatch}) => {
         const token = localStorage.getItem('jwtToken');
+        console.log(createAccount,'create');
+        
         try {
             const res = await fetch(`${apiCreateAccount}/${createAccount.idGroup}`, {
                 method: 'POST',
@@ -22,7 +23,14 @@ export const createAccountForUser = createAsyncThunk<Group | undefined, CreateAc
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify(createAccount)
+                body: JSON.stringify(
+                    {
+                        name: createAccount.name,
+                        email: createAccount.email,
+                        role:createAccount.role,
+                        password:createAccount.password,
+                    }
+                )
             });
 
             if(!res.ok){
@@ -33,11 +41,18 @@ export const createAccountForUser = createAsyncThunk<Group | undefined, CreateAc
             const response: ResponseDataType<Group>= await res.json();
             const group = response.data
 
+            if(createAccount.type === 'test' ) {
+                dispatch(setLoading('signIn'))
+                console.log('tttttt');
+                
+            };
+
             if(group){
                 
                 dispatch(setModalNotification({notify: 'create new user success', status: true}));
                 return group
             };
+
             dispatch(setModalNotification({notify: 'create new User error', status: false})) ;
             return undefined
             

@@ -100,7 +100,7 @@ export class GroupsService {
         try {
             const idNewGroup = await newId();
             const newGroup = {
-                idGroup: idNewGroup,
+                idGroup:idNewGroup,
                 ...createGroup,
                 dateCreate: new Date(Date.now()),
                 rooms:[]

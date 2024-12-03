@@ -35,7 +35,7 @@ export const AppRoute = ({
                 path='/' 
                 element= {
                     loading === "done" && profile ?  (
-                        profile.role === 'admin' ? <Navigate to={'/manage'} replace/> : <Navigate to={'/profile'} replace/>
+                        profile.role === 'admin' ? <Navigate to={'/manage/rooms'} replace/> : <Navigate to={'/profile'} replace/>
                     ) : (
                         <Navigate to={'/start'} replace/>
                     )       
@@ -49,7 +49,7 @@ export const AppRoute = ({
                     ) : loading === 'signIn' ? (
                         <Navigate to={'/signIn'} replace/>
                     ) : loading === 'done' && (
-                        profile?.role === 'admin' ? <Navigate to={'/manage'} replace/> : <Navigate to={'/profile'} replace/>
+                        profile?.role === 'admin' ? <Navigate to={'/manage/rooms'} replace/> : <Navigate to={'/profile'} replace/>
                     )
                 }
             /> 
@@ -78,7 +78,7 @@ export const AppRoute = ({
             />
 
             <Route
-                path='/profile'
+                path='/profile/:key'
                 element= {
                     loading === "none" ?
                     <Navigate to={'/signIn'} replace/> : (

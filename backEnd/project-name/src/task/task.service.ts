@@ -11,13 +11,15 @@ import { Room } from 'src/room/schemas/room.schema';
 import { UpdateNewTask } from 'src/dtos/roomDto/taskDto/updateNewTask.dto';
 import { ChangeMember } from 'src/types/typeDefaults';
 import { MemberTaskDto } from 'src/dtos/roomDto/taskDto/changeMemberTask.dto';
+import { TableService } from 'src/table/table.service';
 
 @Injectable()
 export class TaskService {
     constructor (
         @InjectModel(Table.name) private TableModel: Model<Table>,
         @InjectModel(Task.name) private TaskModel: Model<Task>,
-        @InjectModel(Room.name) private RoomModel: Model<Room>
+        @InjectModel(Room.name) private RoomModel: Model<Room>,
+        private tableService: TableService
     ) {}
 
     async createTask(createTask: CreateTask, user) {
@@ -154,7 +156,6 @@ export class TaskService {
 
 
     async changeMemberTask(memberTaskDto: MemberTaskDto) {
-        console.log(memberTaskDto,'ggg');
 
         if(memberTaskDto.action === 'Add member') {
             try {

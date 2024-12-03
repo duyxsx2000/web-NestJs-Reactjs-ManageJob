@@ -10,7 +10,6 @@ import {
   
   } from '@ant-design/icons';
 import { Col } from 'antd';
-import { color } from 'html2canvas/dist/types/css/types/color';
 import { actionCreateNewAccountForUser } from '../../services/actions/createNewData';
 import { useDispatch } from 'react-redux';
 type Props = {
@@ -24,11 +23,13 @@ export default function AddUserForm({idGroup, closeModal}: Props) {
     const [codeJoinGroup, setCodeJoinGroup] = useState('')
     const [createGoogle, setGoogle] = useState('')
     const [validate, setValidate] = useState(false)
+
     const [createAccount, setCreateAccount] = useState({
         email: '',
         password:'',
         name: ''
     })
+
     const [createUser, setCreateUser] = useState({
         email:'',
         idGroup: idGroup
@@ -55,7 +56,8 @@ export default function AddUserForm({idGroup, closeModal}: Props) {
         const actionCreateAccount = actionCreateNewAccountForUser({
             ...createAccount,
             idGroup: idGroup,
-            role: roles[0]
+            role: roles[0],
+            type:''
         });
 
         dispatch(actionCreateAccount);
@@ -65,8 +67,16 @@ export default function AddUserForm({idGroup, closeModal}: Props) {
             name:'',
             password:''
         })
+    };
 
-    }
+    const handleCopy = async (textToCopy: string) => {
+        try {
+          await navigator.clipboard.writeText(textToCopy);
+          alert('Text copied to clipboard');
+        } catch (err) {
+          console.error('Failed to copy: ', err);
+        }
+    };
 
     const handleCreateGoogle = () => {
 
@@ -107,7 +117,7 @@ export default function AddUserForm({idGroup, closeModal}: Props) {
             {codeJoinGroup && action === 'Create code' && (
                 <div className='ml-2 group relative mr-2 p-1 flex items-center font-medium rounded-[5px] border-2    border-gray-300'>
                     {codeJoinGroup}
-                    <CopyOutlined className='ml-1' />
+                    <CopyOutlined onClick={()=>handleCopy('A34tY234')} className='ml-1' />
                     <div className=' absolute w-[200px] z-[90] hidden group-hover:flex justify-center left-[90%] text-[12px] bg-white border border-gray-400 text-center font-normal -bottom-6'>Code to join the group</div>
                 </div>
             )}
@@ -181,15 +191,6 @@ export default function AddUserForm({idGroup, closeModal}: Props) {
                     Create Code
                 </button>
             )}
-            {(action === 'Google' || !action) && (
-                <button
-                    onClick={() => !action ? setAction('Google') : handleCreateGoogle()}
-                    className='flex items-center  font-medium p-1 text-center  right-0 rounded-[5px] border-2 bg-green-500 text-white -top-[40px]  border-gray-300'
-                >
-                    <GoogleOutlined style={{color:'red'}} className='mr-1' /> Google
-                </button>
-            )}
- 
             <button 
                 onClick={closeModal}
                 className='  font-medium p-1 text-center bg-gray-400 text-gray-200 right-0 rounded-[5px] border-2  -top-[40px]  border-gray-300'

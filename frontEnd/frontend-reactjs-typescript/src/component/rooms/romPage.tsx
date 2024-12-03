@@ -189,7 +189,6 @@ export default function RomPage({room}: Props) {
     if(!listTable) return;
     if(draggedOverPersonTask.indexTask === null) return;
     if(draggedOverPersonTask.indexTable === null) return;
-    console.log('aaaaaaaaaaaaaaaaaaaaaaa',draggedOverPersonTask.indexTable);
     if(dragPersonTask.indexTable === draggedOverPersonTask.indexTable) {
       
       const cloneTaskList = [...listTable[dragPersonTask.indexTable].tasks];
@@ -198,7 +197,7 @@ export default function RomPage({room}: Props) {
       let targetIndex = draggedOverPersonTask.indexTask; // Vị trí mục tiêu bạn muốn di chuyển phần tử đến
       let elementToMove = cloneTaskList.splice(sourceIndex, 1)[0];
       cloneTaskList.splice(targetIndex, 0, elementToMove);
-      console.log(cloneTaskList);
+
       cloneTable.tasks = cloneTaskList
       handleSetTask([cloneTable])
 
@@ -402,7 +401,6 @@ export default function RomPage({room}: Props) {
     type?: 'default' | 'space' | 'none'
   ) => {
     if(!task) return 
-    console.log(type,'type');
     
     return (
       <div 
@@ -496,17 +494,6 @@ export default function RomPage({room}: Props) {
                     <UserAddOutlined/>
                   </span>
                 </div>
-                {/* <div 
-                  onClick={() => {!listUsers ? setListUsers('ggggg') : setListUsers(null)}}
-                  className={`absolute w-[30px] h-[30px] bg-red-400 shadow-md  text-white ${listAbs[0]} ${listZ[0]} top-1 rounded-full flex justify-center items-center`}
-                >
-                  15
-                  <div className=' relative'>
-                    <span className=' absolute -top-2  -right-[8px]'>
-                      <CaretDownOutlined />
-                    </span>
-                  </div>
-                </div>  */}
                 {room.members.map((member,index) => index <= 5 ? (
                   <div className={`absolute w-[30px] h-[30px] ${index % 2 ? 'bg-gray-400' : 'bg-red-400'} text-white ${listAbs[index +1]} ${listZ[index +1]} top-1 rounded-full flex justify-center items-center`}>
                     <UserOutlined  />
@@ -579,7 +566,6 @@ export default function RomPage({room}: Props) {
                 )
               })}
 
-              {/* create table */}
               <div className='min-w-[270px] '>
                 {!createTable ? (
                   <div
@@ -605,7 +591,7 @@ export default function RomPage({room}: Props) {
           onClickClose={()=> {setMenu(false)}}
           idGroup={idGroup}
           idRoom={room.idRoom}
-          onClickUsers={()=> {listUsers ? setListUsers('') : setListUsers('1')}}
+          onClickUsers={()=> setAddMember(true)}
         />
       )}
     </div>

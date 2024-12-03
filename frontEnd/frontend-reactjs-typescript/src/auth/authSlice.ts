@@ -9,15 +9,9 @@ const data: UserAuth = {
     role:'',
     name:'',
     idUser:'',
+    
 };
 
-const initialState: AuthState = {
-    profile: data,
-    test: '',
-    loading: 'none',
-    token:'',
-    reload: false
-};
 
 type ResToken = {
     access_token: string,
@@ -32,8 +26,26 @@ interface AuthState {
     test: string,
     loading: "done" | "none" | "loading" | null,
     reload: boolean,
-    token: string
+    token: string,
+
+    temporaryData: {
+        email: string,
+        password: string
+    }
 };
+
+const initialState: AuthState = {
+    profile: data,
+    test: '',
+    loading: 'none',
+    token:'',
+    reload: false,
+    temporaryData: {
+        email: '',
+        password: ''
+    }
+};
+
 
 export const authSlice = createSlice({
     name:'auth',
@@ -41,6 +53,10 @@ export const authSlice = createSlice({
     reducers: {
         setReload: (state, action) => {
             state.reload = action.payload
+        },
+
+        setTempData: (state, action) => {
+            state.temporaryData = action.payload
         },
 
         setLoading: (state, action) => { 
@@ -131,7 +147,8 @@ export const fetchProfileByToken = createAsyncThunk<UserAuth | null, string>(
             const res = await fetch('http://localhost:3002/auth/profile', {
                 method: 'GET',
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json', 
                 }
             });
 
@@ -139,7 +156,7 @@ export const fetchProfileByToken = createAsyncThunk<UserAuth | null, string>(
                 dispatch(setLoading('none'))
                 return null
             };
-
+          
             const profile: Promise<UserAuth> = await res.json() ; 
             dispatch(setLoading('done'));
 
@@ -173,10 +190,35 @@ export const createNewAdminforCompany = createAsyncThunk<any, CreateAdminAccount
                 dispatch(setModalNotification({notify: 'create error', status: false}))
                 return null
             };
-            dispatch(setModalNotification({notify: 'create succes', status: true}));
-            dispatch(setLoading('signIn'))
+            dispatch(setLoading('signIn'));
 
-            const data = await res.json()
+            const data = await res.json();
+            return data
+        } catch (error) {
+            return  null
+        }
+    }
+);
+
+
+export const markNorify = createAsyncThunk<any, string>(
+    'auth/markNorify',
+    async (id: string,{dispatch}) => {
+
+        try {
+            const res = await fetch(`http://localhost:3002/users/markNotify/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json', 
+                },
+            });
+
+            if(!res.ok) {
+                dispatch(setModalNotification({notify: 'create error', status: false}))
+                return null
+            };
+
+            const data = await res.json();
             return data
         } catch (error) {
             return  null
@@ -185,5 +227,5 @@ export const createNewAdminforCompany = createAsyncThunk<any, CreateAdminAccount
 );
 
 const  {reducer,actions} = authSlice;
-export const {setLoading, setLoadingNone, setReload} = actions;
+export const {setLoading, setLoadingNone, setReload, setTempData} = actions;
 export default reducer

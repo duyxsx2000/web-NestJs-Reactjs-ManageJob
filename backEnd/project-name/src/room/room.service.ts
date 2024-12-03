@@ -282,6 +282,15 @@ export class RoomService {
                 }}
             );
 
+            await this.UserModel.updateOne(
+                {idUser: idUser},
+                {$push:{notify: {
+                    title: `You have been added to room ${idRoom}`,
+                    status: 'await',
+                    date: new Date(Date.now())
+                }}}
+            )
+
             await this.updateActions(idRoom,{
                 title: `${member.name} join room`, 
                 date: new Date(Date.now())

@@ -12,10 +12,11 @@ type Props = {
     onClick: (id: string, role: string, name: string, email: string) => void
     id: string,
     name: string,
-    email: string
+    email: string,
+    type: 'create' | 'add'
 };
 
-const Stick = ({onClick, id, name, email}: Props) => {
+const Stick = ({onClick, id, name, email, type}: Props) => {
 
     const [stick, setStick] = useState(false);
     const [role, setRole] = useState(false);
@@ -35,6 +36,23 @@ const Stick = ({onClick, id, name, email}: Props) => {
         stick ? setStick(false) : setStick(true);
         onClick(id,listRole[0], name, email);
     }
+
+    if(type === 'create') return (
+        <div className='flex items-center space-x-1'>                          
+  
+            <div className='relative font-semibold  flex items-baseline '>
+                <div className='  w-full'>
+                    <p className={`cursor-pointer p-1 text-red-500`}>Admin</p>
+                </div>
+            </div>
+     
+            <div 
+                className='w-[17px] h-[17px] border border-gray-500 text-green-500 flex justify-center items-center '
+            >
+                <CheckOutlined />
+            </div>
+        </div>
+    )
     return (
         <div className='flex items-center space-x-1'>                          
             {stick && (
@@ -50,8 +68,7 @@ const Stick = ({onClick, id, name, email}: Props) => {
                         }
                        
                     </div>
-                    <CaretDownOutlined onClick={() => role ? setRole(false) : setRole(true)} />
-                    
+                    <CaretDownOutlined onClick={() => role ? setRole(false) : setRole(true)} /> 
                 </div>
              )}
             <div 

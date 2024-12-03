@@ -1,3 +1,5 @@
+import exp from "constants"
+
 export type ActionTask = {
     date: Date,
     detail: string,
@@ -13,7 +15,11 @@ export type MemberTask = {
     notify: boolean
 
 }
-
+export type DateTask = {
+    datePost: Date,
+    dateDeadlineStart: Date
+    dateDeadlineEnd: Date
+}
 export interface Task  {
     idTask: string,
     title: string,
@@ -61,7 +67,8 @@ export type CreateAccount = {
     name: string,
     email: string,
     password:string,
-    role: string
+    role: string,
+    type: string
 }
 
 export type CreateTask = {
@@ -152,7 +159,8 @@ export type MemberGroup = {
     email: string,
     name: string,
     date: Date
-}
+};
+
 export interface Group {
     idGroup: string,
     members: MemberGroup[],

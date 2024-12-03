@@ -3,6 +3,12 @@ export type UserAuth = {
     name: string,
     role: string,
     idUser: string,
+    notify?: {
+        title: string,
+        status:string,
+        date: Date,
+        link: string
+    }[]
 };
 
 export type ChangeMember = {

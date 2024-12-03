@@ -19,8 +19,9 @@ export const groupSlice = createSlice({
     name:'group',
     initialState,
     reducers: {
-        setLoading: (state, action) => {
-            
+        setUser: (state, action) => {
+            if(!state.data) return
+            state.data.members = action.payload
         },
 
         pushRooms: (state, action) => {
@@ -85,5 +86,5 @@ export const groupSlice = createSlice({
 
 
 const  {reducer,actions} = groupSlice;
-export const {setLoading, pushRooms} = actions;
+export const { pushRooms, setUser} = actions;
 export default reducer

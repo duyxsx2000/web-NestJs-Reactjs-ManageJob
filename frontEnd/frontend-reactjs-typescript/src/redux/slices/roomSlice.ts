@@ -1,6 +1,6 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 import {JobType} from "../../types";
-import { ActionTask, MemberTask, Table, Task, TypeMember, TypeRoom, TypeTable} from "../../types/typesSlice";
+import { ActionTask, DateTask, MemberTask, Table, Task, TypeMember, TypeRoom, TypeTable} from "../../types/typesSlice";
 import {createNewTable, createNewTask, fetchEditTable, fetchTables,getDataTaskById, patchUpdateRoom, patchUpdateTable } from "../../services/fetchApi/fetchApis";
 import { deleteMembeByRoom, getDataRoomById, postAddJoinRoom } from "../../services/fetchApi/fetchApiRooms";
 
@@ -40,6 +40,16 @@ export const roomSlice = createSlice({
             const newListTable = action.payload.map((idTable) => cloneTables.find(table => table.idTable === idTable.idTable)).filter(item => item !== undefined) as TypeTable[];
             state.data.table = newListTable
      
+        },
+
+        setDateTask: (state, action: PayloadAction<DateTask>) => {
+            if(!state.dataTask?.dates) return
+            state.dataTask.dates = action.payload
+        },
+
+        setDetailTask: (state, action: PayloadAction<string>) => {
+            if(!state.dataTask) return
+            state.dataTask.detail = action.payload
         },
 
         setColorG: (state, action: PayloadAction<boolean>) => {
@@ -236,12 +246,14 @@ const  {reducer,actions} = roomSlice;
 export const {
     setTables, 
     setRoom,
+    setDetailTask,
     delateTask, 
     changeTable, 
     setLisstUser, 
     setColorG, 
     setActionTask,
     setMemberTask,
-    joinTask
+    joinTask,
+    setDateTask
 } = actions;
 export default reducer

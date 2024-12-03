@@ -22,6 +22,23 @@ export class User {
     @Prop()
     idUser: string;
 
+    @Prop({
+        type: [
+            {
+                title: String,
+                link: String,
+                date: Date,
+                status: String
+            }
+        ]
+    })
+    notify:{
+        title: string,
+        link: string,
+        date: Date,
+        status: string
+    }[]
+
     @Prop({ type: Date, default: new Date(Date.now()) })
     postDate: Date;
 

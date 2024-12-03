@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { IDs3, Task, UpdateTaskDto } from '../../types/typesSlice'
+import { IDs3, MemberTask, Task, TypeMember, UpdateTaskDto } from '../../types/typesSlice'
 import DOMPurify from 'dompurify';
 
 import {
@@ -15,7 +15,6 @@ import {
     EditOutlined
 } from '@ant-design/icons';
 import EditorBox from '../form/editorBox';
-import { tree } from 'next/dist/build/templates/app-page';
 import '../../styles/postJob.css'
 import 'react-quill/dist/quill.snow.css'; // Import the styles
 import 'react-quill/dist/quill.bubble.css'; // Import the styles
@@ -24,11 +23,11 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import Loading from '../loading';
-import { delateTask, setActionTask, setMemberTask } from '../../redux/slices/roomSlice';
+import { delateTask, setActionTask, setDetailTask, setMemberTask } from '../../redux/slices/roomSlice';
 import { calculateDaysDifference, getStringDate } from '../../utils/date';
 import DateInput from '../modals/dateInput';
 import { actionUpdateMembrTask, actionUpdateTask } from '../../services/actions/editdataTask';
-import { ChangeMember } from '../../types';
+import { ChangeMember, UserAuth } from '../../types';
 type Props = {
     onClick: () => void,
     idTask: string,
@@ -42,18 +41,20 @@ export default function DetailTask({
     ids
 
 }: Props) {
-    const dataTask = useSelector((state: RootState) => state.rooms.dataTask);
-    const memberOfRoom = useSelector((state: RootState) => state.rooms.data.room?.members);
-    const profile = useSelector((state: RootState) => state.auth.profile);
-    const [title, setTitle] = useState(dataTask?.title);
-    const [edit, setEdit] = useState('');
-    const [deadline, setDeadline] = useState(false);
-    const [members, setMembers] = useState(false)
+    const dataTask: Task | undefined = useSelector((state: RootState) => state.rooms.dataTask);
+    const memberOfRoom: TypeMember[] | undefined = useSelector((state: RootState) => state.rooms.data.room?.members);
+    const profile: UserAuth | null = useSelector((state: RootState) => state.auth.profile);
+    const [title, setTitle] = useState<string | undefined>(dataTask?.title);
+    const [edit, setEdit] = useState<string>('');
+    const [deadline, setDeadline] = useState<boolean>(false);
+    const [members, setMembers] = useState<boolean>(false)
     const [actions, setActions] = useState<string[]>(['']);
-    const [action, setAction] = useState('');
-    const [actionChangeTitle, setActionChangeTitle] = useState(false);
+    const [searchMember, setSearchMember] = useState<string>('')
+    const [memberByS, setMemberByS] = useState<MemberTask[] | undefined>(undefined)
+    const [action, setAction] = useState<string>('');
+    const [actionChangeTitle, setActionChangeTitle] = useState<boolean>(false);
     const [updateTask, setUpdateTask] = useState<Task | undefined>(undefined);
-    const [valueDetail, setValueDetail] = useState('');
+    const [valueDetail, setValueDetail] = useState<string>('');
 
     const dispatch = useDispatch();
 
@@ -94,6 +95,7 @@ export default function DetailTask({
 
     const handleSaveDetail = (updateTask: UpdateTaskDto) => {
         setEdit('');
+        dispatch(setDetailTask(valueDetail))
         handleUpdateTask(updateTask)
 
     };
@@ -335,7 +337,20 @@ export default function DetailTask({
                                     <CloseOutlined onClick={()=> setMembers(false)} className='absolute right-0 top-0'/>
                                     <input
                                         placeholder='Search member'
+                                        value={searchMember}
                                         className='w-full p-1 outline-blue-500 mt-2 bg-gray-200 border border-gray-300 rounded-[5px]'
+                                        onChange={(e)=> {
+                                            setSearchMember(e.target.value);
+                                            const coppyMemberInTask = [...dataTask.members];
+                                            const coppyMemberInRoom = [...memberOfRoom];
+                                            const filteredMembersTask = coppyMemberInTask.filter(member =>
+                                                !member.idMember.includes('') || member.name.toLowerCase().includes(searchMember.toLowerCase())
+                                            );
+                                            const filteredMembersRoom = coppyMemberInTask.filter(member =>
+                                                !member.idMember.includes('') || member.name.toLowerCase().includes(searchMember.toLowerCase())
+                                            );
+                                            
+                                        }}
                                     ></input>
                                     <div className='mt-4'>
                                         <p className=' font-semibold text-[12px] text-gray-700'>Member of task</p>
@@ -356,7 +371,7 @@ export default function DetailTask({
                                                             idMember: member.idMember,
                                                             idRoom: ids.idRoom,
                                                             name: member.name
-                                                        })                                                   
+                                                        }) ;                                                  
                                                         dispatch(setMemberTask(coppyMembers));
                                                     }}
                                                 />
@@ -372,12 +387,12 @@ export default function DetailTask({
                                                     const membercoppy = [...dataTask.members];
                                                     handleChangeMember({
                                                         idTask: ids.idTask,
-                                                        action:'join',
+                                                        action:'Add member',
                                                         idMember: member.idMember,
                                                         idRoom: ids.idRoom,
                                                         name: member.name
-                                                    })
-                                                    dispatch(setMemberTask(membercoppy))
+                                                    });
+                                                    dispatch(setMemberTask(membercoppy));
                                                 }}
                                                 key={index} 
                                                 className='p-2 hover:bg-gray-300 flex items-center justify-between'
@@ -401,14 +416,15 @@ export default function DetailTask({
                 </div>
                 <div 
                     onClick={()=> {
-                        !deadline ? setDeadline(true)  : setDeadline(false) 
+                        setDeadline(true)  
                     }}
                     className=' relative py-1 cursor-pointer px-3 bg-gray-200 hover:bg-gray-300  rounded-[5px] flex items-center'
                 >
                     <ScheduleOutlined className='mr-2' />
                     Deadline
-                    {deadline && <DateInput dates={dataTask.dates} idTask={dataTask.idTask} onClick={() => setDeadline(false)}/>}
+                    
                 </div>
+                {deadline && <DateInput dates={dataTask.dates} idTask={dataTask.idTask} onClick={() => setDeadline(false)}/>}
 
             </div>
         </div>

@@ -117,4 +117,28 @@ export class TableService {
             throw new NotFoundException('error')
         }
     }
+
+    async updateMemberTask(
+        idTable: string, 
+        idTask: string, 
+        idMember: string
+    ) {
+        try {
+           const update = await this.TableModel.findOneAndUpdate(
+                {idTable:idTable,'tasks.idTask': idTask},
+                {
+                    $push: {
+                        'tasks.$.members': idMember
+                    }
+                },
+                { new: true }
+            );
+
+
+            if(!update) throw new NotFoundException('error');
+            return update
+        } catch (error) {
+            throw new NotFoundException('error')
+        }
+    }
 }

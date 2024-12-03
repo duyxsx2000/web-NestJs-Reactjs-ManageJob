@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react'
 import {
   CloseOutlined,
   UserAddOutlined,
+  DeleteOutlined ,
   SearchOutlined,
   CheckOutlined,
-  PlusOutlined
+  PlusOutlined,
+  BellOutlined
 
 } from '@ant-design/icons';
 
@@ -15,8 +17,6 @@ import RoomCard from '../component/card/roomsCard';
 import { actionGetStartGroup } from '../services/actions/getDatas';
 import { getStringDate } from '../utils/date';
 import ModalDefault from '../component/modals/defaultModal';
-import { CreateRoom } from '../types/typesSlice';
-import ListAddUser from '../component/lists/listAddUser';
 import FormCreateNewRoom from '../component/form/formCreateNewRoom';
 import Search from '../component/search';
 import AddUserForm from '../component/form/addUser';
@@ -34,14 +34,13 @@ export default function HomePage() {
   const [addUser, setAddUser] = useState(false)
   const dispatch = useDispatch()
   const {key} = useParams();
-  
+  const [member, setMember] = useState('')
   useEffect(() => {
     if(key) {
-      setAction(key)
-      console.log(key,'keyyyy');
-      
-    }
-  },[key])
+      setAction(key);  
+    };
+  },[key]);
+
   useEffect(() => {
     dispatch(actionGetStartGroup);
   },[]);
@@ -127,14 +126,25 @@ export default function HomePage() {
         </div>
         <div className=' overflow-auto max-h-[500px]'>
           {users && users.map((user, index) => {
+            if(member === user.idMember) {
+              return (
+                <div key={index} className='flex items-center justify-between'>
+                  <div className='flex items-center '>
+                    <BellOutlined  className=' hover:text-red-900' style={{fontSize:'20px', marginRight:'20px', marginLeft:'30px'}}/>
+                    <DeleteOutlined  className=' hover:text-red-900' style={{fontSize:'20px'}}/>
+                  </div>
+                  <div onClick={()=> setMember('')} className='w-[5%] p-3'>...</div>
+                </div>
+              )
+            }
             return (
-              <div className={`w-full flex  ${index % 2 ? 'bg-green-200' : ''} hover:bg-gray-300 cursor-pointer`} key={index}>
+              <div  className={`w-full flex  ${index % 2 ? 'bg-green-200' : ''} hover:bg-gray-300 cursor-pointer`} key={index}>
                 <div className='w-[5%] p-3'>{index + 1}</div>
                 <div className='w-[30%] p-3'>{user.name}</div>
                 <div className='w-[30%] p-3'>{user.email}</div>
                 <div className='w-[15%] p-3'>{user.role}</div>
                 <div className='w-[15%] p-3'>{getStringDate(user.date)}</div>
-                <div className='w-[5%] p-3'>...</div>
+                <div onClick={()=> setMember(user.idMember)} className='w-[5%] p-3'>...</div>
               </div>
             )
           })}

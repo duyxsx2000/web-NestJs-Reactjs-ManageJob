@@ -63,7 +63,7 @@ export const updateMemberTask = createAsyncThunk<any| undefined, ChangeMember>(
                 return
             };
             
-            if(changeMember.action === 'Join') {
+            if(changeMember.action === 'Add member') {
                 dispatch(joinTask({
                     idMember: changeMember.idMember,
                     name: changeMember.name,

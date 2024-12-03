@@ -111,7 +111,7 @@ export default function AddMember({
                     value={searchMember}
                     onChange={(e) => handleOnchangeSearchMemberValue(e)}
                 ></input>
-                {membersfilter &&
+                {membersfilter ?
                     <div className='rol space-y-2 absolute overflow-auto w-full  z-50 bg-white max-h-[200px] p-2 border-gray-300 border'>
                         { membersfilter.map((member, index) => (
                             <div 
@@ -132,7 +132,7 @@ export default function AddMember({
                                 </div>
                             </div>
                         ))}
-                    </div>
+                    </div> : <div>no member in group</div>
                 }
             </div>
             <div className='flex h-[45px]'>

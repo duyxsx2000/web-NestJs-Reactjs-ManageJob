@@ -18,6 +18,7 @@ import {
 import { getStringDate } from '../../utils/date';
 import { actionUpdateTask } from '../../services/actions/editdataTask';
 import { useDispatch } from 'react-redux';
+import { setDateTask } from '../../redux/slices/roomSlice';
 type Props = {
     onClick: () => void,
     idTask: string,
@@ -46,7 +47,11 @@ export default function DateInput({onClick, idTask, dates}: Props) {
                 dateDeadlineEnd: selectedDateEnd
             }
         });
-
+        dispatch(setDateTask({
+            datePost: dates.datePost,
+            dateDeadlineStart: selectedDateStart,
+            dateDeadlineEnd: selectedDateEnd
+        }))
         dispatch(action)
         
     }

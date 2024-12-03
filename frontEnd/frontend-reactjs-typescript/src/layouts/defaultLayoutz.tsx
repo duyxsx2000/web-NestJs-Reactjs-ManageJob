@@ -1,12 +1,13 @@
 import React, { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import '../pages/page.css'
 type Props ={
-    children: ReactNode
+  children: ReactNode
 }
 export default function StartLayout({children}: Props) {
 
   return (
-    <div className='startMain h-[100vh] m-0flex justify-center items-center'>
+    <div className='startMain h-[100vh] m-0 flex justify-center items-center'>
       <div className='w-full h-full bg-gradient-to-br from-black to-transparent px-24 pt-2' >
         <div className='h-1/7'>
           <div className='flex text-white  text-[20px] font-semibold'>

@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/users.schema';
 import { Model } from 'mongoose';
 import { Group } from 'src/groups/schemas/group.schema';
+import { Profile } from './schemas/profile.schema';
 
 @Injectable()
 
@@ -14,7 +15,7 @@ export class UsersService {
     
     constructor (
         @InjectModel(User.name) private userModel: Model<User>,
-        @InjectModel(Group.name) private groupModel: Model<Group>
+        @InjectModel(Group.name) private groupModel: Model<Group>,
     ) {}
 
     async findAllUsers(email: string) {
@@ -99,7 +100,6 @@ export class UsersService {
             }   
         }
         const id = await randumId();
-        console.log(id);
           
         try {
             
@@ -109,6 +109,12 @@ export class UsersService {
             };
             await this.userModel.create({
                 ...createUserDto,
+                // notify:[{
+                //     title: `Welcome to AAA. Hope you have a good experience`,
+                //     status:'await',
+                //     date: new Date(Date.now()),
+                //     link:''
+                // }],
                 idUser: id
             })
             return 'ok'
@@ -145,6 +151,7 @@ export class UsersService {
             const id = await randumId();
             const newUser = {
                 ...createUser,
+                notify:[],
                 idUser: id
             }
             const checkEmail = await this.userModel.findOne({email: newUser.email});
@@ -189,6 +196,33 @@ export class UsersService {
             await this.userModel.deleteMany({})
             console.log('all2');
             return [123,123]
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+
+    async markNotify(id: string) {
+        try {
+            const result = await this.userModel.aggregate([
+                { $match: { idUser: id } }, // Match the user by idUser
+                { $project: { notify: 1, _id: 0 } } // Project only the notify field, excluding _id
+            ]);
+              
+            const notify = result.length > 0 ? result[0].notify : null;
+
+            const newNotify = notify.map(item => {
+                const newN = {...item, status:'mark'}
+                return newN
+            });
+
+            const newUser = await this.userModel.updateOne(
+            { idUser: id },
+            { $set: { notify: newNotify } }
+            );
+             
+            
+            return 'ok'
         } catch (error) {
             console.log(error);
             

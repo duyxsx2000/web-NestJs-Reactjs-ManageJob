@@ -27,7 +27,7 @@ const RoomCard = ({titleRoom, type}: Props) => {
 
     if(type === 'waiting') return (
         <div 
-            className={`group relative w-full h-full  cursor-pointer rounded-[5px] ${backgroundColor[titleRoom.background]}  hover:shadow-lg  shadow-md shadow-gray-400 p-2`}
+            className={`group relative w-full h-full  cursor-pointer rounded-[5px] ${backgroundColor[titleRoom.background]}  hover:shadow-lg  shadow-md  p-2`}
         >   
             <div className="group-hover:flex absolute hidden rounded-[5px] justify-center  items-end w-full h-full top-0 space-x-2  text-white left-0 bg-gradient-to-t from-[rgba(0,0,0,0.8)] to-transparent">
                 <p className="  font-semibold p-1 px-2 mb-1 w-full text-center ">
@@ -42,7 +42,7 @@ const RoomCard = ({titleRoom, type}: Props) => {
     if(type === 'join') return (
         <Link to={`/room/${titleRoom.idRoom} `}>
             <div 
-                className={`group relative w-full h-full  cursor-pointer rounded-[2px] ${backgroundColor[titleRoom.background]}  hover:shadow-md  shadow-lg shadow-gray-400 p-2`}
+                className={`group relative w-full h-full  cursor-pointer rounded-[2px] ${backgroundColor[titleRoom.background]}  hover:shadow-lg  shadow-md  p-2`}
             >
                 <p className={` text-[17px] ${titleRoom.background != 'none' ? 'text-white' : 'text-black'}  font-medium`}>{titleRoom.title}</p>
                 <p className={`${titleRoom.background != 'none' ? 'text-white' : ''}`}>{titleRoom.mainTask}</p>

@@ -21,9 +21,13 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('login')
     signIn(@Body(ValidationPipe) signInDto: SignInAuthDto) {
-   
       return this.authService.sign(signInDto)
     };
+
+    @Post('google')
+    async googleAuth(@Body('token') token: string) {
+      return this.authService.validateGoogleToken(token)
+    }
 
     @UseGuards(AuthGuard)
     @Get('profile')
